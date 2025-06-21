@@ -1,9 +1,6 @@
 // app/not-found.tsx
 
 "use client"
-
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { AlertTriangle } from "lucide-react"
 
 export default function NotFound() {

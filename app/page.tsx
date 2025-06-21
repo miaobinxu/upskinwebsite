@@ -25,12 +25,6 @@ export default function Home() {
   const resetResult = useScreenshotStore((state) => state.reset)
   const setImage = useScreenshotStore((state) => state.setImage)
 
-  // const handleGenerate = (image: string, data: typeof formData) => {
-  //   setUploadedImage(image)
-  //   setFormData(data)
-  //   setCurrentScreen("preview")
-  // }
-
   const handleGenerate = async (file: File, data: typeof formData) => {
     if (!file) return
     setLoading(true)

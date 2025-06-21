@@ -30,27 +30,43 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
   const { name, overallScore, fitScore, Ingredients, keyTakeaway } = result
 
 
-  const handleDownload = async () => {
-    if (!previewRef.current) return;
+const waitForImagesToLoad = (node: HTMLElement) => {
+  const images = node.querySelectorAll("img");
+  return Promise.all(
+    Array.from(images).map((img) =>
+      img.complete
+        ? Promise.resolve()
+        : new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          })
+    )
+  );
+};
 
-    setIsDownloading(true);
-    try {
-      const dataUrl = await toPng(previewRef.current, {
-        cacheBust: true,
-        // backgroundColor: null,
-        pixelRatio: 2,
-      });
+const handleDownload = async () => {
+  if (!previewRef.current) return;
 
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = "screenshot.png";
-      link.click();
-    } catch (err) {
-      console.error("Image generation failed", err);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+  setIsDownloading(true);
+  try {
+    // 👇 Ensure all images are loaded before generating the screenshot
+    await waitForImagesToLoad(previewRef.current);
+
+    const dataUrl = await toPng(previewRef.current, {
+      cacheBust: true,
+      pixelRatio: 2,
+    });
+
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "screenshot.png";
+    link.click();
+  } catch (err) {
+    console.error("Image generation failed", err);
+  } finally {
+    setIsDownloading(false);
+  }
+};
 
 
   const getDotColor = (value: number | string) => {
@@ -186,9 +202,11 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                 </div>
 
                 {/* Product Title */}
-                <div className="flex items-center justify-between w-full mb-4" style={{ gap: "8px" }}>
-                  <h2 className="text-xl w-[80%] font-bold truncate text-[#393E46]">{formData.productName || name}</h2>
-                  <Heart className="h-6 w-6 font-bold" />
+                <div className="flex items-start justify-between w-full mb-4" style={{ gap: "8px" }}>
+                  <h2 className="text-xl font-bold text-[#393E46] break-words">
+                    {formData.productName || name}
+                  </h2>
+                  <Heart className="h-6 w-6 font-bold mt-1" />
                 </div>
 
                 {/* Scores */}
@@ -205,7 +223,9 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                           item.icon
                         )}
                       </div>
-                      <p className="text-xs font-medium truncate mb-1">{item.name}</p>
+                      <p className="text-xs font-medium mb-1 break-words w-full">
+                        {item.name}
+                      </p>
                       {/* Text */}
                       <div style={{ color: item.dotColor }} className="text-xs">
                         <p className="font-semibold text-sm">
