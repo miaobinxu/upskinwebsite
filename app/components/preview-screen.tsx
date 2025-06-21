@@ -98,12 +98,12 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
 
   const iconMap: Record<string, IconType> = {
     [normalize("Overall Score")]: '/shield.png',
-    [normalize("Skin Type")]: '/skin-type.png',
+    [normalize("Your Skin")]: '/skin-type.png',
     [normalize("Compatibility")]: '/compability.png',
   };
 
 
-  const scoreCards = [overallScore, { name: 'Skin Type', value: formData.skinType }, fitScore].map((item) => ({
+  const scoreCards = [overallScore, { name: 'Your Skin', value: formData.skinType }, fitScore].map((item) => ({
     ...item,
     icon: iconMap[normalize(item.name)] || null,
     dotColor: getDotColor(item.value),
@@ -129,7 +129,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
       return "#EB4335"; // Red
     }
 
-    return "#8B5CF6"; // Fallback purple
+    return "#2B641A"; // Dark Green
   };
 
   return (
@@ -184,7 +184,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                 </div>
 
                 {/* Product Image */}
-                <div className="relative w-full max-w-[240px] aspect-square mb-6 rounded-[8px] overflow-hidden bg-gray-100 mx-auto">
+                <div className="relative w-full max-w-[180px] aspect-square mb-6 rounded-[8px] overflow-hidden bg-gray-100 mx-auto">
                   <img
                     src={image || "/placeholder.svg"}
                     alt="Product"

@@ -45,7 +45,7 @@ export async function analyzeProduct({
     Default:
       "1 acne risk ingredient with a short phrase (Choose one from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with a short phrase (Choose one from: Improve Your Pores, Improve Your Redness, Improve Your Pigmentation)",
     Positive:
-      "2 good ingredients (must include acne safe ingredient) with a short phrase (Choose one from: Acne Safe, Improve Your Hydration, Improve Your Pores, Improve Your Redness, Improve Your Pigmentation)",
+      "2 good ingredients (must include acne safe ingredient) with a short phrase (Choose one from: Acne Safe, Improve Your Pores, Improve Your Redness, Improve Your Pigmentation)",
     Negative:
       "2 bad ingredients (must include acne risk ingredient) with a short phrase (Choose one from:Acne Risk, Moderate Risk, High Risk)",
     "Positive but not match":
