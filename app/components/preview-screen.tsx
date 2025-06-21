@@ -5,11 +5,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useScreenshotStore } from "@/lib/store/analysisStore"
 import { ArrowLeft, Download, Heart, Share2, RotateCcw, Sparkles, Star, User } from "lucide-react"
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key, JSX, useState } from "react"
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import { useRef } from "react"
 import { PiShare } from "react-icons/pi";
 import { RiShieldCheckFill } from "react-icons/ri";
-import { generateScreenshotInNewTab } from "@/lib/utils"
 
 interface PreviewScreenProps {
   formData: {
@@ -30,18 +29,47 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
   }
   const { name, overallScore, fitScore, Ingredients, keyTakeaway } = result
 
-
 const handleDownload = async () => {
-  const captureElement = document.getElementById("capture-area");
-  if (!captureElement) {
-    alert("Could not find capture area.");
-    return;
+  if (!previewRef.current) return;
+
+  setIsDownloading(true);
+
+  try {
+    const element = previewRef.current; // ✅ properly declared
+
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isIOS) {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+      });
+
+      const dataUrl = canvas.toDataURL("image/png"); // ✅ canvas, not void
+
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "screenshot-ios.png";
+      link.click();
+    } else {
+      const dataUrl = await toPng(element, {
+        cacheBust: true,
+        pixelRatio: 2,
+        backgroundColor: "#fff",
+      });
+
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "screenshot.png";
+      link.click();
+    }
+  } catch (err) {
+    console.error("Image generation failed", err);
+  } finally {
+    setIsDownloading(false);
   }
-
-  const html = captureElement.outerHTML;
-
-  await generateScreenshotInNewTab(html);
 };
+
 
 
   const getDotColor = (value: number | string) => {
@@ -149,7 +177,7 @@ const handleDownload = async () => {
             </div>
 
             {/* Mobile Preview */}
-            <Card id="capture-area" ref={previewRef} className="border-none max-w-sm mx-auto lg:mx-0" style={{
+            <Card ref={previewRef} className="border-none max-w-sm mx-auto lg:mx-0" style={{
               background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
               fontFamily: "Inter, sans-serif",
             }}>
@@ -332,3 +360,7 @@ const handleDownload = async () => {
     </div>
   )
 }
+function html2canvas(element: HTMLDivElement, arg1: { scale: number; useCORS: boolean }) {
+  throw new Error("Function not implemented.")
+}
+
