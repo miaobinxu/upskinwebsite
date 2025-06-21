@@ -3,11 +3,12 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useScreenshotStore } from "@/lib/store/analysisStore"
-import { ArrowLeft, Download, Heart, Share2, RotateCcw, Sparkles } from "lucide-react"
-import Image from "next/image"
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react"
-import html2canvas from "html2canvas"
+import { ArrowLeft, Download, Heart, Share2, RotateCcw, Sparkles, Star, User } from "lucide-react"
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key, JSX, useState } from "react"
+import { toPng } from "html-to-image";
 import { useRef } from "react"
+import { PiShare } from "react-icons/pi";
+import { RiShieldCheckFill } from "react-icons/ri";
 
 interface PreviewScreenProps {
   formData: {
@@ -20,7 +21,8 @@ interface PreviewScreenProps {
 
 export default function PreviewScreen({ formData, onStartOver }: PreviewScreenProps) {
   const result = useScreenshotStore((state) => state.result);
-    const image = useScreenshotStore((state) => state.image)
+  const image = useScreenshotStore((state) => state.image)
+  const [isDownloading, setIsDownloading] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null)
   if (!result) {
     return <p className="text-center text-red-500 font-semibold">No analysis result found.</p>
@@ -31,18 +33,97 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
   const handleDownload = async () => {
     if (!previewRef.current) return;
 
-    const canvas = await html2canvas(previewRef.current, {
-      useCORS: true,
-      backgroundColor: null
-    });
+    setIsDownloading(true);
+    try {
+      const dataUrl = await toPng(previewRef.current, {
+        cacheBust: true,
+        // backgroundColor: null,
+        pixelRatio: 2,
+      });
 
-    const dataUrl = canvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = `${formData.productName || "product"}-screenshot.png`;
-    link.click();
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "screenshot.png";
+      link.click();
+    } catch (err) {
+      console.error("Image generation failed", err);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
+
+  const getDotColor = (value: number | string) => {
+    const score = typeof value === "number" ? value : parseInt(value.toString());
+    if (isNaN(score)) return "#000000"; // fallback for non-score values like skin type
+    if (score >= 90) return "#2B641A";     // Dark Green
+    if (score >= 60) return "#4FBB31";     // Light Green
+    if (score >= 30) return "#FE9E1D";     // Orange
+    return "#EB4335";                      // Red
+  };
+
+  const normalize = (str: string) =>
+    str.trim().toLowerCase().replace(/\s+/g, " ");
+
+  const getScoreDescription = (label: string, value: number | string) => {
+    const score = typeof value === "number" ? value : parseInt(value.toString());
+
+    const normalizedLabel = normalize(label);
+
+    if (normalizedLabel === "overall score") {
+      if (score >= 90) return "Excellent";
+      if (score >= 60) return "Good";
+      if (score >= 30) return "Poor";
+      return "Bad";
+    }
+
+    if (normalizedLabel === "compatibility") {
+      if (score >= 90) return "Perfect";
+      if (score >= 60) return "Good";
+      if (score >= 30) return "Minimal";
+      return "Incompatible";
+    }
+
+    return "";
+  };
+
+  type IconType = JSX.Element | string;
+
+  const iconMap: Record<string, IconType> = {
+    [normalize("Overall Score")]: <RiShieldCheckFill className="w-5 h-5 text-gray-900" />,
+    [normalize("Your Skin Type")]: '/skin-type.png',
+    [normalize("Compatibility")]: '/compability.png',
+  };
+
+
+  const scoreCards = [overallScore, { name: 'Your Skin Type', value: formData.skinType }, fitScore].map((item) => ({
+    ...item,
+    icon: iconMap[normalize(item.name)] || null,
+    dotColor: getDotColor(item.value),
+    description: getScoreDescription(item.name, item.value),
+  }));
+
+  const getIngredientDotColor = (description: string) => {
+    const normalized = description.toLowerCase();
+
+    if (normalized.includes("no risk") || normalized.includes("acne safe")) {
+      return "#2B641A"; // Dark Green
+    }
+
+    if (normalized.includes("low risk")) {
+      return "#FFD35E"; // Yellow
+    }
+
+    if (normalized.includes("moderate risk")) {
+      return "#FE9E1D"; // Orange
+    }
+
+    if (normalized.includes("high risk") || normalized.includes("acne risk")) {
+      return "#EB4335"; // Red
+    }
+
+    return "#8B5CF6"; // Fallback purple
+  };
 
   return (
     <div className="py-8 px-4">
@@ -77,44 +158,79 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
             </div>
 
             {/* Mobile Preview */}
-            <Card ref={previewRef} className="rounded-xl bg-[#F7F7F7] shadow-md hover:shadow-lg transition-shadow max-w-sm mx-auto lg:mx-0">
-              <CardContent className="p-6">
+            <Card ref={previewRef} className="border-none max-w-sm mx-auto lg:mx-0" style={{
+              background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
+              fontFamily: "Inter, sans-serif",
+            }}>
+              <CardContent className="p-6 flex flex-col items-center">
                 {/* Mock Mobile Header */}
+                <div className="flex items-center w-full justify-between mb-6 pb-4">
+                  <div className="p-2 border rounded-full border-gray-200">
+                    <ArrowLeft className="h-5 w-5" />
+                  </div>
+                  <span className="font-semibold text-2xl" style={{ color: "#393E46" }}>
+                    UPSKIN
+                  </span>
+                  <div className="p-2 border rounded-full border-gray-200">
+                    <PiShare className="h-5 w-5" />
+                  </div>
+                </div>
 
                 {/* Product Image */}
-                <div className="relative aspect-square mb-6 rounded-2xl overflow-hidden bg-gray-100">
-                  <Image src={image || "/placeholder.svg"} alt="Product" fill className="object-cover" />
+                <div className="relative w-full max-w-[240px] aspect-square mb-6 rounded-[8px] overflow-hidden bg-gray-100 mx-auto">
+                  <img
+                    src={image || "/placeholder.svg"}
+                    alt="Product"
+                    className="w-full h-full object-cover object-center"
+                  />
                 </div>
 
                 {/* Product Title */}
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold text-[#393E46]">{formData.productName || name}</h2>
-                  <Heart className="h-5 w-5 text-gray-400" />
+                <div className="flex items-center justify-between w-full mb-4" style={{ gap: "8px" }}>
+                  <h2 className="text-xl w-[80%] font-bold truncate text-[#393E46]">{formData.productName || name}</h2>
+                  <Heart className="h-6 w-6 font-bold" />
                 </div>
 
                 {/* Scores */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  {[overallScore, fitScore].map((item, index) => (
-                    <div className="flex items-center space-x-2" key={index}>
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: index === 0 ? "#6D9886" : "#8B5CF6" }}></div>
-                      <div>
-                        <p className="text-xs text-gray-500">{item.name}</p>
-                        <p className="text-lg font-semibold text-[#393E46]">
+                <div className="grid grid-cols-3 mb-4" style={{ gap: "8px" }}>
+                  {scoreCards.map((item, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-[8px] shadow-sm p-3 flex flex-col items-start gap-0"
+                    >
+                      <div className="flex items-center justify-between w-full mb-2">
+                        {typeof item.icon === "string" ? (
+                          <img src={item.icon} alt="icon" className="w-6 h-6 object-contain" />
+                        ) : (
+                          item.icon
+                        )}
+                      </div>
+                      <p className="text-xs font-medium truncate mb-1">{item.name}</p>
+                      {/* Text */}
+                      <div style={{ color: item.dotColor }} className="text-xs">
+                        <p className="font-semibold text-sm">
                           {item.value}
+                          {typeof item.value === "number" && item.description ? (
+                            <span className="text-xs"> · {item.description}</span>
+                          ) : null}
                         </p>
                       </div>
                     </div>
                   ))}
                 </div>
 
+
                 {/* Key Ingredients */}
-                <div className="mb-6 flex flex-col gap-2">
-                  <h3 className="font-semibold mb-3 text-[#393E46]">Key Ingredients</h3>
+                <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
+                  <h3 className="font-semibold text-xl mb-3 text-[#393E46]">Key Ingredients</h3>
                   {Ingredients.map((ingredient: { name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; description: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }, idx: Key | null | undefined) => (
-                    <div className="rounded-xl p-3 bg-[#F2E7D5]" key={idx}>
-                      <p className="font-medium text-[#393E46]">{ingredient.name}</p>
+                    <div className="rounded-[8px] p-3 bg-[#FFFFFF]" key={idx}>
+                      <p className="font-bold text-[#393E46]">{ingredient.name}</p>
                       <div className="flex items-center space-x-1 mt-1">
-                        <div className="w-2 h-2 rounded-full bg-[#6D9886]"></div>
+                        <div
+                          className="w-[10px] h-[10px] rounded-full"
+                          style={{ backgroundColor: getIngredientDotColor(ingredient.description?.toString() || "") }}
+                        ></div>
                         <span className="text-xs text-gray-600">{ingredient.description}</span>
                       </div>
                     </div>
@@ -122,14 +238,17 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                 </div>
 
                 {/* Key Takeaway */}
-                <div className="rounded-xl p-4 bg-[#F2E7D5]">
-                  <h3 className="font-semibold mb-2 text-[#393E46]">Key Takeaway</h3>
-                  {keyTakeaway.map((point: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, idx: Key | null | undefined) => (
-                    <p key={idx} className="text-sm text-gray-700 leading-relaxed mb-2">
-                      {point}
-                    </p>
-                  ))}
+                <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
+                  <h3 className="font-semibold text-xl mb-3 text-[#393E46]">Key Takeaway</h3>
+                  <div className="">
+                    {keyTakeaway.map((point: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, idx: Key | null | undefined) => (
+                      <p key={idx} className="text-sm text-gray-700 rounded-[8px] p-2 bg-[#FFFFFF] leading-relaxed mb-2">
+                        {point}
+                      </p>
+                    ))}
+                  </div>
                 </div>
+
               </CardContent>
             </Card>
           </div>
@@ -143,11 +262,40 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                 <div className="space-y-4">
                   <Button
                     onClick={handleDownload}
-                    className="w-full h-12 sm:h-14 text-base sm:text-lg font-semibold rounded-xl bg-[#6D9886] text-white flex items-center justify-center hover:bg-[#5e8374]"
+                    disabled={isDownloading}
+                    className="w-full h-12 sm:h-14 text-base sm:text-lg font-semibold rounded-xl bg-[#6D9886] text-white flex items-center justify-center hover:bg-[#5e8374] disabled:opacity-60 disabled:cursor-not-allowed"
                     size="lg"
                   >
-                    <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-                    <span className="text-sm sm:text-base">Download High Quality PNG</span>
+                    {isDownloading ? (
+                      <>
+                        <svg
+                          className="animate-spin h-4 w-4 sm:h-5 sm:w-5 mr-2 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8H4z"
+                          ></path>
+                        </svg>
+                        <span className="text-sm sm:text-base">Generating PNG...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                        <span className="text-sm sm:text-base">Download High Quality PNG</span>
+                      </>
+                    )}
                   </Button>
                   <Button
                     variant="outline"

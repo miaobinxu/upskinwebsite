@@ -214,6 +214,7 @@ const handleFileSelect = (file: File) => {
                       <SelectContent className="bg-white border border-gray-200 rounded-xl shadow-md">
                         <SelectItem value="Default">Default Analysis</SelectItem>
                         <SelectItem value="Positive">Positive Focus</SelectItem>
+                        <SelectItem value="Negative">Critical Analysis</SelectItem>
                         <SelectItem value="Positive but not match">Positive with Concerns</SelectItem>
                       </SelectContent>
                     </Select>
