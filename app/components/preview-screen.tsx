@@ -169,7 +169,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
               background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
               fontFamily: "Inter, sans-serif",
             }}>
-              <CardContent className="pt-1 px-6 pb-6 flex flex-col items-center">
+              <CardContent className="pt-0 px-6 pb-6 flex flex-col items-center">
                 {/* Mock Mobile Header */}
                 <div className="flex items-center w-full justify-between mb-1 pb-1">
                   <div className="p-2 border rounded-full border-gray-200">
