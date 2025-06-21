@@ -88,7 +88,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
       if (score >= 90) return "Perfect";
       if (score >= 60) return "Good";
       if (score >= 30) return "Minimal";
-      return "Incompatible";
+      return "Mismatch";
     }
 
     return "";
@@ -233,7 +233,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
 
                 {/* Key Ingredients */}
                 <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
-                  <h3 className="font-semibold text-xl mb-3 text-[#393E46]">Key Ingredients</h3>
+                  <h3 className="font-semibold text-xl mb-3 text-[#393E46]">Ingredients</h3>
                   {Ingredients.map((ingredient: { name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; description: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }, idx: Key | null | undefined) => (
                     <div className="rounded-[8px] p-3 bg-[#FFFFFF]" key={idx}>
                       <p className="font-bold text-[#393E46]">{ingredient.name}</p>

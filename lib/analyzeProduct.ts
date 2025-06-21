@@ -89,8 +89,8 @@ export async function analyzeProduct({
 "value": <COMPATIBILITY_SCORE>
 },
 "Ingredients": [
-{ "name": "<INGREDIENT_1>", "description": "<SHORT_PHRASE>" },
-{ "name": "<INGREDIENT_2>", "description": "<SHORT_PHRASE>" }
+{ "name": "<INGREDIENT_1>", "description": "<SHORT_PHRASE_1>" },
+{ "name": "<INGREDIENT_2>", "description": "<SHORT_PHRASE_2>" }
 ],
 "keyTakeaway": [
 "<TAKEAWAY_1>",
