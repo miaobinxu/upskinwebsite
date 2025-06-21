@@ -43,13 +43,13 @@ export async function analyzeProduct({
 
   const ingredientDescription = {
     Default:
-      "1 acne risk ingredient with short description (Acne Risk), and 1 good ingredient with short description (Improve Your Hydration, Improve Your Pores, Improve Your Redness, Improve Your Pigmentation)",
+      "1 acne risk ingredient with a short phrase (Choose one from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with a short phrase (Choose one from: Improve Your Pores, Improve Your Redness, Improve Your Pigmentation)",
     Positive:
-      "2 good ingredients (must include acne safe ingredient) with short description (Acne Safe, Improve Your Hydration, Improve Your Pores, Improve Your Redness, Improve Your Pigmentation)",
+      "2 good ingredients (must include acne safe ingredient) with a short phrase (Choose one from: Acne Safe, Improve Your Hydration, Improve Your Pores, Improve Your Redness, Improve Your Pigmentation)",
     Negative:
-      "2 bad ingredients (must include acne risk ingredient) with short description (Acne Risk, Moderate Risk, High Risk)",
+      "2 bad ingredients (must include acne risk ingredient) with a short phrase (Choose one from:Acne Risk, Moderate Risk, High Risk)",
     "Positive but not match":
-      "1 acne risk ingredient with short description (Acne Risk), and 1 good ingredient with short description (Acne Safe, Improve Your Hydration, Improve Your Pores, Improve Your Redness, Improve Your Pigmentation)",
+      "1 acne risk ingredient with a short phrase (Choose one from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with a short phrase (Choose one from: Improve Your Pores, Improve Your Redness, Improve Your Pigmentation)",
   };
 
   const payload = {
@@ -89,8 +89,8 @@ export async function analyzeProduct({
 "value": <COMPATIBILITY_SCORE>
 },
 "Ingredients": [
-{ "name": "<INGREDIENT_1>", "description": "<...>" },
-{ "name": "<INGREDIENT_2>", "description": "<...>" }
+{ "name": "<INGREDIENT_1>", "description": "<SHORT_PHRASE>" },
+{ "name": "<INGREDIENT_2>", "description": "<SHORT_PHRASE>" }
 ],
 "keyTakeaway": [
 "<TAKEAWAY_1>",
