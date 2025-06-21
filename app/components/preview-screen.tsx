@@ -9,6 +9,7 @@ import html2canvas from "html2canvas";
 import { useRef } from "react"
 import { PiShare } from "react-icons/pi";
 import { RiShieldCheckFill } from "react-icons/ri";
+import { generateScreenshotInNewTab } from "@/lib/utils"
 
 interface PreviewScreenProps {
   formData: {
@@ -30,31 +31,17 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
   const { name, overallScore, fitScore, Ingredients, keyTakeaway } = result
 
 
-  const handleDownload = async () => {
-    const node = document.getElementById("capture-area");
-    if (!node) return;
+const handleDownload = async () => {
+  const captureElement = document.getElementById("capture-area");
+  if (!captureElement) {
+    alert("Could not find capture area.");
+    return;
+  }
 
-    setIsDownloading(true);
+  const html = captureElement.outerHTML;
 
-    try {
-      const canvas = await html2canvas(node, {
-        useCORS: true,
-        backgroundColor: "#fff",
-        scale: 2,
-      });
-
-      const dataUrl = canvas.toDataURL("image/png");
-
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = "screenshot.png";
-      link.click();
-    } catch (error) {
-      console.error("html2canvas error", error);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+  await generateScreenshotInNewTab(html);
+};
 
 
   const getDotColor = (value: number | string) => {
