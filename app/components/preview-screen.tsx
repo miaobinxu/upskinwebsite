@@ -42,19 +42,76 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
         toast.error("Screenshot download is only supported on desktop. Please use a desktop browser.");
         return;
       }
-      const dataUrl = await toPng(element, {
-        cacheBust: true,
-        pixelRatio: 2,
-        backgroundColor: "#fff",
+
+      // Safari-specific fixes
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      
+      // Wait for all images to load before generating screenshot
+      const images = element.querySelectorAll('img');
+      const imagePromises = Array.from(images).map((img) => {
+        return new Promise<void>((resolve) => {
+          if (img.complete) {
+            resolve();
+          } else {
+            img.onload = () => resolve();
+            img.onerror = () => resolve(); // Still resolve to avoid hanging
+            // Add timeout to prevent indefinite waiting
+            setTimeout(() => resolve(), 3000);
+          }
+        });
       });
 
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = "screenshot.png";
-      link.click();
+      await Promise.all(imagePromises);
+
+      // Safari-optimized options
+      const options = {
+        cacheBust: true,
+        pixelRatio: isSafari ? 1 : 2, // Lower pixel ratio for Safari
+        backgroundColor: "#ffffff",
+        quality: 0.95,
+        preferredFontFormat: 'woff2',
+        // Safari-specific fixes
+        skipAutoScale: isSafari,
+        useCORS: true,
+        allowTaint: false,
+        // Add timeout for Safari
+        timeout: isSafari ? 10000 : 5000,
+        // Force inline styles for Safari compatibility
+        inlineImages: true,
+        // Better font rendering for Safari
+        fontEmbedCSS: `
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        `,
+      };
+
+      const dataUrl = await toPng(element, options);
+
+      // Safari-specific download handling
+      if (isSafari) {
+        // Create a more compatible download method for Safari
+        const blob = await fetch(dataUrl).then(res => res.blob());
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "upskin-analysis-screenshot.png";
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up the object URL
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+      } else {
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "upskin-analysis-screenshot.png";
+        link.click();
+      }
 
     } catch (err) {
-      toast.error("There was an error while generating the screenshot.");
+      console.error('Screenshot generation error:', err);
+      toast.error("There was an error while generating the screenshot. Please try again.");
     } finally {
       setIsDownloading(false);
     }
@@ -168,6 +225,16 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
             <Card ref={previewRef} className="border-none max-w-sm mx-auto lg:mx-0" style={{
               background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
               fontFamily: "Inter, sans-serif",
+              // Safari-specific fixes
+              WebkitTransform: 'translateZ(0)',
+              transform: 'translateZ(0)',
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              WebkitPerspective: '1000px',
+              perspective: '1000px',
+              // Ensure proper rendering
+              isolation: 'isolate',
+              willChange: 'transform',
             }}>
               <CardContent className="p-6 flex flex-col items-center">
                 {/* Mock Mobile Header */}
@@ -189,6 +256,25 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                     src={image || "/placeholder.svg"}
                     alt="Product"
                     className="w-full h-full object-cover object-center"
+                    crossOrigin="anonymous"
+                    style={{
+                      maxWidth: '100%',
+                      height: 'auto',
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                      // Safari-specific fixes
+                      imageRendering: '-webkit-optimize-contrast',
+                      WebkitUserSelect: 'none',
+                      userSelect: 'none',
+                    }}
+                    onLoad={(e) => {
+                      // Ensure image is fully loaded for Safari
+                      (e.target as HTMLImageElement).style.opacity = '1';
+                    }}
+                    onError={(e) => {
+                      // Fallback for broken images
+                      (e.target as HTMLImageElement).src = '/placeholder.svg';
+                    }}
                   />
                 </div>
 
@@ -209,7 +295,25 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                     >
                       <div className="flex items-center justify-between w-full mb-2">
                         {typeof item.icon === "string" ? (
-                          <img src={item.icon} alt="icon" className="w-6 h-6 object-contain" />
+                          <img 
+                            src={item.icon} 
+                            alt="icon" 
+                            className="w-6 h-6 object-contain" 
+                            crossOrigin="anonymous"
+                            style={{
+                              maxWidth: '24px',
+                              maxHeight: '24px',
+                              objectFit: 'contain',
+                              // Safari-specific fixes
+                              imageRendering: '-webkit-optimize-contrast',
+                              WebkitUserSelect: 'none',
+                              userSelect: 'none',
+                            }}
+                            onError={(e) => {
+                              // Hide broken icon images
+                              (e.target as HTMLImageElement).style.display = 'none';
+                            }}
+                          />
                         ) : (
                           item.icon
                         )}
