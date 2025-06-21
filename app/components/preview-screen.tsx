@@ -171,7 +171,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
             }}>
               <CardContent className="p-6 flex flex-col items-center">
                 {/* Mock Mobile Header */}
-                <div className="flex items-center w-full justify-between mb-6 pb-4">
+                <div className="flex items-center w-full justify-between mb-4 pb-2">
                   <div className="p-2 border rounded-full border-gray-200">
                     <ArrowLeft className="h-5 w-5" />
                   </div>
