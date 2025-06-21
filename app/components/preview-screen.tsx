@@ -8,8 +8,7 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key, JSX, 
 import { toPng } from "html-to-image";
 import { useRef } from "react"
 import { PiShare } from "react-icons/pi";
-import { RiShieldCheckFill } from "react-icons/ri";
-import { useToast } from "@/hooks/use-toast"
+import toast from 'react-hot-toast'
 
 interface PreviewScreenProps {
   formData: {
@@ -23,7 +22,6 @@ interface PreviewScreenProps {
 export default function PreviewScreen({ formData, onStartOver }: PreviewScreenProps) {
   const result = useScreenshotStore((state) => state.result);
   const image = useScreenshotStore((state) => state.image);
-  const { toast } = useToast();
   const [isDownloading, setIsDownloading] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null)
   if (!result) {
@@ -41,15 +39,9 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
       if (isMobile) {
-        toast({
-          title: "Unsupported on Mobile",
-          description: "📵 Screenshot download is only supported on desktop browsers. Please switch to a desktop device.",
-          variant: "destructive",
-        });
-
+        toast.error("Screenshot download is only supported on desktop. Please use a desktop browser.");
         return;
       }
-
       const dataUrl = await toPng(element, {
         cacheBust: true,
         pixelRatio: 2,
@@ -62,12 +54,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
       link.click();
 
     } catch (err) {
-      console.error("Image generation failed", err);
-      toast({
-        title: "Image Generation Failed",
-        description: "There was an error while generating the screenshot.",
-        variant: "destructive",
-      });
+      toast.error("There was an error while generating the screenshot.");
     } finally {
       setIsDownloading(false);
     }
