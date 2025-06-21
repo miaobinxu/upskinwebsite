@@ -12,31 +12,38 @@ import { Upload, X, Sparkles, ImageIcon, Zap } from "lucide-react"
 import Image from "next/image"
 
 interface UploadScreenProps {
-  onGenerate: (image: string, data: { mood: string; skinType: string; productName: string }) => void
+  onGenerate: (image: File, data: { mood: string; skinType: string; productName: string }) => void
+  loading: boolean
 }
 
-export default function UploadScreen({ onGenerate }: UploadScreenProps) {
+export default function UploadScreen({ onGenerate, loading }: UploadScreenProps) {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
-  const [mood, setMood] = useState<string>("")
+  const [mood, setMood] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [skinType, setSkinType] = useState<string>("")
   const [productName, setProductName] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFileSelect = (file: File) => {
-    if (!file.type.match(/^image\/(jpeg|jpg|png|webp)$/)) {
-      setError("Please upload a JPEG, PNG, or WebP image")
-      return
-    }
-
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      setUploadedImage(e.target?.result as string)
-      setError(null)
-    }
-    reader.readAsDataURL(file)
+const handleFileSelect = (file: File) => {
+  if (!file.type.match(/^image\/(jpeg|jpg|png|webp)$/)) {
+    setError("Please upload a JPEG, PNG, or WebP image")
+    return
   }
+
+  if (fileInputRef.current) {
+    fileInputRef.current.value = ""
+  }
+
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    setUploadedImage(e.target?.result as string)
+    setSelectedFile(file)
+    setError(null)
+  }
+  reader.readAsDataURL(file)
+}
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -66,13 +73,14 @@ export default function UploadScreen({ onGenerate }: UploadScreenProps) {
 
   const removeImage = () => {
     setUploadedImage(null)
+    setSelectedFile(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
   }
 
   const handleGenerate = () => {
-    if (!uploadedImage) {
+    if (!selectedFile) {
       setError("Please upload an image first")
       return
     }
@@ -83,7 +91,7 @@ export default function UploadScreen({ onGenerate }: UploadScreenProps) {
     }
 
     setError(null)
-    onGenerate(uploadedImage, { mood, skinType, productName })
+    onGenerate(selectedFile, { mood, skinType, productName })
   }
 
   return (
@@ -133,8 +141,8 @@ export default function UploadScreen({ onGenerate }: UploadScreenProps) {
                 {!uploadedImage ? (
                   <div
                     className={`border-2 border-dashed rounded-2xl cursor-pointer transition-shadow ${isDragging
-                        ? "border-[#6D9886] bg-[#F2E7D5]/30 shadow-md"
-                        : "border-gray-300 hover:border-[#6D9886] hover:bg-[#F2E7D5]/10"
+                      ? "border-[#6D9886] bg-[#F2E7D5]/30 shadow-md"
+                      : "border-gray-300 hover:border-[#6D9886] hover:bg-[#F2E7D5]/10"
                       }`}
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
@@ -206,7 +214,6 @@ export default function UploadScreen({ onGenerate }: UploadScreenProps) {
                       <SelectContent className="bg-white border border-gray-200 rounded-xl shadow-md">
                         <SelectItem value="Default">Default Analysis</SelectItem>
                         <SelectItem value="Positive">Positive Focus</SelectItem>
-                        <SelectItem value="Negative">Critical Analysis</SelectItem>
                         <SelectItem value="Positive but not match">Positive with Concerns</SelectItem>
                       </SelectContent>
                     </Select>
@@ -251,16 +258,45 @@ export default function UploadScreen({ onGenerate }: UploadScreenProps) {
                 {/* Generate Button */}
                 <Button
                   onClick={handleGenerate}
-                  disabled={!uploadedImage}
+                  disabled={!uploadedImage || loading}
                   className="w-full mt-8 h-14 text-lg font-semibold rounded-xl shadow-md disabled:opacity-50"
                   style={{
                     backgroundColor: uploadedImage ? "#6D9886" : "#d1d5db",
                     color: "white",
+                    cursor: loading ? "not-allowed" : "pointer",
                   }}
                   size="lg"
                 >
-                  <Sparkles className="h-5 w-5 mr-2 text-yellow-400" />
-                  Generate Screenshot
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v8z"
+                        />
+                      </svg>
+                      Generating...
+                    </span>
+                  ) : (
+                    <>
+                      <Sparkles className="h-5 w-5 mr-2 text-yellow-400" />
+                      Generate Screenshot
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>

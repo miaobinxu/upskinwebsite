@@ -8,7 +8,7 @@ import { Menu, X, Settings, User } from "lucide-react"
 import Image from "next/image"
 
 const navItems = [
-  { label: "Home", href: "/" },
+  { label: "Internal Tool", href: "/internal" },
 ]
 
 export default function Navbar() {
@@ -37,17 +37,17 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map(({ label, href }) => (
-              <Link
-                key={href}
-                href={href}
-                className={`transition-colors ${isActive(href)
+            {navItems.map(({ label, href },idx) => (
+              <p
+                key={idx}
+                // href={href}
+                className={`transition-colors ${!isActive(href)
                   ? "text-[#6D9886] font-semibold border-b-2 border-[#6D9886] pb-1"
                   : "text-gray-600 hover:text-[#6D9886]"
                   }`}
               >
                 {label}
-              </Link>
+              </p>
             ))}
           </div>
 

@@ -1,4 +1,4 @@
-import { Sparkles, Mail } from "lucide-react"
+import { Mail } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -10,16 +10,14 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex mb-2 items-center cursor-pointer">
-              <Link href="/">
-                <Image
-                  src="/upskin-logo.png"
-                  alt="Upskin Logo"
-                  height={50}
-                  width={50}
-                  className="h-16 w-16 object-cover rounded-xl"
-                  priority
-                />
-              </Link>
+              <Image
+                src="/upskin-logo.png"
+                alt="Upskin Logo"
+                height={50}
+                width={50}
+                className="h-16 w-16 object-cover rounded-xl"
+                priority
+              />
             </div>
             <p className="text-gray-600 mb-6 max-w-md">
               Advanced skincare analysis and product screenshot generation tool for beauty professionals and brands.
@@ -99,10 +97,10 @@ export default function Footer() {
         <div className="border-t border-gray-100 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">© 2024 Upskin. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
-            <Link href="/privacy-policies" className="text-gray-500 hover:text-[#6D9886] text-sm transition-colors">
+            <Link href="/privacypolicy" className="text-gray-500 hover:text-[#6D9886] text-sm transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms-of-service" className="text-gray-500 hover:text-[#6D9886] text-sm transition-colors">
+            <Link href="/termsofservice" className="text-gray-500 hover:text-[#6D9886] text-sm transition-colors">
               Terms of Service
             </Link>
           </div>

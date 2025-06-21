@@ -2,11 +2,14 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { useScreenshotStore } from "@/lib/store/analysisStore"
 import { ArrowLeft, Download, Heart, Share2, RotateCcw, Sparkles } from "lucide-react"
 import Image from "next/image"
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react"
+import html2canvas from "html2canvas"
+import { useRef } from "react"
 
 interface PreviewScreenProps {
-  image: string
   formData: {
     mood: string
     skinType: string
@@ -15,42 +18,31 @@ interface PreviewScreenProps {
   onStartOver: () => void
 }
 
-export default function PreviewScreen({ image, formData, onStartOver }: PreviewScreenProps) {
-  const handleDownload = () => {
-    // Create a canvas to render the screenshot
-    const canvas = document.createElement("canvas")
-    const ctx = canvas.getContext("2d")
-
-    if (!ctx) return
-
-    // Set canvas size (adjust as needed)
-    canvas.width = 375
-    canvas.height = 667
-
-    // Create the screenshot (simplified version)
-    // In a real app, this would be more sophisticated
-    const link = document.createElement("a")
-    link.download = `${formData.productName || "product"}-screenshot.png`
-    link.href = canvas.toDataURL()
-    link.click()
+export default function PreviewScreen({ formData, onStartOver }: PreviewScreenProps) {
+  const result = useScreenshotStore((state) => state.result);
+    const image = useScreenshotStore((state) => state.image)
+  const previewRef = useRef<HTMLDivElement>(null)
+  if (!result) {
+    return <p className="text-center text-red-500 font-semibold">No analysis result found.</p>
   }
+  const { name, overallScore, fitScore, Ingredients, keyTakeaway } = result
 
-  // Generate sample data based on form inputs
-  const generateSampleData = () => {
-    const productName = formData.productName || "Skincare Product Analysis"
-    const overallScore = formData.mood === "Positive" ? 98 : formData.mood === "Negative" ? 45 : 76
-    const compatibilityScore = formData.skinType === "Oily" ? 92 : formData.skinType === "Dry" ? 88 : 96
 
-    return {
-      productName,
-      overallScore,
-      compatibilityScore,
-      overallRating: overallScore >= 90 ? "Excellent" : overallScore >= 70 ? "Good" : "Poor",
-      compatibilityRating: compatibilityScore >= 90 ? "Perfect" : compatibilityScore >= 70 ? "Good" : "Poor",
-    }
-  }
+  const handleDownload = async () => {
+    if (!previewRef.current) return;
 
-  const sampleData = generateSampleData()
+    const canvas = await html2canvas(previewRef.current, {
+      useCORS: true,
+      backgroundColor: null
+    });
+
+    const dataUrl = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = `${formData.productName || "product"}-screenshot.png`;
+    link.click();
+  };
+
 
   return (
     <div className="py-8 px-4">
@@ -85,14 +77,9 @@ export default function PreviewScreen({ image, formData, onStartOver }: PreviewS
             </div>
 
             {/* Mobile Preview */}
-            <Card className="rounded-xl shadow-md hover:shadow-lg transition-shadow max-w-sm mx-auto lg:mx-0">
+            <Card ref={previewRef} className="rounded-xl bg-[#F7F7F7] shadow-md hover:shadow-lg transition-shadow max-w-sm mx-auto lg:mx-0">
               <CardContent className="p-6">
                 {/* Mock Mobile Header */}
-                {/* <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-                  <ArrowLeft className="h-5 w-5 text-gray-400" />
-                  <span className="font-semibold text-[#393E46]">UPSKIN</span>
-                  <Share2 className="h-5 w-5 text-gray-400" />
-                </div> */}
 
                 {/* Product Image */}
                 <div className="relative aspect-square mb-6 rounded-2xl overflow-hidden bg-gray-100">
@@ -101,30 +88,19 @@ export default function PreviewScreen({ image, formData, onStartOver }: PreviewS
 
                 {/* Product Title */}
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold text-[#393E46]">{sampleData.productName}</h2>
+                  <h2 className="text-lg font-semibold text-[#393E46]">{formData.productName || name}</h2>
                   <Heart className="h-5 w-5 text-gray-400" />
                 </div>
 
                 {/* Scores */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
-                  {[{
-                    label: "Overall score",
-                    score: sampleData.overallScore,
-                    rating: sampleData.overallRating,
-                    color: "#6D9886"
-                  }, {
-                    label: "Compatibility",
-                    score: sampleData.compatibilityScore,
-                    rating: sampleData.compatibilityRating,
-                    color: "#8B5CF6"
-                  }].map((item, index) => (
+                  {[overallScore, fitScore].map((item, index) => (
                     <div className="flex items-center space-x-2" key={index}>
-                      <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: item.color }}></div>
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: index === 0 ? "#6D9886" : "#8B5CF6" }}></div>
                       <div>
-                        <p className="text-xs text-gray-500">{item.label}</p>
+                        <p className="text-xs text-gray-500">{item.name}</p>
                         <p className="text-lg font-semibold text-[#393E46]">
-                          {item.score}{" "}
-                          <span className="text-sm font-normal" style={{ color: item.color }}>{item.rating}</span>
+                          {item.value}
                         </p>
                       </div>
                     </div>
@@ -134,12 +110,12 @@ export default function PreviewScreen({ image, formData, onStartOver }: PreviewS
                 {/* Key Ingredients */}
                 <div className="mb-6 flex flex-col gap-2">
                   <h3 className="font-semibold mb-3 text-[#393E46]">Key Ingredients</h3>
-                  {["Panthenol (Vitamin B5)", "Madecassoside"].map((ingredient, idx) => (
+                  {Ingredients.map((ingredient: { name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; description: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }, idx: Key | null | undefined) => (
                     <div className="rounded-xl p-3 bg-[#F2E7D5]" key={idx}>
-                      <p className="font-medium text-[#393E46]">{ingredient}</p>
+                      <p className="font-medium text-[#393E46]">{ingredient.name}</p>
                       <div className="flex items-center space-x-1 mt-1">
                         <div className="w-2 h-2 rounded-full bg-[#6D9886]"></div>
-                        <span className="text-xs text-gray-600">No Risk</span>
+                        <span className="text-xs text-gray-600">{ingredient.description}</span>
                       </div>
                     </div>
                   ))}
@@ -147,13 +123,12 @@ export default function PreviewScreen({ image, formData, onStartOver }: PreviewS
 
                 {/* Key Takeaway */}
                 <div className="rounded-xl p-4 bg-[#F2E7D5]">
-                  <h3 className="font-semibold mb-2 text-[#393E46]">Key takeaway</h3>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    Panthenol makes it ideal for your {formData.skinType.toLowerCase()} skin type.
-                  </p>
-                  <p className="text-sm text-gray-700 leading-relaxed mt-2">
-                    This product shows {sampleData.overallRating.toLowerCase()} compatibility with your skin profile.
-                  </p>
+                  <h3 className="font-semibold mb-2 text-[#393E46]">Key Takeaway</h3>
+                  {keyTakeaway.map((point: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, idx: Key | null | undefined) => (
+                    <p key={idx} className="text-sm text-gray-700 leading-relaxed mb-2">
+                      {point}
+                    </p>
+                  ))}
                 </div>
               </CardContent>
             </Card>
