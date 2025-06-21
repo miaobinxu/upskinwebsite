@@ -47,7 +47,6 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
           variant: "destructive",
         });
 
-        await new Promise((r) => setTimeout(r, 100)); // Allow toast to render before exit
         return;
       }
 
