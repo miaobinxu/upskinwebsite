@@ -169,7 +169,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
               background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
               fontFamily: "Inter, sans-serif",
             }}>
-              <CardContent className="pt-0 px-6 pb-6 flex flex-col items-center">
+              <CardContent className="pt-1 px-6 pb-6 flex flex-col items-center">
                 {/* Mock Mobile Header */}
                 <div className="flex items-center w-full justify-between mb-1 pb-1">
                   <div className="p-2 border rounded-full border-gray-200">
@@ -233,7 +233,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
 
                 {/* Key Ingredients */}
                 <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
-                  <h3 className="font-semibold text-xl mb-3 text-[#393E46]">Ingredients</h3>
+                  <h3 className="font-semibold text-lg mb-3 text-[#393E46]">Ingredients</h3>
                   {Ingredients.map((ingredient: { name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; description: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }, idx: Key | null | undefined) => (
                     <div className="rounded-[8px] p-3 bg-[#FFFFFF]" key={idx}>
                       <p className="font-bold text-[#393E46]">{ingredient.name}</p>
@@ -250,7 +250,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
 
                 {/* Key Takeaway */}
                 <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
-                  <h3 className="font-semibold text-xl mb-3 text-[#393E46]">Key Takeaway</h3>
+                  <h3 className="font-semibold text-lg mb-3 text-[#393E46]">Key Takeaway</h3>
                   <div className="">
                     {keyTakeaway.map((point: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, idx: Key | null | undefined) => (
                       <p key={idx} className="text-sm text-gray-700 rounded-[8px] p-2 bg-[#FFFFFF] leading-relaxed mb-2">
