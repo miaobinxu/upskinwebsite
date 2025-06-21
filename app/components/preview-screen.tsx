@@ -6,6 +6,7 @@ import { useScreenshotStore } from "@/lib/store/analysisStore"
 import { ArrowLeft, Download, Heart, Share2, RotateCcw, Sparkles, Star, User } from "lucide-react"
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key, JSX, useState } from "react"
 import { toPng } from "html-to-image";
+import html2canvas from "html2canvas";
 import { useRef } from "react"
 import { PiShare } from "react-icons/pi";
 import { RiShieldCheckFill } from "react-icons/ri";
@@ -360,7 +361,3 @@ const handleDownload = async () => {
     </div>
   )
 }
-function html2canvas(element: HTMLDivElement, arg1: { scale: number; useCORS: boolean }) {
-  throw new Error("Function not implemented.")
-}
-
