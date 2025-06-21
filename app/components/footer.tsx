@@ -27,7 +27,12 @@ export default function Footer() {
             <div className="flex space-x-4">
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <Mail className="h-4 w-4" />
-                <span>miaobinxu@upskin.com</span>
+                <Link
+                  href="mailto:nativfeedback@gmail.com"
+                  className="text-[#6D9886] underline hover:text-[#518c74]"
+                >
+                  nativfeedback@gmail.com
+                </Link>
               </div>
             </div>
           </div>
@@ -39,24 +44,24 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link href="#" className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
+                <p className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
                   Screenshot Generator
-                </Link>
+                </p>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
+                <p className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
                   Skin Analysis
-                </Link>
+                </p>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
+                <p className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
                   Templates
-                </Link>
+                </p>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
+                <p className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
                   API Access
-                </Link>
+                </p>
               </li>
             </ul>
           </div>
@@ -68,24 +73,24 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link href="#" className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
+                <p className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
                   Documentation
-                </Link>
+                </p>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
+                <p className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
                   Help Center
-                </Link>
+                </p>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
+                <p className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
                   Contact Us
-                </Link>
+                </p>
               </li>
               <li>
-                <Link href="#" className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
+                <p className="text-gray-600 hover:text-[#6D9886] transition-colors text-sm">
                   Status
-                </Link>
+                </p>
               </li>
             </ul>
           </div>
@@ -94,10 +99,10 @@ export default function Footer() {
         <div className="border-t border-gray-100 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">© 2024 Upskin. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
-            <Link href="#" className="text-gray-500 hover:text-[#6D9886] text-sm transition-colors">
+            <Link href="/privacy-policies" className="text-gray-500 hover:text-[#6D9886] text-sm transition-colors">
               Privacy Policy
             </Link>
-            <Link href="#" className="text-gray-500 hover:text-[#6D9886] text-sm transition-colors">
+            <Link href="/terms-of-service" className="text-gray-500 hover:text-[#6D9886] text-sm transition-colors">
               Terms of Service
             </Link>
           </div>
