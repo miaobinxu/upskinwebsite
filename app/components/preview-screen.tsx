@@ -6,7 +6,6 @@ import { useScreenshotStore } from "@/lib/store/analysisStore"
 import { ArrowLeft, Download, Heart, Share2, RotateCcw, Sparkles, Star, User } from "lucide-react"
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key, JSX, useState } from "react"
 import { toPng } from "html-to-image";
-import html2canvas from "html2canvas";
 import { useRef } from "react"
 import { PiShare } from "react-icons/pi";
 import { RiShieldCheckFill } from "react-icons/ri";
@@ -23,9 +22,9 @@ interface PreviewScreenProps {
 
 export default function PreviewScreen({ formData, onStartOver }: PreviewScreenProps) {
   const result = useScreenshotStore((state) => state.result);
-  const image = useScreenshotStore((state) => state.image)
+  const image = useScreenshotStore((state) => state.image);
+  const { toast } = useToast();
   const [isDownloading, setIsDownloading] = useState(false);
-  const { toast } = useToast()
   const previewRef = useRef<HTMLDivElement>(null)
   if (!result) {
     return <p className="text-center text-red-500 font-semibold">No analysis result found.</p>
@@ -44,9 +43,11 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
       if (isMobile) {
         toast({
           title: "Unsupported on Mobile",
-          description: "Screenshot download is only supported on desktop browsers. Please switch to a desktop device.",
+          description: "📵 Screenshot download is only supported on desktop browsers. Please switch to a desktop device.",
           variant: "destructive",
         });
+
+        await new Promise((r) => setTimeout(r, 100)); // Allow toast to render before exit
         return;
       }
 
@@ -103,6 +104,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
       if (score >= 30) return "Minimal";
       return "Incompatible";
     }
+
     return "";
   };
 
@@ -177,141 +179,64 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
             </div>
 
             {/* Mobile Preview */}
-            <Card
-              ref={previewRef}
-              style={{
-                border: "none",
-                maxWidth: "24rem",
-                margin: "0 auto",
-                background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
-                fontFamily: "Inter, sans-serif",
-              }}
-            >
-              <CardContent
-                style={{
-                  padding: "1.5rem",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                {/* Header */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    width: "100%",
-                    justifyContent: "space-between",
-                    marginBottom: "1.5rem",
-                    paddingBottom: "1rem",
-                  }}
-                >
-                  <div
-                    style={{
-                      padding: "0.5rem",
-                      border: "1px solid #E5E7EB",
-                      borderRadius: "9999px",
-                    }}
-                  >
-                    <ArrowLeft style={{ width: "1.25rem", height: "1.25rem" }} />
+            <Card ref={previewRef} className="border-none max-w-sm mx-auto lg:mx-0" style={{
+              background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
+              fontFamily: "Inter, sans-serif",
+            }}>
+              <CardContent className="p-6 flex flex-col items-center">
+                {/* Mock Mobile Header */}
+                <div className="flex items-center w-full justify-between mb-6 pb-4">
+                  <div className="p-2 border rounded-full border-gray-200">
+                    <ArrowLeft className="h-5 w-5" />
                   </div>
-                  <span style={{ fontWeight: 600, fontSize: "1.5rem", color: "#393E46" }}>
+                  <span className="font-semibold text-2xl" style={{ color: "#393E46" }}>
                     UPSKIN
                   </span>
-                  <div
-                    style={{
-                      padding: "0.5rem",
-                      border: "1px solid #E5E7EB",
-                      borderRadius: "9999px",
-                    }}
-                  >
-                    <PiShare style={{ width: "1.25rem", height: "1.25rem" }} />
+                  <div className="p-2 border rounded-full border-gray-200">
+                    <PiShare className="h-5 w-5" />
                   </div>
                 </div>
 
                 {/* Product Image */}
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    maxWidth: "240px",
-                    aspectRatio: "1 / 1",
-                    marginBottom: "1.5rem",
-                    borderRadius: "8px",
-                    overflow: "hidden",
-                    background: "#f3f4f6",
-                  }}
-                >
+                <div className="relative w-full max-w-[240px] aspect-square mb-6 rounded-[8px] overflow-hidden bg-gray-100 mx-auto">
                   <img
                     src={image || "/placeholder.svg"}
                     alt="Product"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+                    className="w-full h-full object-cover object-center"
                   />
                 </div>
 
                 {/* Product Title */}
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    width: "100%",
-                    marginBottom: "1rem",
-                    gap: "8px",
-                  }}
-                >
-                  <h2 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#393E46", wordBreak: "break-word" }}>
+                <div className="flex items-start justify-between w-full mb-4" style={{ gap: "8px" }}>
+                  <h2 className="text-xl font-bold text-[#393E46] break-words">
                     {formData.productName || name}
                   </h2>
-                  <Heart style={{ width: "1.5rem", height: "1.5rem", marginTop: "0.25rem" }} />
+                  <Heart className="h-6 w-6 font-bold mt-1" />
                 </div>
 
-                {/* Score Cards */}
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: "8px",
-                    marginBottom: "1rem",
-                    width: "100%",
-                  }}
-                >
+                {/* Scores */}
+                <div className="grid grid-cols-3 mb-4" style={{ gap: "8px" }}>
                   {scoreCards.map((item, index) => (
                     <div
                       key={index}
-                      style={{
-                        background: "#FFFFFF",
-                        borderRadius: "8px",
-                        boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-                        padding: "0.75rem",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                      }}
+                      className="bg-white rounded-[8px] shadow-sm p-3 flex flex-col items-start gap-0"
                     >
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          width: "100%",
-                          marginBottom: "0.5rem",
-                        }}
-                      >
+                      <div className="flex items-center justify-between w-full mb-2">
                         {typeof item.icon === "string" ? (
-                          <img src={item.icon} alt="icon" style={{ width: "1.5rem", height: "1.5rem" }} />
+                          <img src={item.icon} alt="icon" className="w-6 h-6 object-contain" />
                         ) : (
                           item.icon
                         )}
                       </div>
-                      <p style={{ fontSize: "0.75rem", fontWeight: 500, marginBottom: "0.25rem", wordBreak: "break-word", width: "100%" }}>
+                      <p className="text-xs font-medium mb-1 break-words w-full">
                         {item.name}
                       </p>
-                      <div style={{ fontSize: "0.75rem", color: item.dotColor }}>
-                        <p style={{ fontWeight: 600, fontSize: "0.875rem" }}>
+                      {/* Text */}
+                      <div style={{ color: item.dotColor }} className="text-xs">
+                        <p className="font-semibold text-sm">
                           {item.value}
                           {typeof item.value === "number" && item.description ? (
-                            <span style={{ fontSize: "0.75rem" }}> · {item.description}</span>
+                            <span className="text-xs"> · {item.description}</span>
                           ) : null}
                         </p>
                       </div>
@@ -319,50 +244,38 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                   ))}
                 </div>
 
-                {/* Ingredients */}
-                <div style={{ marginBottom: "1rem", width: "100%", display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <h3 style={{ fontWeight: 600, fontSize: "1.25rem", marginBottom: "0.75rem", color: "#393E46" }}>Key Ingredients</h3>
-                  {Ingredients.map((ingredient, idx) => (
-                    <div key={idx} style={{ borderRadius: "8px", padding: "0.75rem", background: "#FFFFFF" }}>
-                      <p style={{ fontWeight: 700, color: "#393E46" }}>{ingredient.name}</p>
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", marginTop: "0.25rem" }}>
-                        <div style={{
-                          width: "10px",
-                          height: "10px",
-                          borderRadius: "9999px",
-                          backgroundColor: getIngredientDotColor(ingredient.description?.toString() || ""),
-                        }}></div>
-                        <span style={{ fontSize: "0.75rem", color: "#4B5563" }}>{ingredient.description}</span>
+
+                {/* Key Ingredients */}
+                <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
+                  <h3 className="font-semibold text-xl mb-3 text-[#393E46]">Key Ingredients</h3>
+                  {Ingredients.map((ingredient: { name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; description: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined }, idx: Key | null | undefined) => (
+                    <div className="rounded-[8px] p-3 bg-[#FFFFFF]" key={idx}>
+                      <p className="font-bold text-[#393E46]">{ingredient.name}</p>
+                      <div className="flex items-center space-x-1 mt-1">
+                        <div
+                          className="w-[10px] h-[10px] rounded-full"
+                          style={{ backgroundColor: getIngredientDotColor(ingredient.description?.toString() || "") }}
+                        ></div>
+                        <span className="text-xs text-gray-600">{ingredient.description}</span>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Key Takeaway */}
-                <div style={{ marginBottom: "1rem", width: "100%", display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <h3 style={{ fontWeight: 600, fontSize: "1.25rem", marginBottom: "0.75rem", color: "#393E46" }}>Key Takeaway</h3>
-                  <div>
-                    {keyTakeaway.map((point, idx) => (
-                      <p
-                        key={idx}
-                        style={{
-                          fontSize: "0.875rem",
-                          color: "#374151",
-                          borderRadius: "8px",
-                          padding: "0.5rem",
-                          background: "#FFFFFF",
-                          lineHeight: "1.6",
-                          marginBottom: "0.5rem",
-                        }}
-                      >
+                <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
+                  <h3 className="font-semibold text-xl mb-3 text-[#393E46]">Key Takeaway</h3>
+                  <div className="">
+                    {keyTakeaway.map((point: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, idx: Key | null | undefined) => (
+                      <p key={idx} className="text-sm text-gray-700 rounded-[8px] p-2 bg-[#FFFFFF] leading-relaxed mb-2">
                         {point}
                       </p>
                     ))}
                   </div>
                 </div>
+
               </CardContent>
             </Card>
-
           </div>
 
           {/* Actions Section */}
