@@ -213,9 +213,9 @@ const handleFileSelect = (file: File) => {
                       </SelectTrigger>
                       <SelectContent className="bg-white border border-gray-200 rounded-xl shadow-md">
                         <SelectItem value="Default">Default Analysis</SelectItem>
-                        <SelectItem value="Positive">Positive Focus</SelectItem>
-                        <SelectItem value="Negative">Critical Analysis</SelectItem>
-                        <SelectItem value="Positive but not match">Positive with Concerns</SelectItem>
+                        <SelectItem value="Positive">Positive</SelectItem>
+                        <SelectItem value="Negative">Negative</SelectItem>
+                        <SelectItem value="Positive but not match">Positive but not match</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -228,7 +228,7 @@ const handleFileSelect = (file: File) => {
                         <SelectValue placeholder="Select skin type" />
                       </SelectTrigger>
                       <SelectContent className="bg-white border border-gray-200 rounded-xl shadow-md">
-                        <SelectItem value="Random">Random Skin Type</SelectItem>
+                        <SelectItem value="Random">Default Skin Type</SelectItem>
                         <SelectItem value="Oily">Oily Skin</SelectItem>
                         <SelectItem value="Dry">Dry Skin</SelectItem>
                         <SelectItem value="Combination">Combination Skin</SelectItem>

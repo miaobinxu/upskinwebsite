@@ -193,11 +193,11 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                 </div>
 
                 {/* Product Title */}
-                <div className="flex items-start justify-between w-full mb-4" style={{ gap: "8px" }}>
+                <div className="flex items-center justify-between w-full mb-4" style={{ gap: "8px" }}>
                   <h2 className="text-xl font-bold text-[#393E46] break-words">
                     {formData.productName || name}
                   </h2>
-                  <Heart className="h-6 w-6 font-bold mt-1" />
+                  <Heart className="h-6 w-6 font-bold flex-shrink-0" />
                 </div>
 
                 {/* Scores */}
