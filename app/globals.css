@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-text: #393e46;
+  --primary-green: #6d9886;
+  --cream: #f2e7d5;
+  --light-bg: #f7f7f7;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-color: #f7f7f7;
+    color: #393e46;
+  }
+}
+
+@layer components {
+  .gradient-bg {
+    background: linear-gradient(135deg, #6d9886 0%, #5a8070 100%);
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .skin-card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100;
+  }
+}
