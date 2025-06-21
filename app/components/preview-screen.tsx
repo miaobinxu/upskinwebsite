@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useScreenshotStore } from "@/lib/store/analysisStore"
 import { ArrowLeft, Download, Heart, Share2, RotateCcw, Sparkles, Star, User } from "lucide-react"
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key, JSX, useState } from "react"
-import { toPng } from "html-to-image";
+import html2canvas from "html2canvas";
 import { useRef } from "react"
 import { PiShare } from "react-icons/pi";
 import { RiShieldCheckFill } from "react-icons/ri";
@@ -30,43 +30,31 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
   const { name, overallScore, fitScore, Ingredients, keyTakeaway } = result
 
 
-const waitForImagesToLoad = (node: HTMLElement) => {
-  const images = node.querySelectorAll("img");
-  return Promise.all(
-    Array.from(images).map((img) =>
-      img.complete
-        ? Promise.resolve()
-        : new Promise((resolve) => {
-            img.onload = resolve;
-            img.onerror = resolve;
-          })
-    )
-  );
-};
+  const handleDownload = async () => {
+    const node = document.getElementById("capture-area");
+    if (!node) return;
 
-const handleDownload = async () => {
-  if (!previewRef.current) return;
+    setIsDownloading(true);
 
-  setIsDownloading(true);
-  try {
-    // 👇 Ensure all images are loaded before generating the screenshot
-    await waitForImagesToLoad(previewRef.current);
+    try {
+      const canvas = await html2canvas(node, {
+        useCORS: true,
+        backgroundColor: "#fff",
+        scale: 2,
+      });
 
-    const dataUrl = await toPng(previewRef.current, {
-      cacheBust: true,
-      pixelRatio: 2,
-    });
+      const dataUrl = canvas.toDataURL("image/png");
 
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = "screenshot.png";
-    link.click();
-  } catch (err) {
-    console.error("Image generation failed", err);
-  } finally {
-    setIsDownloading(false);
-  }
-};
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "screenshot.png";
+      link.click();
+    } catch (error) {
+      console.error("html2canvas error", error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
 
   const getDotColor = (value: number | string) => {
@@ -174,7 +162,7 @@ const handleDownload = async () => {
             </div>
 
             {/* Mobile Preview */}
-            <Card ref={previewRef} className="border-none max-w-sm mx-auto lg:mx-0" style={{
+            <Card id="capture-area" ref={previewRef} className="border-none max-w-sm mx-auto lg:mx-0" style={{
               background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
               fontFamily: "Inter, sans-serif",
             }}>
