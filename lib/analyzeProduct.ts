@@ -3,7 +3,7 @@ const SUPABASE_FUNCTION_URL =
   "https://ujzzcntzxbljuaiaeebc.supabase.co/functions/v1/ask-ai";
 
 type MoodType = "Default" | "Positive" | "Negative" | "Positive but not match";
-type SkinType = "Oily" | "Dry" | "Combination" | "Random";
+type SkinType = "Oily" | "Dry" | "Combination" | "Oily";
 
 interface AnalyzeProductOptions {
   base64Image: string;
