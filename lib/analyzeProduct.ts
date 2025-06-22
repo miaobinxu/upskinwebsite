@@ -43,13 +43,13 @@ export async function analyzeProduct({
 
   const ingredientDescription = {
     Default:
-      "1 acne risk ingredient with short phrase (Choose from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with short phrase (Choose from: Clear your acne, Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
+      "2 different ingredients. 1 acne risk ingredient with short phrase (Choose from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with short phrase (Choose from: Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
     Positive:
       "2 different good ingredients with short phrase (Choose from: Clear your acne, Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
     Negative:
-      "2 differentbad ingredients (must include an acne risk ingredient) with short phrase (Choose from: Acne Risk, Moderate Risk, High Risk)",
+      "2 different bad ingredients with short phrase (Choose from: Acne Risk, High Risk)",
     "Positive but not match":
-      "1 acne risk ingredient with short phrase (Choose from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with short phrase (Choose from: Clear your acne, Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
+      "2 different ingredients. 1 acne risk ingredient with short phrase (Choose from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with short phrase (Choose from: Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
   };
 
   const payload = {
