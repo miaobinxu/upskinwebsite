@@ -31,7 +31,7 @@ export async function analyzeProduct({
       Default: "Make the score as extreme as possible",
       Positive: "Make the score over 90",
       Negative: "Make the score between 30 and 50",
-      "Positive but not match": "Make the score over 90",
+      "Positive but not match": "Make the score over 80",
     },
     compatibility: {
       Default: "Make the score as extreme as possible",
