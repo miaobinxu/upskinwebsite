@@ -83,7 +83,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
       if (score >= 90) return "Perfect";
       if (score >= 60) return "Good";
       if (score >= 30) return "Minimal";
-      return "Mismatch";
+      return "Avoid";
     }
 
     return "";
