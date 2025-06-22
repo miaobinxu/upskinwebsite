@@ -103,7 +103,17 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
   };
 
 
-  const scoreCards = [overallScore, { name: 'Your Skin', value: formData.skinType }, fitScore].map((item) => ({
+  const scoreCards = [
+    { 
+      ...overallScore, 
+      value: typeof overallScore.value === "number" ? overallScore.value + 1 : overallScore.value 
+    }, 
+    { name: 'Your Skin', value: formData.skinType }, 
+    { 
+      ...fitScore, 
+      value: typeof fitScore.value === "number" ? fitScore.value + 1 : fitScore.value 
+    }
+  ].map((item) => ({
     ...item,
     icon: iconMap[normalize(item.name)] || null,
     dotColor: getDotColor(item.value),
