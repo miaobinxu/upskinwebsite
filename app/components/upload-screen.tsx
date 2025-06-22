@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { Upload, X, Sparkles, ImageIcon, Zap } from "lucide-react"
 import Image from "next/image"
+import toast from "react-hot-toast"
 
 interface UploadScreenProps {
   onGenerate: (image: File, data: { mood: string; skinType: string; productName: string }) => void
@@ -26,24 +27,24 @@ export default function UploadScreen({ onGenerate, loading }: UploadScreenProps)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-const handleFileSelect = (file: File) => {
-  if (!file.type.match(/^image\/(jpeg|jpg|png|webp)$/)) {
-    setError("Please upload a JPEG, PNG, or WebP image")
-    return
-  }
+  const handleFileSelect = (file: File) => {
+    if (!file.type.match(/^image\/(jpeg|jpg|png|webp)$/)) {
+      setError("Please upload a JPEG, PNG, or WebP image")
+      return
+    }
 
-  if (fileInputRef.current) {
-    fileInputRef.current.value = ""
-  }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
 
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    setUploadedImage(e.target?.result as string)
-    setSelectedFile(file)
-    setError(null)
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setUploadedImage(e.target?.result as string)
+      setSelectedFile(file)
+      setError(null)
+    }
+    reader.readAsDataURL(file)
   }
-  reader.readAsDataURL(file)
-}
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -80,6 +81,16 @@ const handleFileSelect = (file: File) => {
   }
 
   const handleGenerate = () => {
+  const ua = navigator.userAgent;
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  const isChromeDesktop = /Chrome/.test(ua) && !isSafari && !isMobile;
+
+    if (!isChromeDesktop) {
+      toast.error("This feature is only supported in Chrome on desktop. Please switch browser.");
+      return;
+    }
+
     if (!selectedFile) {
       setError("Please upload an image first")
       return

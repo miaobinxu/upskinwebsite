@@ -36,12 +36,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
 
     try {
       const element = previewRef.current;
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      if (isMobile) {
-        toast.error("Screenshot download is only supported on desktop. Please use a desktop browser.");
-        return;
-      }
       const dataUrl = await toPng(element, {
         cacheBust: true,
         pixelRatio: 2,
@@ -204,7 +199,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
 
                 {/* Product Title */}
                 <div className="flex items-center justify-between w-full mb-4" style={{ gap: "8px" }}>
-                  <h2 className="text-xl font-bold text-[#393E46] break-words">
+                  <h2 className="text-xl font-bold w-[90%] text-[#393E46] break-words">
                     {formData.productName || name}
                   </h2>
                   <Heart className="h-6 w-6 font-bold flex-shrink-0" />
