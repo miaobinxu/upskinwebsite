@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: '/internal', 
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -9,10 +8,6 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
-  },
-
- async redirects() {
-    return [];
   },
 }
 

@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex mb-2 items-center cursor-pointer">
               <Image
-                src="/internal/upskin-logo.png"
+                src="/upskin-logo.png"
                 alt="Upskin Logo"
                 height={50}
                 width={50}
