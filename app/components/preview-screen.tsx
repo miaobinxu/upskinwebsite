@@ -180,7 +180,7 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
                   <div className="p-2 border rounded-full border-gray-200">
                     <ArrowLeft className="h-5 w-5" />
                   </div>
-                  <span className="font-semibold text-2xl" style={{ color: "#393E46", fontFamily: "Cormorant SC" }}>
+                  <span className="text-2xl" style={{ color: "#393E46", fontFamily: "Cormorant SC" }}>
                     UPSKIN
                   </span>
                   <div className="p-2 border rounded-full border-gray-200">
