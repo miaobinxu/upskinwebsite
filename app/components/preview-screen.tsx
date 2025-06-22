@@ -106,12 +106,12 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
   const scoreCards = [
     { 
       ...overallScore, 
-      value: typeof overallScore.value === "number" ? overallScore.value + 1 : overallScore.value 
+      value: typeof overallScore.value === "number" ? Math.min(100, overallScore.value - 2 + Math.floor(Math.random() * 5)) : overallScore.value 
     }, 
     { name: 'Your Skin', value: formData.skinType }, 
     { 
       ...fitScore, 
-      value: typeof fitScore.value === "number" ? fitScore.value + 1 : fitScore.value 
+      value: typeof fitScore.value === "number" ? Math.min(100, fitScore.value - 2 + Math.floor(Math.random() * 5)) : fitScore.value 
     }
   ].map((item) => ({
     ...item,
