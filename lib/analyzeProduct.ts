@@ -43,13 +43,13 @@ export async function analyzeProduct({
 
   const ingredientDescription = {
     Default:
-      "2 different ingredients. 1 acne risk ingredient with short phrase (Choose from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with short phrase (Choose from: Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
+      "Identify 2 different ingredients. 1 acne risk ingredient with a short phrase description (Choose from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with short phrase description (Choose from: Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
     Positive:
-      "2 different good ingredients with short phrase (Choose from: Clear your acne, Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
+      "Identify 2 different good ingredients. For each ingredient, include a short phrase description (Choose from: Clear your acne, Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
     Negative:
-      "2 different bad ingredients with short phrase (Choose from: Acne Risk, Moderate Risk, High Risk)",
+      "Identify 2 different harmful ingredients. For each ingredient, include a short phrase description (Choose from: Acne Risk, Moderate Risk, High Risk).",
     "Positive but not match":
-      "2 different ingredients. 1 acne risk ingredient with short phrase (Choose from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with short phrase (Choose from: Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
+      "Identify 2 different ingredients. 1 acne risk ingredient with a short phrase description (Choose from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with a short phrase description (Choose from: Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
   };
 
   const payload = {
@@ -89,8 +89,8 @@ export async function analyzeProduct({
 "value": <COMPATIBILITY_SCORE>
 },
 "Ingredients": [
-{ "name": "<INGREDIENT_1>", "description": "<SHORT_PHRASE_1>" },
-{ "name": "<INGREDIENT_2>", "description": "<SHORT_PHRASE_2>" }
+{ "name": "<INGREDIENT_1>", "description": "<PHRASE_1>" },
+{ "name": "<INGREDIENT_2>", "description": "<PHRASE_2>" }
 ],
 "keyTakeaway": [
 "<TAKEAWAY_1>",
