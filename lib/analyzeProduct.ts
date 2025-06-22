@@ -47,7 +47,7 @@ export async function analyzeProduct({
     Positive:
       "Identify 2 different good ingredients. For each ingredient, include a short phrase description (Choose from: Clear your acne, Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
     Negative:
-      "Identify 2 different harmful ingredients. For each ingredient, include a short phrase description (Choose from: Acne Risk, Moderate Risk, High Risk).",
+      "Identify 2 different harmful ingredients. For each ingredient, include a short phrase description (Choose from: Acne Risk, Low Risk,Moderate Risk, High Risk).",
     "Positive but not match":
       "Identify 2 different ingredients. 1 acne risk ingredient with a short phrase description (Choose from: Acne Risk, Fungal Acne Risk), and 1 good ingredient with a short phrase description (Choose from: Minimize your pores, Soothe redness, Reduce hyperpigmentation, Hydrate your skin)",
   };
