@@ -239,7 +239,7 @@ export default function UploadScreen({ onGenerate, loading }: UploadScreenProps)
                         <SelectValue placeholder="Select skin type" />
                       </SelectTrigger>
                       <SelectContent className="bg-white border border-gray-200 rounded-xl shadow-md">
-                        <SelectItem value="Random">Default Skin Type</SelectItem>
+                        <SelectItem value="Oily">Default Skin Type</SelectItem>
                         <SelectItem value="Oily">Oily Skin</SelectItem>
                         <SelectItem value="Dry">Dry Skin</SelectItem>
                         <SelectItem value="Combination">Combination Skin</SelectItem>

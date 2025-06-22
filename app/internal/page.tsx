@@ -17,7 +17,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     mood: "Default",
-    skinType: "Random",
+    skinType: "Oily",
     productName: "",
   });
   const { toast } = useToast()
@@ -84,7 +84,7 @@ export default function Home() {
     setUploadedImage(null)
     setFormData({
       mood: "Default",
-      skinType: "Random",
+      skinType: "Oily",
       productName: "",
     });
     resetResult()
