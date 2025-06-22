@@ -1,14 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import Navbar from "./components/navbar"
-import Footer from "./components/footer"
-import UploadScreen from "./components/upload-screen"
-import PreviewScreen from "./components/preview-screen"
 import { convertImageToBase64 } from "@/lib/utils"
 import { analyzeProduct } from "@/lib/analyzeProduct"
 import { useScreenshotStore } from "@/lib/store/analysisStore"
 import { useToast } from "@/hooks/use-toast"
+import Navbar from "./components/navbar"
+import UploadScreen from "./components/upload-screen"
+import PreviewScreen from "./components/preview-screen"
+import Footer from "./components/footer"
+
+
 
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState<"upload" | "preview">("upload")

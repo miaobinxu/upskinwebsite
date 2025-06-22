@@ -92,9 +92,9 @@ export default function PreviewScreen({ formData, onStartOver }: PreviewScreenPr
   type IconType = JSX.Element | string;
 
   const iconMap: Record<string, IconType> = {
-    [normalize("Overall Score")]: '/shield.png',
-    [normalize("Your Skin")]: '/skin-type.png',
-    [normalize("Compatibility")]: '/compability.png',
+    [normalize("Overall Score")]: '/internal/shield.png',
+    [normalize("Your Skin")]: '/internal/skin-type.png',
+    [normalize("Compatibility")]: '/internal/compability.png',
   };
 
 
