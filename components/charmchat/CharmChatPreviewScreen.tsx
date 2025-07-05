@@ -1,0 +1,352 @@
+'use client'
+
+import { useCharmChatStore } from '@/lib/store/charmChatStore'
+import { downloadImage } from '@/lib/utils'
+import { ChevronRight, ClipboardCopyIcon, Download, SquarePen } from 'lucide-react'
+import Image from 'next/image'
+import { useRef, useState } from 'react'
+
+interface CharmChatPreviewScreenProps {
+  images: string[]
+}
+
+/* ---------------------------- Message Extractor --------------------------- */
+function extractMessagesFromFlat(data: Record<string, string>) {
+  const messages = []
+  let i = 1
+  while (data[`Message ${i}`]) {
+    messages.push({
+      text: data[`Message ${i}`],
+      description: data[`Message ${i} Description`] || '',
+    })
+    i++
+  }
+  return messages
+}
+
+/* ---------------------------- 🔥 MAIN COMPONENT --------------------------- */
+export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScreenProps) {
+  const data = useCharmChatStore(state => state.data)
+  const title = data?.['Title'] ?? ''
+  const subtitle = data?.['Subtitle'] ?? ''
+  const tone = data?.['Tone'] ?? ''
+  const reply = data?.['Reply content'] ?? ''
+  const messages = extractMessagesFromFlat(data ?? {});
+
+  if (!images || images.length === 0) {
+    return <div className="text-center text-gray-500">No preview images available.</div>
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center">
+      {images.map((img, index) => {
+        const isFirst = index === 0
+        const isLast = index === images.length - 1
+        const isOnlyOne = images.length === 1
+        const isSecond = index === 1
+
+        // Case 1: Only one image → show only final page
+        if (isOnlyOne) {
+          return (
+            <FinalMockupPage
+              key={`final-${index}`}
+              image={img}
+              reply={reply}
+              tone={tone}
+              messages={messages.map(m => m.text)}
+            />
+          )
+        }
+
+        // Case 2: First image = title page
+        if (isFirst) {
+          return (
+            <TitlePage
+              key={`title-${index}`}
+              image={img}
+              title={title}
+              subtitle={subtitle}
+            />
+          )
+        }
+
+        // Case 3: Last image = final page
+        if (isLast) {
+          return (
+            <FinalMockupPage
+              key={`final-${index}`}
+              image={img}
+              reply={reply}
+              tone={tone}
+              messages={messages.map(m => m.text)}
+            />
+          )
+        }
+
+        // Case 4: Middle images = message pages
+        const msg = messages[index - 1] // shift because first image is title
+        return (
+          <MessagePage
+            key={`msg-${index}`}
+            image={img}
+            message={msg?.text || ''}
+            description={msg?.description || ''}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+/* ------------------------- Utility -------------------------- */
+function getImageSrc(image: File | string): string {
+  return typeof image === 'string' ? image : URL.createObjectURL(image)
+}
+
+/* --------------------- Title Page Component --------------------- */
+function TitlePage({ image, title, subtitle }: {
+  image: File | string
+  title: string
+  subtitle: string
+}) {
+  const titleLines = wrapTextLines(title, 35);
+  const subtitleLines = wrapTextLines(subtitle, 35);
+  const ref = useRef<HTMLDivElement>(null)
+
+
+  return (
+    <div className="scale-[0.65] sm:scale-[0.9] md:scale-[0.6] lg:scale-[0.8] overflow-hidden shadow-md">
+      <button
+        onClick={() => downloadImage(ref, 'charmchat-title.png')}
+        className="absolute top-2 right-2 z-50 bg-white/90 hover:bg-white text-gray-800 px-2 py-1 rounded-full shadow transition"
+      >
+        <Download size={26} />
+      </button>
+      <div ref={ref} className="relative" style={{
+        width: '450px',
+        height: '600px',
+      }}>
+        <Image
+          src={getImageSrc(image ?? '')}
+          fill
+          className="object-cover"
+          alt="Title Page"
+        />
+
+        <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center px-6 text-white text-center gap-2">
+
+          {/* Title lines */}
+          <div className="flex flex-col items-center text-xl font-bold leading-tight">
+            {titleLines.map((line, idx) => (
+              <span
+                key={`title-${idx}`}
+                className="bg-white text-black px-3 py-1"
+              >
+                {line}
+              </span>
+            ))}
+          </div>
+
+          {/* Subtitle lines */}
+          <div className="flex flex-col items-center text-xl font-medium leading-tight">
+            {subtitleLines.map((line, idx) => (
+              <span
+                key={`subtitle-${idx}`}
+                className="bg-red-500 text-white px-3 py-1"
+              >
+                {line}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function wrapTextLines(text: string, maxLineLength = 25): string[] {
+  const words = text.split(' ');
+  const lines: string[] = [];
+  let current = '';
+
+  for (const word of words) {
+    if ((current + word).length > maxLineLength) {
+      lines.push(current.trim());
+      current = word + ' ';
+    } else {
+      current += word + ' ';
+    }
+  }
+
+  if (current) lines.push(current.trim());
+  return lines;
+}
+
+/* ------------------- Message Page Component ------------------- */
+function MessagePage({ image, message, description }: {
+  image: File | string
+  message: string
+  description: string
+}) {
+
+  const messageLines = wrapTextLines(message, 35);
+  const descLines = wrapTextLines(description, 35);
+  const ref = useRef<HTMLDivElement>(null)
+
+  return (
+    <div className="scale-[0.65] sm:scale-[0.9] md:scale-[0.6] lg:scale-[0.8] overflow-hidden shadow-md">
+      <button
+        onClick={() => downloadImage(ref, 'charmchat-title.png')}
+        className="absolute top-2 right-2 z-50 bg-white/90 hover:bg-white text-gray-800 px-2 py-1 rounded-full shadow transition"
+      >
+        <Download size={26} />
+      </button>
+      <div ref={ref} className="relative" style={{
+        width: '450px',
+        height: '600px',
+      }}>
+        <Image
+          src={getImageSrc(image)}
+          fill
+          className="object-cover"
+          alt="Message Page"
+        />
+
+        <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center px-6 text-white text-center gap-3">
+
+          {/* Message (white background) */}
+          <div className="flex flex-col items-center text-xl font-bold leading-tight">
+            {messageLines.map((line, idx) => {
+              return (
+                <span
+                  key={`msg-${idx}`}
+                  className="bg-white text-black px-3 py-1"
+                >
+                  {line}
+                </span>
+              );
+            })}
+          </div>
+
+          {/* Description (red background) */}
+          <div className="flex flex-col items-center text-xl font-bold leading-tight">
+            {descLines.map((line, idx) => {
+              return (
+                <span
+                  key={`desc-${idx}`}
+                  className="bg-red-500 text-white px-3 py-1"
+                >
+                  {line}
+                </span>
+              );
+            })}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ------------------ Final Mockup Page Component ------------------ */
+function FinalMockupPage({ image, reply, tone, messages }: {
+  image?: File | string
+  reply?: string
+  tone?: string
+  messages?: string[]
+}) {
+
+  const ref = useRef<HTMLDivElement>(null)
+
+  return (
+    <div className="scale-[0.65] sm:scale-[0.9] md:scale-[0.6] lg:scale-[0.8] overflow-hidden shadow-md">
+      <button
+        onClick={() => downloadImage(ref, 'charmchat-title.png')}
+        className="absolute top-2 right-2 z-50 bg-white/90 hover:bg-white text-gray-800 px-2 py-1 rounded-full shadow transition"
+      >
+        <Download size={26} />
+      </button>
+      <div ref={ref} className="relative" style={{
+        width: '450px',
+        height: '600px',
+      }}>
+        <Image
+          src={getImageSrc(image ?? '')}
+          fill
+          className="object-cover"
+          alt="Final Page"
+        />
+
+        <div className="w-[308px] scale-[0.65] p-2 px-4 flex flex-col gap-4 absolute left-0 top-2 z-30 bg-[#FAFAFA] text-gray-900 shadow-lg font-sans border border-gray-200">
+          <div className="absolute scale-90 flex left-[214px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
+            <div className='border border-purple-600 rounded-full ring-offset-4 ring-purple-600 text-purple-600 p-2'>
+              <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-72 rounded-full text-[24px] font-medium">
+                Download “CharmChat” App
+              </div>
+            </div>
+            <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-2 border-purple-600 justify-center text-start w-60 rounded-2xl text-[18px] font-medium">
+              Copy and paste to make him obsessed with you.
+              <img src={'/charmchat/crown.png'} className='w-24 h-12 rotate-[12deg] scale-50 absolute -top-8 -right-9' />
+            </div>
+          </div>
+
+
+          {/* Header */}
+          <div className=" flex items-center w-full justify-center text-xl"><img src={'/charmchat/logo.svg'} className='' /></div>
+
+          {/* Toggle */}
+          <div className="flex bg-[#ebebeb] p-1 rounded-xl gap-2">
+            <div
+              className="flex gap-1 items-center w-1/2 justify-center text-sm bg-white font-medium py-1.5 px-2 rounded-[8px] transition"
+            >
+              <img src={'/charmchat/magic.png'} className='w-4 h-4' /> Reply
+            </div>
+            <div
+              className="flex gap-1 text-[#a3a3a3] items-center w-1/2 justify-center text-[16px] font-medium py-1.5 px-2 rounded-[8px]"
+            >
+              <img src={'/charmchat/edit.png'} className='w-4 h-4' /> Compose
+            </div>
+          </div>
+
+          {/* Prompt Block */}
+          <div className="bg-white w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}>
+            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">{tone} <ChevronRight size={16} /></div>
+            <div className="text-base font-semibold text-black leading-snug line-clamp-2">
+              {reply || 'Make him terrified of losing me'}
+            </div>
+          </div>
+
+          {/* Suggestions Header */}
+          <div className="flex justify-between font-medium items-center px-4 text-sm text-gray-600">
+            <span>Suggestions</span>
+            <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/Adjust.svg'} className='w-3 h-3' />Adjust</span>
+          </div>
+
+          {/* Suggestions List */}
+          <div className="flex flex-col gap-3">
+            {messages?.slice(0, 3).map((msg, index) => (
+              <div
+                key={index}
+                className="bg-white text-base font-semibold text-black leading-snug w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}
+              >
+                <div className="leading-snug line-clamp-2">{msg}</div>
+                <div className="flex items-center justify-between text-xs text-gray-400">
+                  <span>V{index + 1}</span>
+                  <div className='bg-[#F2F2F2] p-2 w-[30px] h-[30px] flex items-center justify-center rounded-full'>
+                    <img src={'/charmchat/copy.svg'} className='w-8 h-8 ' />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className='bg-[#FAFAFA] flex items-center justify-around h-10 -mt-6'>
+            <img src={'/charmchat/b-1.svg'} className='w-8 h-8 ' />
+            <img src={'/charmchat/b-2.svg'} className='w-8 h-8 ' />
+            <img src={'/charmchat/b-3.svg'} className='w-8 h-8 ' />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

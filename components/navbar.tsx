@@ -9,6 +9,7 @@ import Image from "next/image"
 
 const navItems = [
   { label: "Internal Tool", href: "/internal" },
+  { label: "charmchat Tool", href: "/charmchat" },
 ]
 
 export default function Navbar() {
@@ -38,16 +39,16 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map(({ label, href },idx) => (
-              <p
+              <Link
                 key={idx}
-                // href={href}
-                className={`transition-colors ${!isActive(href)
+                href={href}
+                className={`transition-colors ${isActive(href)
                   ? "text-[#6D9886] font-semibold border-b-2 border-[#6D9886] pb-1"
                   : "text-gray-600 hover:text-[#6D9886]"
                   }`}
               >
                 {label}
-              </p>
+              </Link>
             ))}
           </div>
 

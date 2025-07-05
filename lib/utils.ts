@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { toPng } from 'html-to-image'
+
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -13,3 +15,23 @@ export const convertImageToBase64 = (file: File): Promise<string> => {
     reader.readAsDataURL(file);
   });
 };
+
+
+export const downloadImage = async (ref: React.RefObject<HTMLElement | null>, filename = 'screenshot.png') => {
+  if (!ref.current) return
+
+  try {
+    const dataUrl = await toPng(ref.current, {
+      cacheBust: true,
+      pixelRatio: 2,
+      backgroundColor: '#fff',
+    })
+
+    const link = document.createElement('a')
+    link.href = dataUrl
+    link.download = filename
+    link.click()
+  } catch (err) {
+    console.error('Image download failed:', err)
+  }
+}

@@ -5,10 +5,8 @@ import { convertImageToBase64 } from "@/lib/utils"
 import { analyzeProduct } from "@/lib/analyzeProduct"
 import { useScreenshotStore } from "@/lib/store/analysisStore"
 import { useToast } from "@/hooks/use-toast"
-import Navbar from "../components/navbar"
-import UploadScreen from "../components/upload-screen"
-import PreviewScreen from "../components/preview-screen"
-import Footer from "../components/footer"
+import UploadScreen from "../../../components/internal/upload-screen"
+import PreviewScreen from "../../../components/internal/preview-screen"
 
 
 export default function Home() {
@@ -91,8 +89,8 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#F7F7F7" }}>
-      <Navbar />
+    <div>
+   
       <main className="flex-1">
         {currentScreen === "upload" ? (
           <UploadScreen onGenerate={handleGenerate} loading={loading} />
@@ -100,7 +98,7 @@ export default function Home() {
           <PreviewScreen formData={formData} onStartOver={handleStartOver} />
         )}
       </main>
-      <Footer />
+
     </div>
   )
 }
