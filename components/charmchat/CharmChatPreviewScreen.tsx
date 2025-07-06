@@ -4,7 +4,14 @@ import { useCharmChatStore } from '@/lib/store/charmChatStore'
 import { downloadImage } from '@/lib/utils'
 import { ChevronRight, ClipboardCopyIcon, Download, SquarePen } from 'lucide-react'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { Poppins } from 'next/font/google';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+});
+
 
 interface CharmChatPreviewScreenProps {
   images: string[]
@@ -256,10 +263,37 @@ function FinalMockupPage({ image, reply, tone, messages }: {
   messages?: string[]
 }) {
 
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
+
+  const modifiedReply =`${reply}`
+  const modifiedMessages = messages?.map((msg, index) => `${msg}`) ?? []
+
+  const CHARS_PER_LINE = 30
+  const countLines = (text: string) =>
+    Math.ceil(text.length / CHARS_PER_LINE)
+
+  const totalLines = useMemo(() => {
+    const replyLines = modifiedReply ? countLines(modifiedReply) : 0
+    const messageLines = modifiedMessages
+      ? modifiedMessages.reduce((sum, msg) => sum + countLines(msg), 0)
+      : 0
+          console.log('messageLines********', messageLines)
+    return replyLines + messageLines
+  }, [modifiedReply, modifiedMessages])
+
+  // Compute top offset based on lines
+  const topOffset = useMemo(() => {
+    const baseTop = 40
+    let shiftPerLine = 6
+    if (totalLines >= 9) shiftPerLine = 7
+    if (totalLines >= 5) shiftPerLine = 4
+    const extraShift = totalLines * shiftPerLine
+    console.log('baseTop - extraShift********', totalLines)
+    return baseTop - extraShift
+  }, [totalLines])
 
   return (
-    <div className="scale-[0.65] sm:scale-[0.9] md:scale-[0.6] lg:scale-[0.8] overflow-hidden shadow-md">
+    <div className={`scale-[0.65] sm:scale-[0.9] md:scale-[0.6] ... lg:scale-[0.8] overflow-hidden shadow-md ${poppins.className}`}>
       <button
         onClick={() => downloadImage(ref, 'charmchat-title.png')}
         className="absolute top-2 right-2 z-50 bg-white/90 hover:bg-white text-gray-800 px-2 py-1 rounded-full shadow transition"
@@ -277,14 +311,14 @@ function FinalMockupPage({ image, reply, tone, messages }: {
           alt="Final Page"
         />
 
-        <div className="w-[308px] scale-[0.65] p-2 px-4 flex flex-col gap-4 absolute left-0 top-2 z-30 bg-[#FAFAFA] text-gray-900 shadow-lg font-sans border border-gray-200">
-          <div className="absolute scale-90 flex left-[214px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
+        <div className="w-[308px] scale-[0.60] p-2 px-4 flex flex-col gap-4 absolute left-0 z-30 bg-[#FAFAFA] text-gray-900 shadow-lg ... border border-gray-200" style={{ top: `${topOffset}px` }}>
+          <div className="absolute scale-90 flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className='border border-purple-600 rounded-full ring-offset-4 ring-purple-600 text-purple-600 p-2'>
-              <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-72 rounded-full text-[24px] font-medium">
+              <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
                 Download “CharmChat” App
               </div>
             </div>
-            <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-2 border-purple-600 justify-center text-start w-60 rounded-2xl text-[18px] font-medium">
+            <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-[3px] border-purple-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
               Copy and paste to make him obsessed with you.
               <img src={'/charmchat/crown.png'} className='w-24 h-12 rotate-[12deg] scale-50 absolute -top-8 -right-9' />
             </div>
@@ -292,7 +326,7 @@ function FinalMockupPage({ image, reply, tone, messages }: {
 
 
           {/* Header */}
-          <div className=" flex items-center w-full justify-center text-xl"><img src={'/charmchat/logo.svg'} className='' /></div>
+          <div className="flex items-center w-full justify-center text-xl"><img src={'/charmchat/logo.svg'} /></div>
 
           {/* Toggle */}
           <div className="flex bg-[#ebebeb] p-1 rounded-xl gap-2">
@@ -311,8 +345,8 @@ function FinalMockupPage({ image, reply, tone, messages }: {
           {/* Prompt Block */}
           <div className="bg-white w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}>
             <div className="text-[12px] text-[#8063EF] font-medium flex items-center">{tone} <ChevronRight size={16} /></div>
-            <div className="text-base font-semibold text-black leading-snug line-clamp-2">
-              {reply || 'Make him terrified of losing me'}
+            <div className="text-[15px] font-medium text-black leading-snug line-clamp-4">
+              {modifiedReply || 'Make him terrified of losing me'}
             </div>
           </div>
 
@@ -324,12 +358,12 @@ function FinalMockupPage({ image, reply, tone, messages }: {
 
           {/* Suggestions List */}
           <div className="flex flex-col gap-3">
-            {messages?.slice(0, 3).map((msg, index) => (
+            {modifiedMessages?.slice(0, 3).map((msg, index) => (
               <div
                 key={index}
-                className="bg-white text-base font-semibold text-black leading-snug w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}
+                className="bg-white text-[15px] font-medium text-black leading-snug w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}
               >
-                <div className="leading-snug line-clamp-2">{msg}</div>
+                <p className="leading-snug line-clamp-4">{msg}</p>
                 <div className="flex items-center justify-between text-xs text-gray-400">
                   <span>V{index + 1}</span>
                   <div className='bg-[#F2F2F2] p-2 w-[30px] h-[30px] flex items-center justify-center rounded-full'>
