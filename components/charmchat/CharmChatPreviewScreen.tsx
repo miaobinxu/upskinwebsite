@@ -333,12 +333,7 @@ function FinalMockupPage({ image, reply, tone, messages }: {
                 <div className="flex items-center justify-between text-xs text-gray-400">
                   <span>V{index + 1}</span>
                   <div className='bg-[#F2F2F2] p-2 w-[30px] h-[30px] flex items-center justify-center rounded-full'>
-                    <Image
-                      src="/charmchat/copy.svg"
-                      alt="Copy"
-                      width={34}
-                      height={34}
-                    />
+                    <img src={'/charmchat/copy.svg'} className='w-8 h-8 ' alt="Copy" />
                   </div>
                 </div>
               </div>
