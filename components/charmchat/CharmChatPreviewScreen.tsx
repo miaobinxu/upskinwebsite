@@ -326,7 +326,7 @@ function FinalMockupPage({ image, reply, tone, messages }: {
 
 
           {/* Header */}
-          <div className="flex items-center w-full justify-center text-xl"><img src={'/charmchat/logo.svg'} /></div>
+          <div className="flex items-center w-full justify-center text-xl"><img src={'/charmchat/Logo.svg'} /></div>
 
           {/* Toggle */}
           <div className="flex bg-[#ebebeb] p-1 rounded-xl gap-2">
@@ -367,7 +367,7 @@ function FinalMockupPage({ image, reply, tone, messages }: {
                 <div className="flex items-center justify-between text-xs text-gray-400">
                   <span>V{index + 1}</span>
                   <div className='bg-[#F2F2F2] p-2 w-[30px] h-[30px] flex items-center justify-center rounded-full'>
-                    <img src={'/charmchat/copy.svg'} className='w-8 h-8 ' />
+                    <img src={'/charmchat/Copy.svg'} className='w-8 h-8 ' />
                   </div>
                 </div>
               </div>
