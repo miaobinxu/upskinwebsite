@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '../ui/label'
+import toast from 'react-hot-toast'
 
 interface PageLine {
   line1: string
@@ -96,6 +97,16 @@ export default function CharmChatUploadScreen({ onGenerate, loading }: UploadScr
   }
 
   const handleSubmit = () => {
+    const ua = navigator.userAgent;
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+    const isChromeDesktop = /Chrome/.test(ua) && !isSafari && !isMobile;
+
+    if (!isChromeDesktop) {
+      toast.error("This feature is only supported in Chrome on desktop. Please switch browser.");
+      return;
+    }
+
     const payload = {
       images: files,
       textStyle,
