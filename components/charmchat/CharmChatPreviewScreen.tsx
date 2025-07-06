@@ -353,7 +353,7 @@ function FinalMockupPage({ image, reply, tone, messages }: {
           {/* Suggestions Header */}
           <div className="flex justify-between font-medium items-center px-4 text-sm text-gray-600">
             <span>Suggestions</span>
-            <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/Adjust.svg'} className='w-3 h-3' />Adjust</span>
+            <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/adjust.svg'} className='w-3 h-3' />Adjust</span>
           </div>
 
           {/* Suggestions List */}
