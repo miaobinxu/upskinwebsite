@@ -43,6 +43,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
   const words = descriptionAndHashtag.split(" ");
 
   const descriptionWords = words.filter(word => !word.startsWith("#"));
+  const hashtags = words.filter(word => word.startsWith("#"));
 
   const messages = extractMessagesFromFlat(data ?? {});
 
@@ -123,10 +124,9 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
           {descriptionWords.join(" ")}
         </p>
 
-        {/* Hashtag Bubbles */}
-        <div className="flex flex-wrap gap-2">
+        <p className="text-gray-700 text-md">
           {title}
-        </div>
+        </p>
       </div>
     </div>
   )
