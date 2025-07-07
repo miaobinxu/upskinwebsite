@@ -45,7 +45,7 @@ export const buildCharmPrompt = (
       replyMessage,
       "Refer the title to write extremely short and extremely concise prompt which can generate these messages"
     )
-    prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
+    prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, Sassy, or NSFW")
 
     for (let i = 1; i <= 3; i++) {
       prompt[`Message ${i}`] = `Fill the blank based on the context`
