@@ -83,10 +83,10 @@ export const buildCharmPrompt = (
       )
     }
   }
-  prompt["Post description and hashtag"] = "Include all content in the post and 5 hashtags"
+  prompt["Post description and hashtag"] = "List content in all pages and include 5 hashtags"
 
   // Final AI prompt string (JSON embedded in instructions)
-  return `You are writing a TikTok post teaching women how to text with men and providing them with texting messages. Here is the structure of your post. If content is provided, you must not change anything. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. Note that all the topics are VERY intriguing to women in modern dating, and it reflects their deepest desires. In terms of the messages generated, they should be VERY impressive.
+  return `You are writing a TikTok post teaching women how to text with men and providing them with texting messages. Here is the structure of your post. If content is provided, you must not change anything. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. Note that all the topics are VERY intriguing to women in modern dating, and it reflects their deepest desires. In terms of the messages generated, they should be VERY impressive. Both the topic and the messages have "dark feminine energy" in them.
 Example 1:
 {
   "Title": "5 FLIERTY replies to 'How are you?'",
