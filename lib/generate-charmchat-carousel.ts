@@ -57,9 +57,13 @@ export const buildCharmPrompt = (
       pageInputs[0]?.line1,
       "fill the blank based on the context"
     )
-    prompt["Reply content"] = fallback(
+    prompt["Subtitle"] = fallback(
       pageInputs[0]?.line2,
       "fill the blank based on the context"
+    )
+    prompt["Reply content"] = fallback(
+      replyMessage,
+      "Put the same content as title"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
