@@ -43,7 +43,6 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
   const words = descriptionAndHashtag.split(" ");
 
   const descriptionWords = words.filter(word => !word.startsWith("#"));
-  const hashtags = words.filter(word => word.startsWith("#"));
 
   const messages = extractMessagesFromFlat(data ?? {});
 
@@ -126,27 +125,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
 
         {/* Hashtag Bubbles */}
         <div className="flex flex-wrap gap-2">
-          {hashtags.map((tag, index) => (
-            <button
-              key={index}
-              onClick={() => handleCopy(tag, index)}
-              className="relative bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full hover:bg-blue-200 transition-all"
-            >
-              {copiedIndex === index ? (
-               <span
-  className="absolute -top-8 left-1/2 -translate-x-1/2
-    px-3 py-1 rounded-full text-xs font-semibold text-green-700 
-    bg-gradient-to-b from-white via-green-50 to-green-100
-    shadow-[inset_0_1px_3px_rgba(255,255,255,0.6),_0_2px_5px_rgba(0,0,0,0.1)]
-    border border-green-300
-    transition-all duration-300 ease-out scale-105"
->
-  Copied!
-</span>
-              ) : null}
-              {tag}
-            </button>
-          ))}
+          {title}
         </div>
       </div>
     </div>
