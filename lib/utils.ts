@@ -23,7 +23,7 @@ export const downloadImage = async (ref: React.RefObject<HTMLElement | null>, fi
   try {
     const dataUrl = await toPng(ref.current, {
       cacheBust: true,
-      pixelRatio: 2,
+      pixelRatio: 3,
       backgroundColor: '#fff',
     })
 
