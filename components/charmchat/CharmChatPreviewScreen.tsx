@@ -23,7 +23,7 @@ function extractMessagesFromFlat(data: Record<string, string>) {
   let i = 1
   while (data[`Message ${i}`]) {
     messages.push({
-      text: data[`Message ${i}`],
+      text: `"${data[`Message ${i}`]}"`, 
       description: data[`Message ${i} Description`] || '',
     })
     i++
