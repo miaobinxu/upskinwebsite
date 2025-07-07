@@ -9,6 +9,7 @@ export interface CharmChatBase {
   Subtitle: string
   "Reply content": string
   Tone: string
+  "Post description and hashtag": string
 }
 
 export type CharmChatData = CharmChatBase & {
@@ -22,14 +23,14 @@ interface CharmChatState {
 }
 
 export const useCharmChatStore = create<CharmChatState>()(
-    persist(
-        (set) => ({
-            data: null,
-            setData: (newData) => set({ data: newData }),
-            clearData: () => set({ data: null }),
-        }),
-        {
-            name: 'charmchat',
-        }
-    )
+  persist(
+    (set) => ({
+      data: null,
+      setData: (newData) => set({ data: newData }),
+      clearData: () => set({ data: null }),
+    }),
+    {
+      name: 'charmchat',
+    }
+  )
 )

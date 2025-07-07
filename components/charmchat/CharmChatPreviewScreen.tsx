@@ -33,74 +33,122 @@ function extractMessagesFromFlat(data: Record<string, string>) {
 
 /* ---------------------------- 🔥 MAIN COMPONENT --------------------------- */
 export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScreenProps) {
-  const data = useCharmChatStore(state => state.data)
+  const data = useCharmChatStore(state => state.data);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const title = data?.['Title'] ?? ''
   const subtitle = data?.['Subtitle'] ?? ''
   const tone = data?.['Tone'] ?? ''
   const reply = data?.['Reply content'] ?? ''
+  const descriptionAndHashtag = data?.['Post description and hashtag'] ?? ''
+  const words = descriptionAndHashtag.split(" ");
+
+  const descriptionWords = words.filter(word => !word.startsWith("#"));
+  const hashtags = words.filter(word => word.startsWith("#"));
+
   const messages = extractMessagesFromFlat(data ?? {});
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
   }
 
+  const handleCopy = (tag: string, index: number) => {
+    navigator.clipboard.writeText(tag);
+    setCopiedIndex(index);
+    setTimeout(() => {
+      setCopiedIndex(null);
+    }, 1000);
+  };
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center">
-      {images.map((img, index) => {
-        const isFirst = index === 0
-        const isLast = index === images.length - 1
-        const isOnlyOne = images.length === 1
-        const isSecond = index === 1
+    <div className='flex flex-col items-center p-4'>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 place-items-center w-full">
+        {images.map((img, index) => {
+          const isFirst = index === 0
+          const isLast = index === images.length - 1
+          const isOnlyOne = images.length === 1
+          const isSecond = index === 1
 
-        // Case 1: Only one image → show only final page
-        if (isOnlyOne) {
+          // Case 1: Only one image → show only final page
+          if (isOnlyOne) {
+            return (
+              <FinalMockupPage
+                key={`final-${index}`}
+                image={img}
+                reply={reply}
+                tone={tone}
+                messages={messages.map(m => m.text)}
+              />
+            )
+          }
+
+          // Case 2: First image = title page
+          if (isFirst) {
+            return (
+              <TitlePage
+                key={`title-${index}`}
+                image={img}
+                title={title}
+                subtitle={subtitle}
+              />
+            )
+          }
+
+          // Case 3: Last image = final page
+          if (isLast) {
+            return (
+              <FinalMockupPage
+                key={`final-${index}`}
+                image={img}
+                reply={reply}
+                tone={tone}
+                messages={messages.map(m => m.text)}
+              />
+            )
+          }
+
+          // Case 4: Middle images = message pages
+          const msg = messages[index - 1] // shift because first image is title
           return (
-            <FinalMockupPage
-              key={`final-${index}`}
+            <MessagePage
+              key={`msg-${index}`}
               image={img}
-              reply={reply}
-              tone={tone}
-              messages={messages.map(m => m.text)}
+              message={msg?.text || ''}
+              description={msg?.description || ''}
             />
           )
-        }
+        })}
+      </div>
+      <div className="space-y-2 flex flex-col items-center">
+        {/* Description */}
+        <p className="text-gray-700 text-md">
+          {descriptionWords.join(" ")}
+        </p>
 
-        // Case 2: First image = title page
-        if (isFirst) {
-          return (
-            <TitlePage
-              key={`title-${index}`}
-              image={img}
-              title={title}
-              subtitle={subtitle}
-            />
-          )
-        }
-
-        // Case 3: Last image = final page
-        if (isLast) {
-          return (
-            <FinalMockupPage
-              key={`final-${index}`}
-              image={img}
-              reply={reply}
-              tone={tone}
-              messages={messages.map(m => m.text)}
-            />
-          )
-        }
-
-        // Case 4: Middle images = message pages
-        const msg = messages[index - 1] // shift because first image is title
-        return (
-          <MessagePage
-            key={`msg-${index}`}
-            image={img}
-            message={msg?.text || ''}
-            description={msg?.description || ''}
-          />
-        )
-      })}
+        {/* Hashtag Bubbles */}
+        <div className="flex flex-wrap gap-2">
+          {hashtags.map((tag, index) => (
+            <button
+              key={index}
+              onClick={() => handleCopy(tag, index)}
+              className="relative bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full hover:bg-blue-200 transition-all"
+            >
+              {copiedIndex === index ? (
+               <span
+  className="absolute -top-8 left-1/2 -translate-x-1/2
+    px-3 py-1 rounded-full text-xs font-semibold text-green-700 
+    bg-gradient-to-b from-white via-green-50 to-green-100
+    shadow-[inset_0_1px_3px_rgba(255,255,255,0.6),_0_2px_5px_rgba(0,0,0,0.1)]
+    border border-green-300
+    transition-all duration-300 ease-out scale-105"
+>
+  Copied!
+</span>
+              ) : null}
+              {tag}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
@@ -265,7 +313,7 @@ function FinalMockupPage({ image, reply, tone, messages }: {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const modifiedReply =`${reply}`
+  const modifiedReply = `${reply}`
   const modifiedMessages = messages?.map((msg, index) => `${msg}`) ?? []
 
   const CHARS_PER_LINE = 30
@@ -277,7 +325,7 @@ function FinalMockupPage({ image, reply, tone, messages }: {
     const messageLines = modifiedMessages
       ? modifiedMessages.reduce((sum, msg) => sum + countLines(msg), 0)
       : 0
-          console.log('messageLines********', messageLines)
+    console.log('messageLines********', messageLines)
     return replyLines + messageLines
   }, [modifiedReply, modifiedMessages])
 
