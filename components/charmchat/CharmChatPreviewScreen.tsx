@@ -121,7 +121,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
           {title}
         </p>
         {/* Description */}
-        <p className="text-gray-700 text-md">
+        <p className="text-gray-700 text-md whitespace-pre-line">
           {finalResult}
         </p>
       </div>
