@@ -45,7 +45,7 @@ export const buildCharmPrompt = (
       replyMessage,
       "educated guess the message based on the context"
     )
-    prompt["Tone"] = fallback(tone, "Use only one word to fill the blank")
+    prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
     for (let i = 1; i <= 3; i++) {
       prompt[`Message ${i}`] = `Generate ${ordinal(i)} message to fill the blank`
