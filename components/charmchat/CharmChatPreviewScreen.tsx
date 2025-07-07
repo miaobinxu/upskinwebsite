@@ -360,7 +360,7 @@ function FinalMockupPage({ image, reply, tone, messages }: {
         />
 
         <div className={`w-[308px] scale-[0.60] p-2 px-4 flex flex-col gap-4 absolute left-0 z-30 bg-[#FAFAFA] text-gray-900 shadow-lg ... border border-gray-200 ${poppins.className}`} style={{ top: `${topOffset}px` }}>
-          <div className="absolute scale-90 flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
+          <div className="absolute scale-[1.05] flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className='border border-purple-600 rounded-full ring-offset-4 ring-purple-600 text-purple-600 p-2'>
               <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
                 Download “CharmChat” App
