@@ -43,7 +43,7 @@ export const buildCharmPrompt = (
   if (totalImages === 1) {
     prompt["Reply content"] = fallback(
       replyMessage,
-      "educated guess the message based on the context"
+      "Write the prompt which can generate these messages"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
@@ -63,7 +63,7 @@ export const buildCharmPrompt = (
     )
     prompt["Reply content"] = fallback(
       replyMessage,
-      "Put the same content as title"
+      "Write the prompt which can generate these messages"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
