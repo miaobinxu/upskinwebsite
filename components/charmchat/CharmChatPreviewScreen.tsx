@@ -43,7 +43,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
   const messages = extractMessagesFromFlat(data ?? {});
   const finalResult = messages
   .map(msg => `"${msg.text}" - ${msg.description}`)
-  .join('\n') + '\n#dating #relationship #texting'
+  .join('\n') + '\n#dating #relationship #texting #queen #feminineenergy'
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
@@ -164,7 +164,7 @@ function TitlePage({ image, title, subtitle }: {
           alt="Title Page"
         />
 
-        <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center px-6 text-white text-center gap-2">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-2">
 
           {/* Title lines */}
           <div className="flex flex-col items-center text-xl font-bold leading-tight">
@@ -243,7 +243,7 @@ function MessagePage({ image, message, description }: {
           alt="Message Page"
         />
 
-        <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center px-6 text-white text-center gap-3">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-3">
 
           {/* Message (white background) */}
           <div className="flex flex-col items-center text-xl font-bold leading-tight">
@@ -339,7 +339,7 @@ function FinalMockupPage({ image, reply, tone, messages }: {
           <div className="absolute scale-[1.05] flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className='border border-purple-600 rounded-full ring-offset-4 ring-purple-600 text-purple-600 p-2'>
               <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
-                Download “CharmChat” App
+                Download "CharmChat" App
               </div>
             </div>
             <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-[3px] border-purple-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
