@@ -39,11 +39,6 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
   const subtitle = data?.['Subtitle'] ?? ''
   const tone = data?.['Tone'] ?? ''
   const reply = data?.['Message Prompt'] ?? ''
-  const descriptionAndHashtag = data?.['Post description and hashtag'] ?? ''
-  const words = descriptionAndHashtag.split(" ");
-
-  const descriptionWords = words.filter(word => !word.startsWith("#"));
-  const hashtags = words.filter(word => word.startsWith("#"));
 
   const messages = extractMessagesFromFlat(data ?? {});
 
@@ -119,13 +114,12 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
         })}
       </div>
       <div className="space-y-2 flex flex-col items-center">
-        {/* Description */}
-        <p className="text-gray-700 text-md">
-          {descriptionWords.join(" ")}
-        </p>
-
         <p className="text-gray-700 text-md">
           {title}
+        </p>
+        {/* Description */}
+        <p className="text-gray-700 text-md">
+          {messages}
         </p>
       </div>
     </div>
