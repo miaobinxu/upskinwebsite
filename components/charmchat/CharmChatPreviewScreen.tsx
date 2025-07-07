@@ -41,6 +41,9 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
   const reply = data?.['Message Prompt'] ?? ''
 
   const messages = extractMessagesFromFlat(data ?? {});
+  const finalResult = messages
+  .map(msg => `"${msg.text}" - ${msg.description}`)
+  .join('\n') + '\n#dating #relationship #texting'
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
@@ -119,7 +122,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
         </p>
         {/* Description */}
         <p className="text-gray-700 text-md">
-          {messages.toString()}
+          {finalResult}
         </p>
       </div>
     </div>
