@@ -85,7 +85,7 @@ export const buildCharmPrompt = (
   }
 
   // Final AI prompt string (JSON embedded in instructions)
-  return `You are writing a TikTok post teaching women how to text with men and providing native texting messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. You must learn from these posts regarding how intriguing these topics are to women in modern dating, and how native and impressive these messages are. Messages must not use any emoji.
+  return `You are writing a TikTok post teaching women how to text with men and providing native texting messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. Note that all the topics are VERY intriguing to women in modern dating, and it reflects their deepest desires. In terms of the messages generated, they should be VERY impressive and must not use any emoji.
 Example 1:
 {
   "Title": "5 FLIERTY replies to 'How are you?'",
