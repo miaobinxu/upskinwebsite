@@ -43,7 +43,7 @@ export const buildCharmPrompt = (
   if (totalImages === 1) {
     prompt["Message Prompt"] = fallback(
       replyMessage,
-      "Refer the title to write the prompt to generate these messages"
+      "Refer the title to write extremely short and extremely concise prompt which can generate these messages"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
@@ -63,7 +63,7 @@ export const buildCharmPrompt = (
     )
     prompt["Message Prompt"] = fallback(
       replyMessage,
-      "Refer the title to write the prompt to generate these messages"
+      "Refer the title to write extremely short and extremely concise prompt which can generate these messages"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
@@ -85,7 +85,7 @@ export const buildCharmPrompt = (
   }
 
   // Final AI prompt string (JSON embedded in instructions)
-  return `You are writing a TikTok post teaching women how to text with men and providing them with texting messages. Here is the structure of your post. If content is provided, you must not change anything. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. Note that all the topics are VERY intriguing to women in modern dating, and it reflects their deepest desires. In terms of the messages generated, they should be VERY impressive.
+  return `You are writing a TikTok post teaching women how to text with men and providing them with texting messages. Here is the structure of your post. If content is provided, you must not change anything. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. Note that all the topics are VERY intriguing to women in modern dating, and it reflects their deepest desires. In terms of the messages generated, they should be VERY impressive and must not use any emoji.
 Example 1:
 {
   "Title": "5 FLIERTY replies to 'How are you?'",
