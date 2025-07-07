@@ -10,6 +10,7 @@ import Image from "next/image"
 const navItems = [
   { label: "Internal Tool", href: "/internal" },
   { label: "charmchat Tool", href: "/charmchat" },
+  { label: "dontsay Tool", href: "/dontsay" },
 ]
 
 export default function Navbar() {
