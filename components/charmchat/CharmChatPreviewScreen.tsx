@@ -119,7 +119,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
         </p>
         {/* Description */}
         <p className="text-gray-700 text-md">
-          {messages}
+          {messages.toString}
         </p>
       </div>
     </div>
