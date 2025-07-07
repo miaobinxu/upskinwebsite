@@ -38,7 +38,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
   const title = data?.['Title'] ?? ''
   const subtitle = data?.['Subtitle'] ?? ''
   const tone = data?.['Tone'] ?? ''
-  const reply = data?.['Reply content'] ?? ''
+  const reply = data?.['Message Prompt'] ?? ''
   const descriptionAndHashtag = data?.['Post description and hashtag'] ?? ''
   const words = descriptionAndHashtag.split(" ");
 

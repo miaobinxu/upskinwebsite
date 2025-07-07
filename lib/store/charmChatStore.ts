@@ -7,7 +7,7 @@ import { persist } from 'zustand/middleware'
 export interface CharmChatBase {
   Title: string
   Subtitle: string
-  "Reply content": string
+  "Message Prompt": string
   Tone: string
   "Post description and hashtag": string
 }

@@ -41,9 +41,9 @@ export const buildCharmPrompt = (
 
   // Case: only 1 image → no title/subtitle, always 3 AI-generated messages
   if (totalImages === 1) {
-    prompt["Reply content"] = fallback(
+    prompt["Message Prompt"] = fallback(
       replyMessage,
-      "Write the prompt which can generate these messages"
+      "Refer the title to write the prompt to generate these messages"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
@@ -61,9 +61,9 @@ export const buildCharmPrompt = (
       pageInputs[0]?.line2,
       "fill the blank based on the context"
     )
-    prompt["Reply content"] = fallback(
+    prompt["Message Prompt"] = fallback(
       replyMessage,
-      "Write the prompt which can generate these messages"
+      "Refer the title to write the prompt to generate these messages"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
@@ -89,7 +89,7 @@ export const buildCharmPrompt = (
 Example 1:
 {
   "Title": "5 FLIERTY replies to 'How are you?'",
-  "Reply content": "How are you?",
+  "Message Prompt": "How are you?",
   "Tone": "Flirty",
   "Message 1": "Better now that you're talking to me.",
   "Message 1 Description": "Makes him feel special and important instantly.",
