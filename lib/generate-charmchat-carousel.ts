@@ -48,7 +48,7 @@ export const buildCharmPrompt = (
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
     for (let i = 1; i <= 3; i++) {
-      prompt[`Message ${i}`] = `Generate ${ordinal(i)} message to fill the blank`
+      prompt[`Message ${i}`] = `Fill the blank based on the context`
       prompt[`Message ${i} Description`] = `Fill the blank based on the context`
     }
   } else {
@@ -65,7 +65,7 @@ export const buildCharmPrompt = (
       replyMessage,
       "educated guess the message based on the context"
     )
-    prompt["Tone"] = fallback(tone, "Use only one word to fill the blank")
+    prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
     // Use messages from pages 2 to N-1 (excluding app screen)
     const totalUsablePages = totalImages - 2
@@ -75,11 +75,11 @@ export const buildCharmPrompt = (
       const page = pageInputs[i] // pageInputs[1] = page 2, and so on
       prompt[`Message ${i}`] = fallback(
         page?.line1,
-        `Generate ${ordinal(i)} message to fill the blank`
+        `Fill the blank based on the context`
       )
       prompt[`Message ${i} Description`] = fallback(
         page?.line2,
-        `Describe why the ${ordinal(i)} message is good to fill the blank`
+        `Fill the blank based on the context`
       )
     }
   }
