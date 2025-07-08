@@ -43,7 +43,7 @@ export const buildCharmPrompt = (
   if (totalImages === 1) {
     prompt["Message Prompt"] = fallback(
       replyMessage,
-      "Refer the title to write extremely short and extremely concise prompt which can generate these messages"
+      "Refer the title to write a phrase"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
@@ -90,6 +90,8 @@ Example 1:
 {
   "Title": "Words that break his ego",
   "Subtitle": "(in the right way) & bring out his best behavior",
+  "Message Prompt": "Break his ego!",
+  "Tone": "Sassy",
   "Message 1": "Let me know when you're ready to treat me right.",
   "Message 1 Description": "(Confident. Calm. Unbothered.)",
   "Message 2": "I'm not here to teach you how to love a woman.",
@@ -117,6 +119,8 @@ Example 3:
 {
   "Title": "Too much silence between you two?",
   "Subtitle": "These 5 texts can break it without chasing",
+  "Message Prompt": "Break the silence",
+  "Tone": "Sassy",
   "Message 1": "Not expecting anything from this... just felt like being honest about the part of me that still cares. That's all.",
   "Message 1 Description": "Grown, Not Desperate",
   "Message 2": "This isn't me trying to fix anything - just saying, if you ever want peace, I'd be open to that.",
@@ -129,6 +133,8 @@ Example 3:
 Example 4:
 {
   "Title": "Texts that make him chase you",
+  "Message Prompt": "Make him chase me",
+  "Tone": "Dating",
   "Message 1": "I've been so busy lately, haven't even had time to think.",
   "Message 1 Description": "It signals independence. No chasing = he starts.",
   "Message 2": "Last night was fun.",
@@ -142,6 +148,8 @@ Example 5:
 {
   "Title": "Text him this and watch how he changes.",
   "Subtitle": "No chasing. No begging. Just power.",
+  "Message Prompt": "Change him",
+  "Tone": "Sassy",
   "Message 1": "I love when a man knows exactly what he wants.",
   "Message 1 Description": "triggers his masculine side to step up.",
   "Message 2": "It's okay, I don't repeat myself twice.",
@@ -155,6 +163,8 @@ Example 6:
 {
   "Title": "Feminine Ways to Express Disappointment",
   "Subtitle": "(Without Attacking)",
+  "Message Prompt": "Express Disappointment",
+  "Tone": "Sassy",
   "Message 1": "It's okay... I've kind of learned not to expect too much anymore.",
   "Message 1 Description": "Subtle, yet heavy - it makes him reflect without a direct confrontation.",
   "Message 2": "I wasn't surprised... I've been trying to lower my hopes lately.",

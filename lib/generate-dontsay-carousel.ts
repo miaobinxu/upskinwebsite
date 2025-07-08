@@ -63,7 +63,7 @@ export const buildDontSayPrompt = (
     )
     prompt["Message Prompt"] = fallback(
       replyMessage,
-      "Refer the title to write extremely short and extremely concise prompt which can generate 'Say' messages"
+      "Refer the title to write a phrase"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
@@ -90,6 +90,8 @@ Example 1:
 {
   "Title": "Feminine Ways to Talk to Him",
   "Subtitle": "Make Him Crave You",
+  "Message Prompt": "Make him crave me",
+  "Tone": "Dating",
   "Don't Say Message 1": "Why didn't you text me back?",
   "Say Message 1": "I missed hearing from you today... but I figured you were busy.",
   "Don't Say Message 2": "Where were you all day?",
@@ -104,6 +106,8 @@ Example 1:
 Example 2:
 {
   "Title": "How to speak to him femininely",
+  "Message Prompt": "Speak to him femininely",
+  "Tone": "Dating",
   "Don't Say Message 1": "Why didn't you call me?",
   "Say Message 1": "I missed hearing your voice, it would've made my day.",
   "Don't Say Message 2": "You need to listen to me.",
@@ -118,6 +122,8 @@ Example 2:
 Example 3:
 {
   "Title": "Texts that break his ego",
+  "Message Prompt": "Break his ego!",
+  "Tone": "Sassy",
   "Subtitle": "but make him rise for you",
   "Don't Say Message 1": "It's okay, I don't expect anything from you anymore.",
   "Say Message 1": "I release you.",
@@ -131,6 +137,8 @@ Example 3:
 Example 4:
 {
   "Title": "Feminine ways to communicate when you want to exit a situationship",
+  "Message Prompt": "exit a situationship",
+  "Tone": "Dating",
   "Don't Say Message 1": "What are we? I need to know where this is going.",
   "Say Message 1": "I've really enjoyed our time together, but I'm looking for something more serious. I'd love to know if we're on the same page.",
   "Don't Say Message 2": "This isn't working for me anymore. We should stop seeing each other.",
@@ -146,6 +154,8 @@ Example 5:
 {
   "Title": "Feminine ways to speak to your man......",
   "Subtitle": "If you have an anxious attachment style",
+  "Message Prompt": "Speak to him when I have an anxious attachment style",
+  "Tone": "Dating",
   "Don't Say Message 1": "Why didn't you text me back? Are you mad at me?",
   "Say Message 1": "I love hearing from you -- it always brightens my day. It makes me feel closer when we stay in touch.",
   "Don't Say Message 2": "Are you losing interest? Why haven't we spent time together?",
@@ -159,7 +169,6 @@ Example 5:
   "Don't Say Message 6": "You don't tell me you love me enough. Do you still feel the same?",
   "Say Message 6": "I feel so loved when you tell me how much I mean to you. It makes me feel secure knowing how you feel."
 }
-
 Respond strictly in the following JSON format:
 ${JSON.stringify(prompt, null, 2)}`
 }
