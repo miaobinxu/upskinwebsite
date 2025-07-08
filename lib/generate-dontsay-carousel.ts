@@ -48,8 +48,8 @@ export const buildDontSayPrompt = (
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 
     for (let i = 1; i <= 3; i++) {
-      prompt[`Message ${i}`] = `Fill the blank based on the context`
-      prompt[`Message ${i} Description`] = `Fill the blank based on the context`
+      prompt[`Don't Say Message ${i}`] = `Fill the blank based on the context`
+      prompt[`Say Message ${i}`] = `Fill the blank based on the context`
     }
   } else {
     // First image = title + subtitle
@@ -73,7 +73,7 @@ export const buildDontSayPrompt = (
 
     for (let i = 1; i <= messageCount; i++) {
       const page = pageInputs[i] // pageInputs[1] = page 2, and so on
-      prompt[`Dont't Say Message ${i}`] = fallback(
+      prompt[`Don't Say Message ${i}`] = fallback(
         page?.line1,
         `Fill the blank based on the context`
       )
@@ -190,7 +190,7 @@ Example 7:
   "Don't Say Message 4": "I have to go, bye",
   "Say Message 4": "Jumping under a shower, speak later"
 }
-  
+
 Respond strictly in the following JSON format:
 ${JSON.stringify(prompt, null, 2)}`
 }
