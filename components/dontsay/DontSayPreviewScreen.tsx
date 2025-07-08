@@ -281,12 +281,12 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-3">
 
           {/* Message (white background) */}
-          <div className="bg-white text-black px-4 py-2 text-xl font-bold leading-tight max-w-[380px] text-center">
+          <div className="bg-white text-black px-4 py-3 text-xl font-bold leading-tight max-w-[340px] text-center rounded-sm" style={{ wordBreak: 'break-word', hyphens: 'auto' }}>
             {message}
           </div>
 
           {/* Description (red background) */}
-          <div className="bg-red-500 text-white px-4 py-2 text-xl font-bold leading-tight max-w-[380px] text-center">
+          <div className="bg-red-500 text-white px-4 py-3 text-xl font-bold leading-tight max-w-[340px] text-center rounded-sm" style={{ wordBreak: 'break-word', hyphens: 'auto' }}>
             {description}
           </div>
 
