@@ -173,10 +173,7 @@ interface FinalMockupPageProps {
 
 /* --------------------- Title Page Component --------------------- */
 function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
-  const titleLines = wrapTextLines(title, 30);
-  const subtitleLines = wrapTextLines(subtitle, 30);
   const ref = useRef<HTMLDivElement>(null)
-
 
   return (
     <div className="scale-[0.65] sm:scale-[0.9] md:scale-[0.6] lg:scale-[0.8] overflow-hidden shadow-md">
@@ -199,28 +196,14 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
 
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-2">
 
-          {/* Title lines */}
-          <div className="flex flex-col items-center text-xl font-bold leading-tight">
-            {titleLines.map((line, idx) => (
-              <span
-                key={`title-${idx}`}
-                className="bg-white text-black px-3 py-1"
-              >
-                {line}
-              </span>
-            ))}
+          {/* Title */}
+          <div className="bg-white text-black px-3 py-1 text-xl font-bold leading-tight max-w-full break-words">
+            {title}
           </div>
 
-          {/* Subtitle lines */}
-          <div className="flex flex-col items-center text-xl font-medium leading-tight">
-            {subtitleLines.map((line, idx) => (
-              <span
-                key={`subtitle-${idx}`}
-                className="bg-red-500 text-white px-3 py-1"
-              >
-                {line}
-              </span>
-            ))}
+          {/* Subtitle */}
+          <div className="bg-red-500 text-white px-3 py-1 text-xl font-medium leading-tight max-w-full break-words">
+            {subtitle}
           </div>
         </div>
       </div>
@@ -228,29 +211,8 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
   )
 }
 
-function wrapTextLines(text: string, maxLineLength = 25): string[] {
-  const words = text.split(' ');
-  const lines: string[] = [];
-  let current = '';
-
-  for (const word of words) {
-    if ((current + word).length >= maxLineLength) {
-      lines.push(current.trim());
-      current = word;
-    } else {
-      current += ' ' + word;
-    }
-  }
-
-  if (current) lines.push(current.trim());
-  return lines;
-}
-
 /* ------------------- Message Page Component ------------------- */
 function MessagePage({ image, message, description, downloadIndex }: MessagePageProps) {
-
-  const messageLines = wrapTextLines(message, 30);
-  const descLines = wrapTextLines(description, 30);
   const ref = useRef<HTMLDivElement>(null)
 
   return (
@@ -275,31 +237,13 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-2">
 
           {/* Message (white background) */}
-          <div className="flex flex-col items-center text-xl font-bold leading-tight">
-            {messageLines.map((line, idx) => {
-              return (
-                <span
-                  key={`msg-${idx}`}
-                  className="bg-white text-black px-3 py-1"
-                >
-                  {line}
-                </span>
-              );
-            })}
+          <div className="bg-white text-black px-3 py-1 text-xl font-bold leading-tight max-w-full break-words">
+            {message}
           </div>
 
           {/* Description (red background) */}
-          <div className="flex flex-col items-center text-xl font-bold leading-tight">
-            {descLines.map((line, idx) => {
-              return (
-                <span
-                  key={`desc-${idx}`}
-                  className="bg-red-500 text-white px-3 py-1"
-                >
-                  {line}
-                </span>
-              );
-            })}
+          <div className="bg-red-500 text-white px-3 py-1 text-xl font-bold leading-tight max-w-full break-words">
+            {description}
           </div>
 
         </div>
