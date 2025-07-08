@@ -173,8 +173,8 @@ interface FinalMockupPageProps {
 
 /* --------------------- Title Page Component --------------------- */
 function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
-  const titleLines = wrapTextLines(title, 50);
-  const subtitleLines = wrapTextLines(subtitle, 50);
+  const titleLines = wrapTextLines(title, 75);
+  const subtitleLines = wrapTextLines(subtitle, 75);
   const ref = useRef<HTMLDivElement>(null)
 
 
@@ -234,13 +234,11 @@ function wrapTextLines(text: string, maxLineLength = 25): string[] {
   let current = '';
 
   for (const word of words) {
-    // Check if adding this word would exceed the limit
-    const testLine = current + (current ? ' ' : '') + word;
-    if (testLine.length > maxLineLength && current) {
+    if ((current + word).length > maxLineLength) {
       lines.push(current.trim());
-      current = word;
+      current = word + ' ';
     } else {
-      current = testLine;
+      current += word + ' ';
     }
   }
 
@@ -251,8 +249,8 @@ function wrapTextLines(text: string, maxLineLength = 25): string[] {
 /* ------------------- Message Page Component ------------------- */
 function MessagePage({ image, message, description, downloadIndex }: MessagePageProps) {
 
-  const messageLines = wrapTextLines(message, 30);
-  const descLines = wrapTextLines(description, 30);
+  const messageLines = wrapTextLines(message, 75);
+  const descLines = wrapTextLines(description, 75);
   const ref = useRef<HTMLDivElement>(null)
 
   return (
@@ -274,15 +272,15 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
           alt="Message Page"
         />
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-black text-center gap-3">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-3">
 
           {/* Message (white background) */}
-          <div className="flex flex-col items-center text-lg font-bold leading-tight max-w-[400px]">
+          <div className="flex flex-col items-center text-xl font-bold leading-tight">
             {messageLines.map((line, idx) => {
               return (
                 <span
                   key={`msg-${idx}`}
-                  className="bg-white text-black px-3 py-1 text-center"
+                  className="bg-white text-black px-3 py-1"
                 >
                   {line}
                 </span>
@@ -291,12 +289,12 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
           </div>
 
           {/* Description (red background) */}
-          <div className="flex flex-col items-center text-lg font-bold leading-tight max-w-[400px]">
+          <div className="flex flex-col items-center text-xl font-bold leading-tight">
             {descLines.map((line, idx) => {
               return (
                 <span
                   key={`desc-${idx}`}
-                  className="bg-red-500 text-white px-3 py-1 text-center"
+                  className="bg-red-500 text-white px-3 py-1"
                 >
                   {line}
                 </span>
