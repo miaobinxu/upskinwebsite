@@ -197,7 +197,7 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-8">
 
           {/* Title */}
-          <div className="text-xl font-bold leading-snug max-w-sm">
+          <div className="text-xl font-bold leading-snug max-w-xs">
             <span 
               className="bg-white text-black px-3 py-1" 
               style={{ 
@@ -211,7 +211,7 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
           </div>
 
           {/* Subtitle */}
-          <div className="text-xl font-medium leading-snug max-w-sm">
+          <div className="text-xl font-medium leading-snug max-w-xs">
             <span 
               className="bg-red-500 text-white px-3 py-1" 
               style={{ 
@@ -255,7 +255,7 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-8">
 
           {/* Message (white background) */}
-          <div className="text-xl font-bold leading-snug max-w-sm">
+          <div className="text-xl font-bold leading-snug max-w-xs">
             <span 
               className="bg-white text-black px-3 py-1" 
               style={{ 
@@ -269,7 +269,7 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
           </div>
 
           {/* Description (red background) */}
-          <div className="text-xl font-bold leading-snug max-w-sm">
+          <div className="text-xl font-bold leading-snug max-w-xs">
             <span 
               className="bg-red-500 text-white px-3 py-1" 
               style={{ 
@@ -372,7 +372,7 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
 
           {/* Prompt Block */}
           <div className="bg-white w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}>
-            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">{tone} <ChevronRight size={16} /></div>
+            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">{tone} Mode<ChevronRight size={16} /></div>
             <div className="text-[15px] font-medium text-black leading-snug line-clamp-4">
               {modifiedReply || 'Make him terrified of losing me'}
             </div>
