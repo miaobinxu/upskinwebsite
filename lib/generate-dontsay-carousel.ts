@@ -103,7 +103,7 @@ Example 1:
 Example 2:
 {
   "Title": "Words that break his ego",
-  "Subtitle": "(in the right way) & bring out his best behavior >>>",
+  "Subtitle": "(in the right way) & bring out his best behavior",
   "Message 1": "Let me know when you're ready to treat me right.",
   "Message 1 Description": "(Confident. Calm. Unbothered.)",
   "Message 2": "I'm not here to teach you how to love a woman.",
@@ -116,7 +116,7 @@ Example 2:
 Example 3:
 {
   "Title": "Words that break his ego",
-  "Subtitle": "(But Make Him Rise for You)>>>",
+  "Subtitle": "(But Make Him Rise for You)",
   "Message 1": "You're better than that.",
   "Message 1 Description": "Not an attack. A challenge. And men rise to challenges.",
   "Message 2": "I don't argue with men I respect.",
@@ -141,7 +141,7 @@ Example 4:
 }
 Example 5:
 {
-  "Title": "4 texts to make him terrified of losing you >>>",
+  "Title": "4 texts to make him terrified of losing you",
   "Message 1": "I've been pouring so much into this... I just hope it's mutual.",
   "Message 1 Description": "-> Makes him reflect on what he's giving back.",
   "Message 2": "I've started realizing what I truly deserve.",
