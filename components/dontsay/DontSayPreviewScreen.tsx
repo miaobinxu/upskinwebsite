@@ -197,31 +197,13 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-2">
 
           {/* Title */}
-          <div className="text-xl font-bold leading-tight">
-            <span 
-              className="bg-white text-black px-3 py-1" 
-              style={{ 
-                boxDecorationBreak: 'clone',
-                WebkitBoxDecorationBreak: 'clone',
-                display: 'inline'
-              }}
-            >
-              {title}
-            </span>
+          <div className="bg-white text-black px-3 py-1 text-xl font-bold leading-tight max-w-sm">
+            {title}
           </div>
 
           {/* Subtitle */}
-          <div className="text-xl font-medium leading-tight">
-            <span 
-              className="bg-red-500 text-white px-3 py-1" 
-              style={{ 
-                boxDecorationBreak: 'clone',
-                WebkitBoxDecorationBreak: 'clone',
-                display: 'inline'
-              }}
-            >
-              {subtitle}
-            </span>
+          <div className="bg-red-500 text-white px-3 py-1 text-xl font-medium leading-tight max-w-sm">
+            {subtitle}
           </div>
         </div>
       </div>
@@ -255,31 +237,13 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-2">
 
           {/* Message (white background) */}
-          <div className="text-xl font-bold leading-tight">
-            <span 
-              className="bg-white text-black px-3 py-1" 
-              style={{ 
-                boxDecorationBreak: 'clone',
-                WebkitBoxDecorationBreak: 'clone',
-                display: 'inline'
-              }}
-            >
-              {message}
-            </span>
+          <div className="bg-white text-black px-3 py-1 text-xl font-bold leading-tight max-w-sm">
+            {message}
           </div>
 
           {/* Description (red background) */}
-          <div className="text-xl font-bold leading-tight">
-            <span 
-              className="bg-red-500 text-white px-3 py-1" 
-              style={{ 
-                boxDecorationBreak: 'clone',
-                WebkitBoxDecorationBreak: 'clone',
-                display: 'inline'
-              }}
-            >
-              {description}
-            </span>
+          <div className="bg-red-500 text-white px-3 py-1 text-xl font-bold leading-tight max-w-sm">
+            {description}
           </div>
 
         </div>
