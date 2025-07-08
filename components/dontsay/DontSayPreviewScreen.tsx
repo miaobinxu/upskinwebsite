@@ -252,7 +252,7 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
           alt="Message Page"
         />
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-4">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-10">
 
           {/* Message (white background) */}
           <div className="text-xl font-bold leading-tight max-w-sm">
