@@ -194,10 +194,10 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
           alt="Title Page"
         />
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-2">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-8">
 
           {/* Title */}
-          <div className="text-xl font-bold leading-relaxed max-w-sm">
+          <div className="text-xl font-bold leading-snug max-w-sm">
             <span 
               className="bg-white text-black px-3 py-1" 
               style={{ 
@@ -211,7 +211,7 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
           </div>
 
           {/* Subtitle */}
-          <div className="text-xl font-medium leading-relaxed max-w-sm">
+          <div className="text-xl font-medium leading-snug max-w-sm">
             <span 
               className="bg-red-500 text-white px-3 py-1" 
               style={{ 
@@ -255,7 +255,7 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-8">
 
           {/* Message (white background) */}
-          <div className="text-xl font-bold leading-relaxed max-w-sm">
+          <div className="text-xl font-bold leading-snug max-w-sm">
             <span 
               className="bg-white text-black px-3 py-1" 
               style={{ 
@@ -269,7 +269,7 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
           </div>
 
           {/* Description (red background) */}
-          <div className="text-xl font-bold leading-relaxed max-w-sm">
+          <div className="text-xl font-bold leading-snug max-w-sm">
             <span 
               className="bg-red-500 text-white px-3 py-1" 
               style={{ 
