@@ -173,8 +173,8 @@ interface FinalMockupPageProps {
 
 /* --------------------- Title Page Component --------------------- */
 function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
-  const titleLines = wrapTextLines(title, 75);
-  const subtitleLines = wrapTextLines(subtitle, 75);
+  const titleLines = wrapTextLines(title, 35);
+  const subtitleLines = wrapTextLines(subtitle, 35);
   const ref = useRef<HTMLDivElement>(null)
 
 
@@ -234,31 +234,21 @@ function wrapTextLines(text: string, maxLineLength = 25): string[] {
   let current = '';
 
   for (const word of words) {
-    // Test if adding this word would exceed the limit
-    const testLine = current + (current ? ' ' : '') + word;
-    if (testLine.length > maxLineLength && current) {
-      // Push current line and start new line with current word
+    if ((current + word).length > maxLineLength) {
       lines.push(current.trim());
-      current = word;
+      current = word + ' ';
     } else {
-      // Add word to current line
-      current = testLine;
+      current += word + ' ';
     }
   }
 
-  // Don't forget to add the last line
-  if (current.trim()) {
-    lines.push(current.trim());
-  }
-  
+  if (current) lines.push(current.trim());
   return lines;
 }
 
 /* ------------------- Message Page Component ------------------- */
 function MessagePage({ image, message, description, downloadIndex }: MessagePageProps) {
 
-  const messageLines = wrapTextLines(message, 25);
-  const descLines = wrapTextLines(description, 25);
   const ref = useRef<HTMLDivElement>(null)
 
   return (
@@ -280,30 +270,34 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
           alt="Message Page"
         />
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-3">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-black text-center gap-4">
 
           {/* Message (white background) */}
-          <div className="flex flex-col items-center text-xl font-bold leading-tight">
-            {messageLines.map((line, idx) => (
-              <span
-                key={`msg-${idx}`}
-                className="bg-white text-black px-3 py-1"
-              >
-                {line}
-              </span>
-            ))}
+          <div 
+            className="bg-white text-black px-4 py-3 text-xl font-bold leading-relaxed text-center"
+            style={{ 
+              maxWidth: '320px', 
+              wordWrap: 'break-word',
+              wordBreak: 'break-word',
+              whiteSpace: 'normal',
+              display: 'inline-block'
+            }}
+          >
+            {message}
           </div>
 
           {/* Description (red background) */}
-          <div className="flex flex-col items-center text-xl font-bold leading-tight">
-            {descLines.map((line, idx) => (
-              <span
-                key={`desc-${idx}`}
-                className="bg-red-500 text-white px-3 py-1"
-              >
-                {line}
-              </span>
-            ))}
+          <div 
+            className="bg-red-500 text-white px-4 py-3 text-xl font-bold leading-relaxed text-center"
+            style={{ 
+              maxWidth: '320px', 
+              wordWrap: 'break-word',
+              wordBreak: 'break-word',
+              whiteSpace: 'normal',
+              display: 'inline-block'
+            }}
+          >
+            {description}
           </div>
 
         </div>
