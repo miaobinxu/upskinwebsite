@@ -124,8 +124,8 @@ export default function DontSayPreviewScreen({ images }: DontSayPreviewScreenPro
             <MessagePage
               key={`msg-${index}`}
               image={img}
-              message={msg?.text ? `Don't Say: "${msg.text}"` : ''}
-              description={msg?.description ? `Say this: "${msg.description}"` : ''}
+              message={msg?.text ? `❌ Don't Say: "${msg.text}"` : ''}
+              description={msg?.description ? `✅ Say this: "${msg.description}"` : ''}
               downloadIndex={sequentialIndex}
             />
           )
