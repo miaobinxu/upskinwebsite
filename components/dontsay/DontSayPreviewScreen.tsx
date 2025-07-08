@@ -234,15 +234,23 @@ function wrapTextLines(text: string, maxLineLength = 25): string[] {
   let current = '';
 
   for (const word of words) {
-    if ((current + word).length > maxLineLength) {
+    // Test if adding this word would exceed the limit
+    const testLine = current + (current ? ' ' : '') + word;
+    if (testLine.length > maxLineLength && current) {
+      // Push current line and start new line with current word
       lines.push(current.trim());
-      current = word + ' ';
+      current = word;
     } else {
-      current += word + ' ';
+      // Add word to current line
+      current = testLine;
     }
   }
 
-  if (current) lines.push(current.trim());
+  // Don't forget to add the last line
+  if (current.trim()) {
+    lines.push(current.trim());
+  }
+  
   return lines;
 }
 
