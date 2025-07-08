@@ -257,6 +257,8 @@ function wrapTextLines(text: string, maxLineLength = 25): string[] {
 /* ------------------- Message Page Component ------------------- */
 function MessagePage({ image, message, description, downloadIndex }: MessagePageProps) {
 
+  const messageLines = wrapTextLines(message, 25);
+  const descLines = wrapTextLines(description, 25);
   const ref = useRef<HTMLDivElement>(null)
 
   return (
@@ -281,13 +283,27 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-3">
 
           {/* Message (white background) */}
-          <div className="bg-white text-black px-4 py-3 text-xl font-bold leading-tight max-w-[340px] text-center rounded-sm" style={{ wordBreak: 'break-word', hyphens: 'auto' }}>
-            {message}
+          <div className="flex flex-col items-center text-xl font-bold leading-tight">
+            {messageLines.map((line, idx) => (
+              <span
+                key={`msg-${idx}`}
+                className="bg-white text-black px-3 py-1"
+              >
+                {line}
+              </span>
+            ))}
           </div>
 
           {/* Description (red background) */}
-          <div className="bg-red-500 text-white px-4 py-3 text-xl font-bold leading-tight max-w-[340px] text-center rounded-sm" style={{ wordBreak: 'break-word', hyphens: 'auto' }}>
-            {description}
+          <div className="flex flex-col items-center text-xl font-bold leading-tight">
+            {descLines.map((line, idx) => (
+              <span
+                key={`desc-${idx}`}
+                className="bg-red-500 text-white px-3 py-1"
+              >
+                {line}
+              </span>
+            ))}
           </div>
 
         </div>
