@@ -173,8 +173,8 @@ interface FinalMockupPageProps {
 
 /* --------------------- Title Page Component --------------------- */
 function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
-  const titleLines = wrapTextLines(title, 35);
-  const subtitleLines = wrapTextLines(subtitle, 35);
+  const titleLines = wrapTextLines(title, 50);
+  const subtitleLines = wrapTextLines(subtitle, 50);
   const ref = useRef<HTMLDivElement>(null)
 
 
