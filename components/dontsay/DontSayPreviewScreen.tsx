@@ -173,8 +173,8 @@ interface FinalMockupPageProps {
 
 /* --------------------- Title Page Component --------------------- */
 function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
-  const titleLines = wrapTextLines(title, 35);
-  const subtitleLines = wrapTextLines(subtitle, 35);
+  const titleLines = wrapTextLines(title, 50);
+  const subtitleLines = wrapTextLines(subtitle, 50);
   const ref = useRef<HTMLDivElement>(null)
 
 
@@ -249,8 +249,8 @@ function wrapTextLines(text: string, maxLineLength = 25): string[] {
 /* ------------------- Message Page Component ------------------- */
 function MessagePage({ image, message, description, downloadIndex }: MessagePageProps) {
 
-  const messageLines = wrapTextLines(message, 35);
-  const descLines = wrapTextLines(description, 35);
+  const messageLines = wrapTextLines(message, 50);
+  const descLines = wrapTextLines(description, 50);
   const ref = useRef<HTMLDivElement>(null)
 
   return (
