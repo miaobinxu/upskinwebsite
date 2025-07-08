@@ -77,7 +77,7 @@ export default function DontSayPreviewScreen({ images }: DontSayPreviewScreenPro
                 image={img}
                 reply={reply}
                 tone={tone}
-                messages={messages.map(m => m.text)}
+                messages={messages.map(m => m.description)}
                 downloadIndex={sequentialIndex}
               />
             )
@@ -104,7 +104,7 @@ export default function DontSayPreviewScreen({ images }: DontSayPreviewScreenPro
                 image={img}
                 reply={reply}
                 tone={tone}
-                messages={messages.map(m => m.text)}
+                messages={messages.map(m => m.description)}
                 downloadIndex={sequentialIndex}
               />
             )
@@ -116,8 +116,8 @@ export default function DontSayPreviewScreen({ images }: DontSayPreviewScreenPro
             <MessagePage
               key={`msg-${index}`}
               image={img}
-              message={msg?.text ? `"${msg.text}"` : ''}
-              description={msg?.description || ''}
+              message={msg?.text ? `Don't Say: "${msg.text}"` : ''}
+              description={msg?.description ? `Say this: "${msg.description}"` : ''}
               downloadIndex={sequentialIndex}
             />
           )
