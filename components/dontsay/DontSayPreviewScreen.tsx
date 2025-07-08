@@ -234,11 +234,11 @@ function wrapTextLines(text: string, maxLineLength = 25): string[] {
   let current = '';
 
   for (const word of words) {
-    if ((current + word).length > maxLineLength) {
+    if ((current + word).length >= maxLineLength) {
       lines.push(current.trim());
-      current = word + ' ';
+      current = word;
     } else {
-      current += word + ' ';
+      current += ' ' + word;
     }
   }
 
@@ -249,6 +249,8 @@ function wrapTextLines(text: string, maxLineLength = 25): string[] {
 /* ------------------- Message Page Component ------------------- */
 function MessagePage({ image, message, description, downloadIndex }: MessagePageProps) {
 
+  const messageLines = wrapTextLines(message, 35);
+  const descLines = wrapTextLines(description, 35);
   const ref = useRef<HTMLDivElement>(null)
 
   return (
@@ -270,34 +272,34 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
           alt="Message Page"
         />
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-black text-center gap-4">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-2">
 
           {/* Message (white background) */}
-          <div 
-            className="bg-white text-black px-4 py-3 text-xl font-bold leading-relaxed text-center"
-            style={{ 
-              maxWidth: '320px', 
-              wordWrap: 'break-word',
-              wordBreak: 'break-word',
-              whiteSpace: 'normal',
-              display: 'inline-block'
-            }}
-          >
-            {message}
+          <div className="flex flex-col items-center text-xl font-bold leading-tight">
+            {messageLines.map((line, idx) => {
+              return (
+                <span
+                  key={`msg-${idx}`}
+                  className="bg-white text-black px-3 py-1"
+                >
+                  {line}
+                </span>
+              );
+            })}
           </div>
 
           {/* Description (red background) */}
-          <div 
-            className="bg-red-500 text-white px-4 py-3 text-xl font-bold leading-relaxed text-center"
-            style={{ 
-              maxWidth: '320px', 
-              wordWrap: 'break-word',
-              wordBreak: 'break-word',
-              whiteSpace: 'normal',
-              display: 'inline-block'
-            }}
-          >
-            {description}
+          <div className="flex flex-col items-center text-xl font-bold leading-tight">
+            {descLines.map((line, idx) => {
+              return (
+                <span
+                  key={`desc-${idx}`}
+                  className="bg-red-500 text-white px-3 py-1"
+                >
+                  {line}
+                </span>
+              );
+            })}
           </div>
 
         </div>
