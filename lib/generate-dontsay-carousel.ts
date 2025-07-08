@@ -43,7 +43,7 @@ export const buildDontSayPrompt = (
   if (totalImages === 1) {
     prompt["Message Prompt"] = fallback(
       replyMessage,
-      "Refer the title to write extremely short and extremely concise prompt which can generate 'Say' messages"
+      "Refer the title to write a phrase"
     )
     prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
 

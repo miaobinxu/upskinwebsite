@@ -31,12 +31,21 @@ function extractMessagesFromFlat(data: Record<string, string>) {
   return messages
 }
 
+/* ---------------------------- Helper Function --------------------------- */
+function addArrowSuffix(text: string): string {
+  const trimmed = text.trim()
+  if (trimmed.endsWith('.')) {
+    return trimmed.slice(0, -1) + ' >>>'
+  }
+  return trimmed + ' >>>'
+}
+
 /* ---------------------------- 🔥 MAIN COMPONENT --------------------------- */
 export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScreenProps) {
   const data = useCharmChatStore(state => state.data);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const title = data?.['Title'] ?? ''
-  const subtitle = (data?.['Subtitle'] ?? '') + ' >>>'
+  const subtitle = addArrowSuffix(data?.['Subtitle'] ?? '')
   const tone = data?.['Tone'] ?? ''
   const reply = data?.['Message Prompt'] ?? ''
 
@@ -117,7 +126,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
               key={`msg-${index}`}
               image={img}
               message={msg?.text ? `"${msg.text}"` : ''}
-              description={(msg?.description || '') + " >>>"}
+              description={addArrowSuffix(msg?.description || '')}
               downloadIndex={sequentialIndex}
             />
           )
