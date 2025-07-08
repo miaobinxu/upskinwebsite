@@ -85,8 +85,21 @@ export const buildCharmPrompt = (
   }
 
   // Final AI prompt string (JSON embedded in instructions)
-  return `You are writing a TikTok post teaching women how to text with men and providing native texting messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. Note that all the topics are VERY intriguing to women in modern dating, and it reflects their deepest desires. In terms of the messages generated, they should be VERY impressive and must not use any emoji.
+  return `You are writing a TikTok post teaching women how to text with men and providing native texting messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. In terms of the messages generated, they should be VERY impressive and must not use any emoji.
 Example 1:
+{
+  "Title": "Words that break his ego",
+  "Subtitle": "(in the right way) & bring out his best behavior",
+  "Message 1": "Let me know when you're ready to treat me right.",
+  "Message 1 Description": "(Confident. Calm. Unbothered.)",
+  "Message 2": "I'm not here to teach you how to love a woman.",
+  "Message 2 Description": "(It makes him realize you're not his therapist.)",
+  "Message 3": "Actions show me everything. Words don't impress me.",
+  "Message 3 Description": "(Makes him step up instead of talk.)",
+  "Message 4": "I don't chase. I choose.",
+  "Message 4 Description": "(It puts the power back in your hands -- where it belongs.)"
+}
+Example 2:
 {
   "Title": "5 FLIERTY replies to 'How are you?'",
   "Message Prompt": "How are you?",
@@ -100,33 +113,32 @@ Example 1:
   "Message 4": "I was fine... until you distracted me.",
   "Message 4 Description": "Playful and teasing, it flatters him while also making the conversation more flirty and engaging."
 }
-Example 2:
-{
-  "Title": "Words that break his ego",
-  "Subtitle": "(in the right way) & bring out his best behavior",
-  "Message 1": "Let me know when you're ready to treat me right.",
-  "Message 1 Description": "(Confident. Calm. Unbothered.)",
-  "Message 2": "I'm not here to teach you how to love a woman.",
-  "Message 2 Description": "(It makes him realize you're not his therapist.)",
-  "Message 3": "Actions show me everything. Words don't impress me.",
-  "Message 3 Description": "(Makes him step up instead of talk.)",
-  "Message 4": "I don't chase. I choose.",
-  "Message 4 Description": "(It puts the power back in your hands -- where it belongs.)"
-}
 Example 3:
 {
-  "Title": "Words that break his ego",
-  "Subtitle": "(But Make Him Rise for You)",
-  "Message 1": "You're better than that.",
-  "Message 1 Description": "Not an attack. A challenge. And men rise to challenges.",
-  "Message 2": "I don't argue with men I respect.",
-  "Message 2 Description": "Let that one sit. Watch him choose his tone wisely next time.",
-  "Message 3": "I know my worth -- do you?",
-  "Message 3 Description": "It's not a threat. It's a mirror.",
-  "Message 4": "Peace is more attractive to me than proving a point.",
-  "Message 4 Description": "You keep your feminine energy. He learns to meet you there."
+  "Title": "Too much silence between you two?",
+  "Subtitle": "These 5 texts can break it without chasing",
+  "Message 1": "Not expecting anything from this... just felt like being honest about the part of me that still cares. That's all.",
+  "Message 1 Description": "Grown, Not Desperate",
+  "Message 2": "This isn't me trying to fix anything - just saying, if you ever want peace, I'd be open to that.",
+  "Message 2 Description": "Open, But Guarded",
+  "Message 3": "I'm not reaching out to be chosen. I'm reaching out because pretending I didn't care never felt right.",
+  "Message 3 Description": "Real, Not Needy",
+  "Message 4": "If you're not ready, that's okay. But if you ever wonder if I still wish you well - I do.",
+  "Message 4 Description": "Strong, Still Soft"
 }
 Example 4:
+{
+  "Title": "Texts that make him chase you",
+  "Message 1": "I've been so busy lately, haven't even had time to think.",
+  "Message 1 Description": "It signals independence. No chasing = he starts.",
+  "Message 2": "Last night was fun.",
+  "Message 2 Description": "No over-excitement. Casual. He's left wondering what was fun, and if you felt the same.",
+  "Message 3": "I'll let you know if I'm free.",
+  "Message 3 Description": "Control the pace. You're the one with options",
+  "Message 4": "You looked good today.",
+  "Message 4 Description": "Just enough to spark his ego, but not too much to feed it."
+}
+Example 5:
 {
   "Title": "Text him this and watch how he changes.",
   "Subtitle": "No chasing. No begging. Just power.",
@@ -139,17 +151,16 @@ Example 4:
   "Message 4": "I'm not here to convince, I'm here to be chosen.",
   "Message 4 Description": "makes him realize he could lose you."
 }
-Example 5:
+Example 6:
 {
-  "Title": "4 texts to make him terrified of losing you",
-  "Message 1": "I've been pouring so much into this... I just hope it's mutual.",
-  "Message 1 Description": "-> Makes him reflect on what he's giving back.",
-  "Message 2": "I've started realizing what I truly deserve.",
-  "Message 2 Description": "-> Plants the seed that you won't settle.",
-  "Message 3": "I miss how things used to feel.",
-  "Message 3 Description": "-> Hits nostalgia. And fear.",
-  "Message 4": "I need to feel chosen, not tolerated.",
-  "Message 4 Description": "-> Forces him to step up -- or lose you."
+  "Title": "Feminine Ways to Express Disappointment",
+  "Subtitle": "(Without Attacking)",
+  "Message 1": "It's okay... I've kind of learned not to expect too much anymore.",
+  "Message 1 Description": "Subtle, yet heavy - it makes him reflect without a direct confrontation.",
+  "Message 2": "I wasn't surprised... I've been trying to lower my hopes lately.",
+  "Message 2 Description": "Sounds calm, but cuts deep. It makes him think about how he's shown up.",
+  "Message 3": "I didn't really count on it happening - I've gotten used to letting things go.",
+  "Message 3 Description": "Subtle detachment that makes him feel the distance growing."
 }
 Respond strictly in the following JSON format:
 ${JSON.stringify(prompt, null, 2)}`

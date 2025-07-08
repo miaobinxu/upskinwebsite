@@ -85,7 +85,7 @@ export const buildDontSayPrompt = (
   }
 
   // Final AI prompt string (JSON embedded in instructions)
-  return `You are writing a TikTok post teaching women how to text with men and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. Note that all the topics are VERY intriguing to women in modern dating, and it reflects their deepest desires. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive.
+  return `You are writing a TikTok post teaching women how to text with men and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive.
 Example 1:
 {
   "Title": "Feminine Ways to Talk to Him",
@@ -103,6 +103,20 @@ Example 1:
 }
 Example 2:
 {
+  "Title": "How to speak to him femininely",
+  "Don't Say Message 1": "Why didn't you call me?",
+  "Say Message 1": "I missed hearing your voice, it would've made my day.",
+  "Don't Say Message 2": "You need to listen to me.",
+  "Say Message 2": "It would mean a lot if you could hear me out, I value your attention.",
+  "Don't Say Message 3": "You're not doing enough.",
+  "Say Message 3": "I appreciate what you do, and it would make me feel even more cared for if...",
+  "Don't Say Message 4": "You don't care about my feelings.",
+  "Say Message 4": "I feel safe when I know you understand how I'm feeling.",
+  "Don't Say Message 5": "Why can't you just do it my way?",
+  "Say Message 5": "I trust your decision, but could we try this as well?"
+}
+Example 3:
+{
   "Title": "Texts that break his ego",
   "Subtitle": "but make him rise for you",
   "Don't Say Message 1": "It's okay, I don't expect anything from you anymore.",
@@ -113,24 +127,6 @@ Example 2:
   "Say Message 3": "I'm the one choosing now.",
   "Don't Say Message 4": "You taught me what I'll never accept again.",
   "Say Message 4": "Thank you and goodbye."
-}
-Example 3:
-{
-  "Title": "Gaslighting vs Respectful Communication",
-  "Don't Say Message 1": "You're too sensitive.",
-  "Say Message 1": "I didn't mean to hurt you. Thanks for telling me how you feel.",
-  "Don't Say Message 2": "I never said that.",
-  "Say Message 2": "Maybe I wasn't clear -- let's try to understand each other better.",
-  "Don't Say Message 3": "You can't take a joke.",
-  "Say Message 3": "That joke didn't land well -- I'm sorry it upset you.",
-  "Don't Say Message 4": "You always make everything about you.",
-  "Say Message 4": "I didn't realize this affected you too. Let's talk about it.",
-  "Don't Say Message 5": "You're crazy.",
-  "Say Message 5": "You seem overwhelmed. I want to understand what's going on.",
-  "Don't Say Message 6": "You're the reason I act this way.",
-  "Say Message 6": "I take responsibility for how I handled that. It wasn't okay.",
-  "Don't Say Message 7": "You're remembering it wrong.",
-  "Say Message 7": "That's not how I recall it, but your feelings are valid."
 }
 Example 4:
 {
@@ -162,33 +158,6 @@ Example 5:
   "Say Message 5": "I've noticed we haven't been as close lately, and I really miss our connection. It makes me feel safe when we're in sync.",
   "Don't Say Message 6": "You don't tell me you love me enough. Do you still feel the same?",
   "Say Message 6": "I feel so loved when you tell me how much I mean to you. It makes me feel secure knowing how you feel."
-}
-Example 6:
-{
-  "Title": "How to speak to him femininely",
-  "Don't Say Message 1": "Why didn't you call me?",
-  "Say Message 1": "I missed hearing your voice, it would've made my day.",
-  "Don't Say Message 2": "You need to listen to me.",
-  "Say Message 2": "It would mean a lot if you could hear me out, I value your attention.",
-  "Don't Say Message 3": "You're not doing enough.",
-  "Say Message 3": "I appreciate what you do, and it would make me feel even more cared for if...",
-  "Don't Say Message 4": "You don't care about my feelings.",
-  "Say Message 4": "I feel safe when I know you understand how I'm feeling.",
-  "Don't Say Message 5": "Why can't you just do it my way?",
-  "Say Message 5": "I trust your decision, but could we try this as well?"
-}
-Example 7:
-{
-  "Title": "How to text a man",
-  "Subtitle": "to make him obsessed with you",
-  "Don't Say Message 1": "I miss you",
-  "Say Message 1": "Get out of my head! I can't focus at work right now.",
-  "Don't Say Message 2": "How was it yesterday?",
-  "Say Message 2": "How bored were you without me last night?",
-  "Don't Say Message 3": "Going to sleep, goodnight",
-  "Say Message 3": "If we keep talking, I may not be able to fall asleep. Goodnight",
-  "Don't Say Message 4": "I have to go, bye",
-  "Say Message 4": "Jumping under a shower, speak later"
 }
 
 Respond strictly in the following JSON format:
