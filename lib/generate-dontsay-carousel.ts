@@ -73,11 +73,11 @@ export const buildDontSayPrompt = (
 
     for (let i = 1; i <= messageCount; i++) {
       const page = pageInputs[i] // pageInputs[1] = page 2, and so on
-      prompt[`Message ${i}`] = fallback(
+      prompt[`Dont't Say Message ${i}`] = fallback(
         page?.line1,
         `Fill the blank based on the context`
       )
-      prompt[`Message ${i} Description`] = fallback(
+      prompt[`Say Message ${i}`] = fallback(
         page?.line2,
         `Fill the blank based on the context`
       )
@@ -85,72 +85,112 @@ export const buildDontSayPrompt = (
   }
 
   // Final AI prompt string (JSON embedded in instructions)
-  return `You are writing a TikTok post teaching women how to text with men and providing native texting messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. Note that all the topics are VERY intriguing to women in modern dating, and it reflects their deepest desires. In terms of the messages generated, they should be VERY impressive and must not use any emoji.
+  return `You are writing a TikTok post teaching women how to text with men and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. Note that all the topics are VERY intriguing to women in modern dating, and it reflects their deepest desires. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive.
 Example 1:
 {
-  "Title": "5 FLIERTY replies to 'How are you?'",
-  "Message Prompt": "How are you?",
-  "Tone": "Flirty",
-  "Message 1": "Better now that you're talking to me.",
-  "Message 1 Description": "Makes him feel special and important instantly.",
-  "Message 2": "Missing something... maybe you.",
-  "Message 2 Description": "Creates mystery and playful emotional connection.",
-  "Message 3": "I'm good... but seeing you would make it even better.",
-  "Message 3 Description": "Shows independence but invites him closer.",
-  "Message 4": "I was fine... until you distracted me.",
-  "Message 4 Description": "Playful and teasing, it flatters him while also making the conversation more flirty and engaging."
+  "Title": "Feminine Ways to Talk to Him",
+  "Subtitle": "Make Him Crave You",
+  "Don't Say Message 1": "Why didn't you text me back?",
+  "Say Message 1": "I missed hearing from you today... but I figured you were busy.",
+  "Don't Say Message 2": "Where were you all day?",
+  "Say Message 2": "I hope your day went well. I love hearing about it when you have time.",
+  "Don't Say Message 3": "You never make time for me.",
+  "Say Message 3": "I really enjoy the moments we do share... they always leave me wanting more.",
+  "Don't Say Message 4": "I'm mad at you.",
+  "Say Message 4": "I felt a little off earlier... I think I just needed some reassurance.",
+  "Don't Say Message 5": "Are you even interested in me?",
+  "Say Message 5": "I like how things feel between us... just wanted to see if you're on the same page."
 }
 Example 2:
 {
-  "Title": "Words that break his ego",
-  "Subtitle": "(in the right way) & bring out his best behavior",
-  "Message 1": "Let me know when you're ready to treat me right.",
-  "Message 1 Description": "(Confident. Calm. Unbothered.)",
-  "Message 2": "I'm not here to teach you how to love a woman.",
-  "Message 2 Description": "(It makes him realize you're not his therapist.)",
-  "Message 3": "Actions show me everything. Words don't impress me.",
-  "Message 3 Description": "(Makes him step up instead of talk.)",
-  "Message 4": "I don't chase. I choose.",
-  "Message 4 Description": "(It puts the power back in your hands -- where it belongs.)"
+  "Title": "Texts that break his ego",
+  "Subtitle": "but make him rise for you",
+  "Don't Say Message 1": "It's okay, I don't expect anything from you anymore.",
+  "Say Message 1": "I release you.",
+  "Don't Say Message 2": "I realized I was asking for the bare minimum. I'm done doing that.",
+  "Say Message 2": "I've leveled up.",
+  "Don't Say Message 3": "You don't have to change. I just no longer align with this,",
+  "Say Message 3": "I'm the one choosing now.",
+  "Don't Say Message 4": "You taught me what I'll never accept again.",
+  "Say Message 4": "Thank you and goodbye."
 }
 Example 3:
 {
-  "Title": "Words that break his ego",
-  "Subtitle": "(But Make Him Rise for You)",
-  "Message 1": "You're better than that.",
-  "Message 1 Description": "Not an attack. A challenge. And men rise to challenges.",
-  "Message 2": "I don't argue with men I respect.",
-  "Message 2 Description": "Let that one sit. Watch him choose his tone wisely next time.",
-  "Message 3": "I know my worth -- do you?",
-  "Message 3 Description": "It's not a threat. It's a mirror.",
-  "Message 4": "Peace is more attractive to me than proving a point.",
-  "Message 4 Description": "You keep your feminine energy. He learns to meet you there."
+  "Title": "Gaslighting vs Respectful Communication",
+  "Don't Say Message 1": "You're too sensitive.",
+  "Say Message 1": "I didn't mean to hurt you. Thanks for telling me how you feel.",
+  "Don't Say Message 2": "I never said that.",
+  "Say Message 2": "Maybe I wasn't clear -- let's try to understand each other better.",
+  "Don't Say Message 3": "You can't take a joke.",
+  "Say Message 3": "That joke didn't land well -- I'm sorry it upset you.",
+  "Don't Say Message 4": "You always make everything about you.",
+  "Say Message 4": "I didn't realize this affected you too. Let's talk about it.",
+  "Don't Say Message 5": "You're crazy.",
+  "Say Message 5": "You seem overwhelmed. I want to understand what's going on.",
+  "Don't Say Message 6": "You're the reason I act this way.",
+  "Say Message 6": "I take responsibility for how I handled that. It wasn't okay.",
+  "Don't Say Message 7": "You're remembering it wrong.",
+  "Say Message 7": "That's not how I recall it, but your feelings are valid."
 }
 Example 4:
 {
-  "Title": "Text him this and watch how he changes.",
-  "Subtitle": "No chasing. No begging. Just power.",
-  "Message 1": "I love when a man knows exactly what he wants.",
-  "Message 1 Description": "triggers his masculine side to step up.",
-  "Message 2": "It's okay, I don't repeat myself twice.",
-  "Message 2 Description": "sets standards without sounding needy.",
-  "Message 3": "I'm not upset. I just know what I deserve.",
-  "Message 3 Description": "shows emotional control (rare = attractive).",
-  "Message 4": "I'm not here to convince, I'm here to be chosen.",
-  "Message 4 Description": "makes him realize he could lose you."
+  "Title": "Feminine ways to communicate when you want to exit a situationship",
+  "Don't Say Message 1": "What are we? I need to know where this is going.",
+  "Say Message 1": "I've really enjoyed our time together, but I'm looking for something more serious. I'd love to know if we're on the same page.",
+  "Don't Say Message 2": "This isn't working for me anymore. We should stop seeing each other.",
+  "Say Message 2": "I think we've shared some great moments, but I'm at a point where I need more clarity in my relationships. It's time for me to focus on what aligns with my future.",
+  "Don't Say Message 3": "I feel like you're stringing me along, and I don't want to waste my time.",
+  "Say Message 3": "I've been reflecting on what I want in a relationship, and I realize I'm looking for more stability and commitment. I'd love to hear your thoughts on where we stand.",
+  "Don't Say Message 4": "Why do you keep sending me mixed signals? You need to make up your mind.",
+  "Say Message 4": "I've noticed some inconsistency, and I value clarity and open communication. I need to know where we're headed to see if we're a fit moving forward.",
+  "Don't Say Message 5": "This situationship isn't working. I'm done.",
+  "Say Message 5": "I've enjoyed our time, but I've realized I'm ready for a relationship that offers more depth and commitment. I think it's best for us to part ways and pursue what we both truly want."
 }
 Example 5:
 {
-  "Title": "4 texts to make him terrified of losing you",
-  "Message 1": "I've been pouring so much into this... I just hope it's mutual.",
-  "Message 1 Description": "-> Makes him reflect on what he's giving back.",
-  "Message 2": "I've started realizing what I truly deserve.",
-  "Message 2 Description": "-> Plants the seed that you won't settle.",
-  "Message 3": "I miss how things used to feel.",
-  "Message 3 Description": "-> Hits nostalgia. And fear.",
-  "Message 4": "I need to feel chosen, not tolerated.",
-  "Message 4 Description": "-> Forces him to step up -- or lose you."
+  "Title": "Feminine ways to speak to your man......",
+  "Subtitle": "If you have an anxious attachment style",
+  "Don't Say Message 1": "Why didn't you text me back? Are you mad at me?",
+  "Say Message 1": "I love hearing from you -- it always brightens my day. It makes me feel closer when we stay in touch.",
+  "Don't Say Message 2": "Are you losing interest? Why haven't we spent time together?",
+  "Say Message 2": "I really miss our time together. I always feel so connected when we spend quality time with each other.",
+  "Don't Say Message 3": "Are you going to leave me? I feel like you don't want me around anymore.",
+  "Say Message 3": "I feel the most secure and happy when I know we're on the same page. It helps me feel safe when I feel that closeness.",
+  "Don't Say Message 4": "Why don't you ever call me? Do you not care about how I'm feeling?",
+  "Say Message 4": "I love hearing your voice, and it makes me feel so good when we talk. It really helps me feel more connected to you.",
+  "Don't Say Message 5": "Why are you pulling away? Did I do something wrong?",
+  "Say Message 5": "I've noticed we haven't been as close lately, and I really miss our connection. It makes me feel safe when we're in sync.",
+  "Don't Say Message 6": "You don't tell me you love me enough. Do you still feel the same?",
+  "Say Message 6": "I feel so loved when you tell me how much I mean to you. It makes me feel secure knowing how you feel."
 }
+Example 6:
+{
+  "Title": "How to speak to him femininely",
+  "Don't Say Message 1": "Why didn't you call me?",
+  "Say Message 1": "I missed hearing your voice, it would've made my day.",
+  "Don't Say Message 2": "You need to listen to me.",
+  "Say Message 2": "It would mean a lot if you could hear me out, I value your attention.",
+  "Don't Say Message 3": "You're not doing enough.",
+  "Say Message 3": "I appreciate what you do, and it would make me feel even more cared for if...",
+  "Don't Say Message 4": "You don't care about my feelings.",
+  "Say Message 4": "I feel safe when I know you understand how I'm feeling.",
+  "Don't Say Message 5": "Why can't you just do it my way?",
+  "Say Message 5": "I trust your decision, but could we try this as well?"
+}
+Example 7:
+{
+  "Title": "How to text a man",
+  "Subtitle": "to make him obsessed with you",
+  "Don't Say Message 1": "I miss you",
+  "Say Message 1": "Get out of my head! I can't focus at work right now.",
+  "Don't Say Message 2": "How was it yesterday?",
+  "Say Message 2": "How bored were you without me last night?",
+  "Don't Say Message 3": "Going to sleep, goodnight",
+  "Say Message 3": "If we keep talking, I may not be able to fall asleep. Goodnight",
+  "Don't Say Message 4": "I have to go, bye",
+  "Say Message 4": "Jumping under a shower, speak later"
+}
+  
 Respond strictly in the following JSON format:
 ${JSON.stringify(prompt, null, 2)}`
 }
