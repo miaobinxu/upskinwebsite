@@ -52,7 +52,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
   const messages = extractMessagesFromFlat(data ?? {});
   const finalResult = 'Messages suggested by CharmChat\n' + messages
   .map(msg => `"${msg.text}" - ${msg.description}`)
-  .join('\n') + '\n#dating #relationship #texting #queen #feminineenergy'
+  .join('\n') + '\n#dating #relationship #texting #queen #feminineenergy '
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>

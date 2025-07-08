@@ -51,7 +51,7 @@ export default function DontSayPreviewScreen({ images }: DontSayPreviewScreenPro
   const messages = extractMessagesFromFlat(data ?? {});
   const finalResult = 'Messages suggested by CharmChat.\n' + messages
   .map(msg => `Don't say: "${msg.text}"\nSay: "${msg.description}"`)
-  .join('\n') + '\n#dating #relationship #texting #queen #feminineenergy'
+  .join('\n') + '\n#dating #relationship #texting #queen #feminineenergy '
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
