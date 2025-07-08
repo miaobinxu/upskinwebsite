@@ -249,8 +249,8 @@ function wrapTextLines(text: string, maxLineLength = 25): string[] {
 /* ------------------- Message Page Component ------------------- */
 function MessagePage({ image, message, description, downloadIndex }: MessagePageProps) {
 
-  const messageLines = wrapTextLines(message, 35);
-  const descLines = wrapTextLines(description, 35);
+  const messageLines = wrapTextLines(message, 50);
+  const descLines = wrapTextLines(description, 50);
   const ref = useRef<HTMLDivElement>(null)
 
   return (
