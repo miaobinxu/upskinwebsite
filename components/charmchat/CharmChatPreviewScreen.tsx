@@ -133,9 +133,6 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
         })}
       </div>
       <div className="space-y-2 flex flex-col items-center">
-        <p className="text-gray-700 text-md">
-          {title}
-        </p>
         {/* Description */}
         <p className="text-gray-700 text-md whitespace-pre-line">
           {finalResult}
