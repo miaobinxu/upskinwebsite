@@ -209,7 +209,7 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
           </div>
 
           {/* Subtitle */}
-          <div className="text-xl font-medium leading-snug max-w-xs">
+          {/* <div className="text-xl font-medium leading-snug max-w-xs">
             <span 
               className="bg-red-500 text-white px-3 py-1" 
               style={{ 
@@ -220,7 +220,7 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
             >
               {subtitle}
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
