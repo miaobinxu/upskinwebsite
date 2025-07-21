@@ -126,7 +126,6 @@ export default function DontSayPreviewScreen({ images }: DontSayPreviewScreenPro
               image={img}
               message={msg?.text ? `❌ Don't Say: "${msg.text}"` : ''}
               description={msg?.description ? `✅ Say this: "${msg.description}"` : ''}
-              number={`Message #${index}`}
               downloadIndex={sequentialIndex}
             />
           )
@@ -158,7 +157,6 @@ interface MessagePageProps {
   image: File | string
   message: string
   description: string
-  number: string
   downloadIndex?: string
 }
 
@@ -229,7 +227,7 @@ function TitlePage({ image, title, subtitle, downloadIndex }: TitlePageProps) {
 }
 
 /* ------------------- Message Page Component ------------------- */
-function MessagePage({ image, message, description, number, downloadIndex }: MessagePageProps) {
+function MessagePage({ image, message, description, downloadIndex }: MessagePageProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   return (
@@ -252,19 +250,6 @@ function MessagePage({ image, message, description, number, downloadIndex }: Mes
         />
 
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-8">
-          <div className="text-xl font-bold leading-snug max-w-xs">
-            <span 
-              className="bg-red-500 text-white px-3 py-1" 
-              style={{ 
-                display: 'inline',
-                boxDecorationBreak: 'clone',
-                WebkitBoxDecorationBreak: 'clone'
-              }}
-            >
-              {number}
-            </span>
-          </div>
-
           {/* Message (white background) */}
           <div className="text-xl font-bold leading-snug max-w-xs">
             <span 
