@@ -21,10 +21,10 @@ interface CharmChatPreviewScreenProps {
 function extractMessagesFromFlat(data: Record<string, string>) {
   const messages = []
   let i = 1
-  while (data[`Message ${i}`]) {
+  while (data[`Don't Say Message ${i}`]) {
     messages.push({
-      text: data[`Message ${i}`],
-      description: data[`Message ${i} Description`] || '',
+      text: data[`Don't Say Message ${i}`],
+      description: data[`Say Message ${i}`] || '',
     })
     i++
   }
@@ -51,7 +51,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
 
   const messages = extractMessagesFromFlat(data ?? {});
   const finalResult = 'Messages suggested by CharmChat\n' + messages
-  .map(msg => `"${msg.text}" - ${msg.description}`)
+  .map(msg => `Don't say: "${msg.text}"\nSay: "${msg.description}"`)
   .join('\n') + '\n#dating #relationship #texting #queen #feminineenergy '
 
   if (!images || images.length === 0) {
@@ -86,7 +86,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
                 image={img}
                 reply={reply}
                 tone={tone}
-                messages={messages.map(m => m.text)}
+                messages={messages.map(m => m.description)}
                 downloadIndex={sequentialIndex}
               />
             )
@@ -113,7 +113,7 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
                 image={img}
                 reply={reply}
                 tone={tone}
-                messages={messages.map(m => m.text)}
+                messages={messages.map(m => m.description)}
                 downloadIndex={sequentialIndex}
               />
             )
@@ -125,8 +125,8 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
             <MessagePage
               key={`msg-${index}`}
               image={img}
-              message={msg?.text ? `"${msg.text}"` : ''}
-              description={addArrowSuffix(msg?.description || '')}
+              message={msg?.text ? `❌ Don't Say: "${msg.text}"` : ''}
+              description={msg?.description ? `✅ Say this: "${msg.description}"` : ''}
               downloadIndex={sequentialIndex}
             />
           )

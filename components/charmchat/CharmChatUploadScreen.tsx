@@ -289,7 +289,7 @@ export default function CharmChatUploadScreen({ onGenerate, loading }: UploadScr
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-10">
-      <h1 className="text-3xl font-semibold text-center">CharmChat Tool</h1>
+      <h1 className="text-3xl font-semibold text-center">Spanish Tool</h1>
       {renderImageUploadCard()}
       {files.length > 0 && <div className="space-y-6">{renderImageInputBlocks()}</div>}
       {renderFormInputs()}
