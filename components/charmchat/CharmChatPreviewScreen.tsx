@@ -50,9 +50,9 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
   const reply = data?.['Message Prompt'] ?? ''
 
   const messages = extractMessagesFromFlat(data ?? {});
-  const finalResult = 'Messages suggested by CharmChat\n' + messages
-  .map(msg => `Don't say: "${msg.text}"\nSay: "${msg.description}"`)
-  .join('\n') + '\n#dating #relationship #texting #queen #feminineenergy '
+  const finalResult = 'Mensajes sugeridos por CharmChat\n' + messages
+  .map(msg => `No digas: "${msg.text}"\nDi esto: "${msg.description}"`)
+  .join('\n') + '\n#citas #relación #mensajes #reina '
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
@@ -125,8 +125,8 @@ export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScree
             <MessagePage
               key={`msg-${index}`}
               image={img}
-              message={msg?.text ? `❌ Don't Say: "${msg.text}"` : ''}
-              description={msg?.description ? `✅ Say this: "${msg.description}"` : ''}
+              message={msg?.text ? `❌ No digas: "${msg.text}"` : ''}
+              description={msg?.description ? `✅ Di esto: "${msg.description}"` : ''}
               downloadIndex={sequentialIndex}
             />
           )
@@ -359,18 +359,18 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
             <div
               className="flex gap-1 items-center w-1/2 justify-center text-sm bg-white font-medium py-1.5 px-2 rounded-[8px] transition"
             >
-              <img src={'/charmchat/magic.png'} className='w-4 h-4' /> Reply
+              <img src={'/charmchat/magic.png'} className='w-4 h-4' /> responder
             </div>
             <div
               className="flex gap-1 text-[#a3a3a3] items-center w-1/2 justify-center text-[16px] font-medium py-1.5 px-2 rounded-[8px]"
             >
-              <img src={'/charmchat/edit.png'} className='w-4 h-4' /> Compose
+              <img src={'/charmchat/edit.png'} className='w-4 h-4' /> redactar
             </div>
           </div>
 
           {/* Prompt Block */}
           <div className="bg-white w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}>
-            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">{tone} Mode<ChevronRight size={16} /></div>
+            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">Modo {tone}<ChevronRight size={16} /></div>
             <div className="text-[15px] font-medium text-black leading-snug line-clamp-4">
               {modifiedReply || 'Make him terrified of losing me'}
             </div>
@@ -378,7 +378,7 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
 
           {/* Suggestions Header */}
           <div className="flex justify-between font-medium items-center px-4 text-sm text-gray-600">
-            <span>Suggestions</span>
+            <span>Sugerencias</span>
             <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/Adjust.svg'} className='w-3 h-3' />Adjust</span>
           </div>
 
