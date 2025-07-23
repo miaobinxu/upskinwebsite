@@ -35,16 +35,16 @@ function extractMessagesFromFlat(data: Record<string, string>) {
 function addArrowSuffix(text: string): string {
   const trimmed = text.trim()
   if (trimmed.endsWith('.')) {
-    return trimmed.slice(0, -1) + ' >>>'
+    return trimmed.slice(0, -1) + ' (versión en inglés)'
   }
-  return trimmed + ' >>>'
+  return trimmed + ' (versión en inglés)'
 }
 
 /* ---------------------------- 🔥 MAIN COMPONENT --------------------------- */
 export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScreenProps) {
   const data = useCharmChatStore(state => state.data);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const title = data?.['Title'] ?? ''
+  const title = addArrowSuffix(data?.['Title'] ?? '')
   const subtitle = addArrowSuffix(data?.['Subtitle'] ?? '')
   const tone = data?.['Tone'] ?? ''
   const reply = data?.['Message Prompt'] ?? ''
