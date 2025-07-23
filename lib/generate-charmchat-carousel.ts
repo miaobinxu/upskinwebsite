@@ -54,12 +54,12 @@ export const buildCharmPrompt = (
   } else {
     // First image = title + subtitle
     prompt["Title"] = fallback(
-      pageInputs[0]?.line1,
-      "fill the blank based on the context in native Spanish"
+      "Translate '" + pageInputs[0]?.line1 + "' to native Spanish",
+      "fill the blank in native Spanish based on the context"
     )
     prompt["Subtitle"] = fallback(
-      pageInputs[0]?.line2,
-      "fill the blank based on the context in native Spanish"
+      "Translate '" + pageInputs[0]?.line2 + "' to native Spanish",
+      "fill the blank in native Spanish based on the context"
     )
     prompt["Message Prompt"] = fallback(
       replyMessage,
