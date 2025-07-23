@@ -341,11 +341,11 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
           <div className="absolute scale-[1.05] flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className='border border-purple-600 rounded-full ring-offset-4 ring-purple-600 text-purple-600 p-2'>
               <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
-                Download "CharmChat" App
+                Descarga la app "CharmChat"
               </div>
             </div>
             <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-[3px] border-purple-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
-              Copy and paste to make him obsessed with you.
+              Copia y pega para que se obsesione contigo.
               <img src={'/charmchat/crown.png'} className='w-24 h-12 rotate-[12deg] scale-50 absolute -top-8 -right-9' />
             </div>
           </div>
@@ -379,7 +379,7 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
           {/* Suggestions Header */}
           <div className="flex justify-between font-medium items-center px-4 text-sm text-gray-600">
             <span>Sugerencias</span>
-            <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/Adjust.svg'} className='w-3 h-3' />Adjust</span>
+            <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/Adjust.svg'} className='w-3 h-3' />ajustar</span>
           </div>
 
           {/* Suggestions List */}

@@ -75,11 +75,11 @@ export const buildCharmPrompt = (
       const page = pageInputs[i] // pageInputs[1] = page 2, and so on
       prompt[`Don't Say Message ${i}`] = fallback(
         page?.line1,
-        `Fill the blank based on the context in English`
+        `Fill the blank in English based on the context`
       )
       prompt[`Say Message ${i}`] = fallback(
         page?.line2,
-        `Fill the blank based on the context in English`
+        `Fill the blank in English based on the context`
       )
     }
   }
