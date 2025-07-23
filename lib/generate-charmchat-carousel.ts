@@ -43,29 +43,29 @@ export const buildCharmPrompt = (
   if (totalImages === 1) {
     prompt["Message Prompt"] = fallback(
       replyMessage,
-      "Refer the title to write a phrase"
+      "Refer the title to write a phrase in native Spanish"
     )
-    prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
+    prompt["Tone"] = fallback(tone, "Choose from Citas, Coqueta, or Atrevida")
 
     for (let i = 1; i <= 3; i++) {
-      prompt[`Don't Say Message ${i}`] = `Fill the blank based on the context`
-      prompt[`Say Message ${i}`] = `Fill the blank based on the context`
+      prompt[`Don't Say Message ${i}`] = `Fill the blank based on the context in English`
+      prompt[`Say Message ${i}`] = `Fill the blank based on the context in English`
     }
   } else {
     // First image = title + subtitle
     prompt["Title"] = fallback(
       pageInputs[0]?.line1,
-      "fill the blank based on the context"
+      "fill the blank based on the context in native Spanish"
     )
     prompt["Subtitle"] = fallback(
       pageInputs[0]?.line2,
-      "fill the blank based on the context"
+      "fill the blank based on the context in native Spanish"
     )
     prompt["Message Prompt"] = fallback(
       replyMessage,
-      "Refer the title to write a phrase"
+      "Refer the title to write a phrase in native Spanish"
     )
-    prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Sassy")
+    prompt["Tone"] = fallback(tone, "Choose from Citas, Coqueta, or Atrevida")
 
     // Use messages from pages 2 to N-1 (excluding app screen)
     const totalUsablePages = totalImages - 2
@@ -75,17 +75,17 @@ export const buildCharmPrompt = (
       const page = pageInputs[i] // pageInputs[1] = page 2, and so on
       prompt[`Don't Say Message ${i}`] = fallback(
         page?.line1,
-        `Fill the blank based on the context`
+        `Fill the blank based on the context in English`
       )
       prompt[`Say Message ${i}`] = fallback(
         page?.line2,
-        `Fill the blank based on the context`
+        `Fill the blank based on the context in English`
       )
     }
   }
 
   // Final AI prompt string (JSON embedded in instructions)
-  return `You are writing a TikTok post teaching women how to text with men and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive.
+  return `You are writing a TikTok post teaching women how to text with men and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field unless the field requires to use Spanish. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post, but they are all in English. You will need to use Spanish in some fields as required. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive.
 Example 1:
 {
   "Title": "Feminine Ways to Talk to Him",
