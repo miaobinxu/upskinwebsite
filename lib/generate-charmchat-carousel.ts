@@ -174,13 +174,13 @@ ${JSON.stringify(prompt, null, 2)}`
 }
 
 /* ------------------------ API CALLER ------------------------ */
-export async function generateDontSayCarousel({
+export async function generateCharmChatCarousel({
   pageInputs,
   replyMessage = "",
   tone = "",
   textStyle = "style1",
-}: GenerateCarouselPayload): Promise<DontSayResponse> {
-  const finalPrompt = buildDontSayPrompt(pageInputs, replyMessage, tone)
+}: GenerateCarouselPayload): Promise<CharmChatResponse> {
+  const finalPrompt = buildCharmPrompt(pageInputs, replyMessage, tone)
 
   const messages = [
     {
@@ -209,4 +209,4 @@ export async function generateDontSayCarousel({
   } catch (error) {
     return { data: null, error: String(error) }
   }
-} 
+}
