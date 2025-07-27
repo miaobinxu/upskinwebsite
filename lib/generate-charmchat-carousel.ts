@@ -48,8 +48,8 @@ export const buildCharmPrompt = (
     prompt["Tone"] = fallback(tone, "Choose from Citas, Coqueta, or Atrevida")
 
     for (let i = 1; i <= 3; i++) {
-      prompt[`Don't Say Message ${i}`] = `Fill the blank based on the context in English`
-      prompt[`Say Message ${i}`] = `Fill the blank based on the context in English`
+      prompt[`Don't Say Message ${i}`] = `Fill the blank in native Spanish based on the context`
+      prompt[`Say Message ${i}`] = `Fill the blank in native Spanish based on the context`
     }
   } else {
     // First image = title + subtitle
@@ -75,11 +75,11 @@ export const buildCharmPrompt = (
       const page = pageInputs[i] // pageInputs[1] = page 2, and so on
       prompt[`Don't Say Message ${i}`] = fallback(
         page?.line1,
-        `Fill the blank in English based on the context`
+        `Fill the blank in native Spanish based on the context`
       )
       prompt[`Say Message ${i}`] = fallback(
         page?.line2,
-        `Fill the blank in English based on the context`
+        `Fill the blank in native Spanish based on the context`
       )
     }
   }

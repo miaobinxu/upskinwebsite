@@ -44,7 +44,7 @@ function addArrowSuffix(text: string): string {
 export default function CharmChatPreviewScreen({ images }: CharmChatPreviewScreenProps) {
   const data = useCharmChatStore(state => state.data);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const title = addArrowSuffix(data?.['Title'] ?? '')
+  const title = data?.['Title'] ?? ''
   const subtitle = addArrowSuffix(data?.['Subtitle'] ?? '')
   const tone = data?.['Tone'] ?? ''
   const reply = data?.['Message Prompt'] ?? ''
