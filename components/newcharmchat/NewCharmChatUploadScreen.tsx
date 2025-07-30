@@ -18,8 +18,7 @@ export default function NewCharmChatUploadScreen({ onGenerate, loading }: Upload
 
   const handleGenerate = () => {
     const ua = navigator.userAgent
-      const isLikelyChrome = /Chrome|CriOS/.test(ua) && !/Edg|OPR|Brave/i.test(ua)
-
+    const isLikelyChrome = /Chrome|CriOS/.test(ua) && !/Edg|OPR|Brave/i.test(ua)
 
     if (!isLikelyChrome) {
       toast.error("This feature is only supported in Chrome. Please switch your browser.")
@@ -27,7 +26,6 @@ export default function NewCharmChatUploadScreen({ onGenerate, loading }: Upload
     }
     onGenerate()
   }
-
 
   return (
     <div className='flex flex-col items-center justify-center h-full py-20'>
