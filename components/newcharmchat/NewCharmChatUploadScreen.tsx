@@ -8,22 +8,19 @@ interface UploadScreenProps {
   loading: boolean
 }
 
-interface PageLine {
-  line1: string
-  line2: string
-}
-
 
 export default function NewCharmChatUploadScreen({ onGenerate, loading }: UploadScreenProps) {
 
   const handleGenerate = () => {
-    // const ua = navigator.userAgent
-    // const isLikelyChrome = /Chrome|CriOS/.test(ua) && !/Edg|OPR|Brave/i.test(ua)
+    const ua = navigator.userAgent;
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+    const isChromeDesktop = /Chrome/.test(ua) && !isSafari && !isMobile;
 
-    // if (!isLikelyChrome) {
-    //   toast.error("This feature is only supported in Chrome. Please switch your browser.")
-    //   return
-    // }
+    if (!isChromeDesktop) {
+      toast.error("This feature is only supported in Chrome on desktop. Please switch browser.");
+      return;
+    }
     onGenerate()
   }
 

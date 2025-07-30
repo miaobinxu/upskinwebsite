@@ -59,7 +59,7 @@ export default function NewCharmChatPreviewScreen({ images }: newCharmChatPrevie
 
   return (
     <div className='flex flex-col p-4'>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center w-full">
+      <div className="grid grid-cols-1 place-items-center w-full">
         {images.map((img, index) => {
           const isFirst = index === 0
           const isLast = index === images.length - 1
@@ -166,10 +166,12 @@ function TitlePage({ image, title, downloadIndex }: TitlePageProps) {
   return (
     <div className="scale-[0.65] sm:scale-[0.9] md:scale-[0.6] lg:scale-[0.8] overflow-hidden shadow-md">
       <DownloadButton refEl={ref} filename={`${downloadIndex || '01'}.png`} />
-      <div ref={ref} className="relative" style={{
-        width: '450px',
-        height: '600px',
-      }}>
+      <div ref={ref}
+        onClick={() => downloadImage(ref, `${downloadIndex || '01'}.png`)}
+        className="relative cursor-pointer" style={{
+          width: '450px',
+          height: '600px',
+        }}>
         <Image
           src={getImageSrc(image ?? '')}
           fill
@@ -205,7 +207,9 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
   return (
     <div className="scale-[0.65] sm:scale-[0.9] md:scale-[0.6] lg:scale-[0.8] overflow-hidden shadow-md">
       <DownloadButton refEl={ref} filename={`${downloadIndex || '01'}.png`} />
-      <div ref={ref} className="relative" style={{
+      <div ref={ref} 
+      onClick={() => downloadImage(ref, `${downloadIndex || '01'}.png`)}
+      className="relative cursor-pointer" style={{
         width: '450px',
         height: '600px',
       }}>
@@ -284,7 +288,9 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
   return (
     <div className={`scale-[0.65] sm:scale-[0.9] md:scale-[0.6] ... lg:scale-[0.8] overflow-hidden shadow-md ${poppins.className}`}>
       <DownloadButton refEl={ref} filename={`${downloadIndex || '01'}.png`} />
-      <div ref={ref} className="relative" style={{
+      <div ref={ref}
+      onClick={() => downloadImage(ref, `${downloadIndex || '01'}.png`)}
+      className="relative cursor-pointer" style={{
         width: '450px',
         height: '600px',
       }}>

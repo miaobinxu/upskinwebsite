@@ -37,61 +37,6 @@ export const downloadImage = async (ref: React.RefObject<HTMLElement | null>, fi
   }
 }
 
-function isIOSChrome() {
-  const ua = window.navigator.userAgent
-  return /CriOS/.test(ua) && /iPhone|iPad|iPod/.test(ua)
-}
-
-export const downloadImageNew = async (ref: React.RefObject<HTMLElement | null>, filename = 'screenshot.png') => {
-  if (!ref.current) return
-
-  try {
-    const dataUrl = await toPng(ref.current, {
-      cacheBust: true,
-      pixelRatio: 3,
-      backgroundColor: '#fff',
-    })
-    // console.log('dataUrl**************', dataUrl) isIOSChrome()
-    if (isIOSChrome()) {
-      const newTab = window.open()
-      newTab?.document.write(`
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <title>${filename}</title>
-      <style>
-        html, body {
-          margin: 0;
-          padding: 0;
-          height: 100%;
-          background: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        img {
-          max-width: 100%;
-          max-height: 100%;
-          object-fit: contain;
-        }
-      </style>
-    </head>
-    <body>
-      <img src="${dataUrl}" alt="${filename}" />
-    </body>
-  </html>
-`)
-      newTab?.document.close()
-    } else {
-      const link = document.createElement('a')
-      link.href = dataUrl
-      link.download = filename
-      link.click()
-    }
-  } catch (err) {
-    throw Error('Failed to download')
-  }
-}
 
 // export const downloadImageNew = async (
 //   ref: React.RefObject<HTMLElement | null>,

@@ -5,7 +5,7 @@ const BUCKET_NAME = process.env.BUCKET_NAME || 'files';
 const FOLDER_NAME = process.env.FOLDER_NAME || 'charmtool2';
 const EXCLUDE_FILE = process.env.EXCLUDE_FILE || '__keep.txt';
 const RANDOM_LIMIT = 5;
-const EXPIRY_SECONDS = 60 * 5; // 5 minutes
+const EXPIRY_SECONDS = 60 * 15; // 15 minutes
 
 export async function GET() {
   try {
