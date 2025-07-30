@@ -1,8 +1,8 @@
 import { supabase } from "@/lib/supabase/server";
 
-
 export async function GET(req: Request) {
   try {
+    // Fetch current index from cursor
     const { data: cursorData, error: cursorError } = await supabase
       .from('topic_cursor')
       .select('current_index')
@@ -11,9 +11,10 @@ export async function GET(req: Request) {
 
     if (cursorError) throw cursorError;
 
-    const currentIndex = cursorData.current_index;
+    let currentIndex = cursorData.current_index;
 
-    const { data: nextTopic, error: topicError } = await supabase
+    // Try to fetch the next topic
+    let { data: nextTopic, error: topicError } = await supabase
       .from('topics')
       .select('*')
       .gt('order_index', currentIndex)
@@ -21,8 +22,34 @@ export async function GET(req: Request) {
       .limit(1)
       .single();
 
-    if (topicError || !nextTopic) throw topicError || new Error('No more topics.');
+    // If no topic found, reset index to 0 and try again
+    if (topicError || !nextTopic) {
+      // Reset cursor to 0
+      await supabase
+        .from('topic_cursor')
+        .update({ current_index: 0, updated_at: new Date().toISOString() })
+        .eq('id', 1);
 
+      // Fetch first topic again after reset
+      const { data: resetTopic, error: resetError } = await supabase
+        .from('topics')
+        .select('*')
+        .order('order_index', { ascending: true })
+        .limit(1)
+        .single();
+
+      if (resetError || !resetTopic) throw resetError || new Error('No topics found after reset.');
+
+      // Update cursor with new index
+      await supabase
+        .from('topic_cursor')
+        .update({ current_index: resetTopic.order_index, updated_at: new Date().toISOString() })
+        .eq('id', 1);
+
+      return new Response(JSON.stringify({ topic: resetTopic }), { status: 200 });
+    }
+
+    // Normal flow, topic found
     await supabase
       .from('topic_cursor')
       .update({ current_index: nextTopic.order_index, updated_at: new Date().toISOString() })
