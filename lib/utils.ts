@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { toPng } from 'html-to-image'
+import { error } from "console";
 
 
 export function cn(...inputs: ClassValue[]) {
@@ -32,6 +33,6 @@ export const downloadImage = async (ref: React.RefObject<HTMLElement | null>, fi
     link.download = filename
     link.click()
   } catch (err) {
-    console.error('Image download failed:', err)
+    throw Error('Failed to download')
   }
 }
