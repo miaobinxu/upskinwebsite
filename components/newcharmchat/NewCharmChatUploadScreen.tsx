@@ -17,13 +17,13 @@ interface PageLine {
 export default function NewCharmChatUploadScreen({ onGenerate, loading }: UploadScreenProps) {
 
   const handleGenerate = () => {
-    const ua = navigator.userAgent
-    const isLikelyChrome = /Chrome|CriOS/.test(ua) && !/Edg|OPR|Brave/i.test(ua)
+    // const ua = navigator.userAgent
+    // const isLikelyChrome = /Chrome|CriOS/.test(ua) && !/Edg|OPR|Brave/i.test(ua)
 
-    if (!isLikelyChrome) {
-      toast.error("This feature is only supported in Chrome. Please switch your browser.")
-      return
-    }
+    // if (!isLikelyChrome) {
+    //   toast.error("This feature is only supported in Chrome. Please switch your browser.")
+    //   return
+    // }
     onGenerate()
   }
 

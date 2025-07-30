@@ -134,10 +134,8 @@ export default function NewCharmChatPreviewScreen({ images }: newCharmChatPrevie
 
 /* ------------------------- Utility -------------------------- */
 function getImageSrc(image: File | string): string {
-  if (typeof image === 'string') {
-    return `/api/proxy-image?name=${encodeURIComponent(image)}`
-  }
-  return URL.createObjectURL(image)
+  console.log('image**********', image)
+  return typeof image === 'string' ? image : URL.createObjectURL(image)
 }
 
 interface TitlePageProps {
