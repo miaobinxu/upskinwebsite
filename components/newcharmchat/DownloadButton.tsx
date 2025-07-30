@@ -1,7 +1,7 @@
 'use client'
 
 import { Download } from 'lucide-react'
-import { downloadImage } from '@/lib/utils'
+import { downloadImage, downloadImageNew } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
 type Props = {
@@ -13,7 +13,7 @@ export function DownloadButton({ refEl, filename }: Props) {
 
   const handleDownload = async () => {
     try {
-      await downloadImage(refEl, filename)
+      await downloadImageNew(refEl, filename)
     } catch (err) {
       toast.error('Please reload the page and try again.')
     }
