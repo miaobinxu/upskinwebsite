@@ -51,10 +51,6 @@ export const downloadImageFromBrowserless = async (
     <html>
       <head>
         <meta charset="utf-8" />
-        <style>
-          * { box-sizing: border-box; }
-          body { margin: 0; font-family: sans-serif; }
-        </style>
       </head>
       <body>
         ${ref.current.outerHTML}
