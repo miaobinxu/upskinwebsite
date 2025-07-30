@@ -134,7 +134,6 @@ export default function NewCharmChatPreviewScreen({ images }: newCharmChatPrevie
 
 /* ------------------------- Utility -------------------------- */
 function getImageSrc(image: File | string): string {
-  console.log('image**********', image)
   return typeof image === 'string' ? image : URL.createObjectURL(image)
 }
 
