@@ -23,7 +23,7 @@ export const useEsStore = create<EsState>()(
   persist(
     (set) => ({
       data: null,
-      setData: (newData) => set({ data: newData }),
+      setData: (newData: EsData) => set({ data: newData }),
       clearData: () => set({ data: null }),
     }),
     {

@@ -12,7 +12,7 @@ export default function Page() {
     const [loading, setLoading] = useState(false)
     const [previewImages, setPreviewImages] = useState<string[]>([])
     const { toast } = useToast()
-    const setData = useEsStore((s) => s.setData)
+    const setData = useEsStore((state) => state.setData)
 
     const handleGenerate = async () => {
         setLoading(true)
