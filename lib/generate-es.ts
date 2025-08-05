@@ -9,7 +9,7 @@ interface GenerateCarouselPayload {
   textStyle?: string
 }
 
-interface EsResponse {
+interface CharmChatResponse {
   data: any
   error: string | null
 }
@@ -19,7 +19,7 @@ const fallback = (val: string | undefined, placeholder: string) =>
   val?.trim() ? val : placeholder
 
 /* ------------------------ PROMPT BUILDER ------------------------ */
-export const buildEsPrompt = (topic: string, tone = ""): string => {
+export const buildCharmPrompt = (topic: string, tone = ""): string => {
   const prompt: Record<string, string> = {}
 
   prompt["Title"] = topic
@@ -32,7 +32,7 @@ export const buildEsPrompt = (topic: string, tone = ""): string => {
     prompt[`Say Message ${i}`] = `Fill the blank based on the context`
   }
 
-  return `You are writing a TikTok post teaching women how to text with men and providing "don't say" messages and "say" messages for ES audience. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive.
+  return `You are writing a TikTok post teaching women how to text with men and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive.
 Example 1:
 {
   "Title": "Feminine Ways to Talk to Him",
@@ -121,12 +121,12 @@ ${JSON.stringify(prompt, null, 2)}`
 }
 
 /* ------------------------ API CALLER ------------------------ */
-export async function generateEsCarousel({
+export async function generateesCarousel({
   topic,
   tone = "",
   textStyle = "style1",
-}: GenerateCarouselPayload): Promise<EsResponse> {
-  const finalPrompt = buildEsPrompt(topic, tone)
+}: GenerateCarouselPayload): Promise<CharmChatResponse> {
+  const finalPrompt = buildCharmPrompt(topic, tone)
 
   const messages = [
     {
@@ -155,4 +155,4 @@ export async function generateEsCarousel({
   } catch (error) {
     return { data: null, error: String(error) }
   }
-} 
+}

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export interface EsBase {
+export interface esBase {
   Title: string
   Subtitle: string
   "Message Prompt": string
@@ -9,25 +9,25 @@ export interface EsBase {
   "Post description and hashtag": string
 }
 
-export type EsData = EsBase & {
+export type esData = esBase & {
   [key: string]: string
 }
 
-interface EsState {
-  data: EsData | null
-  setData: (newData: EsData) => void
+interface esState {
+  data: esData | null
+  setData: (newData: esData) => void
   clearData: () => void
 }
 
-export const useEsStore = create<EsState>()(
+export const useesStore = create<esState>()(
   persist(
     (set) => ({
       data: null,
-      setData: (newData: EsData) => set({ data: newData }),
+      setData: (newData) => set({ data: newData }),
       clearData: () => set({ data: null }),
     }),
     {
-      name: 'es-store',
+      name: 'es',
     }
   )
-) 
+)
