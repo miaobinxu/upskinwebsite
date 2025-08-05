@@ -9,7 +9,7 @@ interface UploadScreenProps {
 }
 
 
-export default function esUploadScreen({ onGenerate, loading }: UploadScreenProps) {
+export default function ESUploadScreen({ onGenerate, loading }: UploadScreenProps) {
 
   const handleGenerate = () => {
     const ua = navigator.userAgent;
@@ -43,7 +43,7 @@ export default function esUploadScreen({ onGenerate, loading }: UploadScreenProp
         ) : (
           <>
             <Sparkles className="h-5 w-5 mr-2 text-yellow-400" />
-            Generate es CharmChat
+            Generate ES
           </>
         )}
       </Button>

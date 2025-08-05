@@ -2,17 +2,17 @@
 
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
-import esUploadScreen from '@/components/es/esUploadScreen'
-import { generateesCarousel } from '@/lib/generate-es'
-import { useesStore } from '@/lib/store/esStore'
-import esPreviewScreen from '@/components/es/esPreviewScreen'
+import ESUploadScreen from '@/components/es/ESUploadScreen'
+import { generateESCarousel } from '@/lib/generate-ES'
+import { useESStore } from '@/lib/store/ESStore'
+import ESPreviewScreen from '@/components/es/ESPreviewScreen'
 
 export default function Page() {
     const [currentScreen, setCurrentScreen] = useState<'upload' | 'preview'>('upload')
     const [loading, setLoading] = useState(false)
     const [previewImages, setPreviewImages] = useState<string[]>([])
     const { toast } = useToast()
-    const setData = useesStore((s) => s.setData)
+    const setData = useESStore((s) => s.setData)
 
     const handleGenerate = async () => {
         setLoading(true)
@@ -47,7 +47,7 @@ export default function Page() {
                 return
             }
 
-            const { data: response, error } = await generateesCarousel({ topic: topicTitle })
+            const { data: response, error } = await generateESCarousel({ topic: topicTitle })
 
             const rawContent = response?.choices?.[0]?.message?.content?.trim()
             if (error || !rawContent) {
@@ -82,9 +82,9 @@ export default function Page() {
     return (
         <main className="flex flex-col h-full">
             {currentScreen === 'upload' ? (
-                <esUploadScreen onGenerate={handleGenerate} loading={loading} />
+                <ESUploadScreen onGenerate={handleGenerate} loading={loading} />
             ) : (
-                <esPreviewScreen images={previewImages} />
+                <ESPreviewScreen images={previewImages} />
             )}
         </main>
     )

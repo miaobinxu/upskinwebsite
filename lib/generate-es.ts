@@ -121,7 +121,7 @@ ${JSON.stringify(prompt, null, 2)}`
 }
 
 /* ------------------------ API CALLER ------------------------ */
-export async function generateesCarousel({
+export async function generateESCarousel({
   topic,
   tone = "",
   textStyle = "style1",
