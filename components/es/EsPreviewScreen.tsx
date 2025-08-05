@@ -305,11 +305,11 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
           <div className="absolute scale-[1.05] flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className='border border-purple-600 rounded-full ring-offset-4 ring-purple-600 text-purple-600 p-2'>
               <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
-                Download "CharmChat" App
+                Descarga la app "CharmChat"
               </div>
             </div>
             <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-[3px] border-purple-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
-              Copy and paste to make him obsessed with you.
+              Copia y pega para que se obsesione contigo.
               <img src={'/charmchat/crown.png'} className='w-24 h-12 rotate-[12deg] scale-50 absolute -top-8 -right-9' />
             </div>
           </div>
@@ -323,18 +323,18 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
             <div
               className="flex gap-1 items-center w-1/2 justify-center text-sm bg-white font-medium py-1.5 px-2 rounded-[8px] transition"
             >
-              <img src={'/charmchat/magic.png'} className='w-4 h-4' /> Reply
+              <img src={'/charmchat/magic.png'} className='w-4 h-4' /> Responder
             </div>
             <div
               className="flex gap-1 text-[#a3a3a3] items-center w-1/2 justify-center text-[16px] font-medium py-1.5 px-2 rounded-[8px]"
             >
-              <img src={'/charmchat/edit.png'} className='w-4 h-4' /> Compose
+              <img src={'/charmchat/edit.png'} className='w-4 h-4' /> Redactar
             </div>
           </div>
 
           {/* Prompt Block */}
           <div className="bg-white w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}>
-            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">{tone} Mode<ChevronRight size={16} /></div>
+            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">Modo {tone}<ChevronRight size={16} /></div>
             <div className="text-[15px] font-medium text-black leading-snug line-clamp-4">
               {modifiedReply || 'Make him terrified of losing me'}
             </div>
@@ -342,7 +342,7 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
 
           {/* Suggestions Header */}
           <div className="flex justify-between font-medium items-center px-4 text-sm text-gray-600">
-            <span>Suggestions</span>
+            <span>Sugerencias</span>
             <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/Adjust.svg'} className='w-3 h-3' />Adjust</span>
           </div>
 
