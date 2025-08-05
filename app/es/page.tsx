@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import ESUploadScreen from '@/components/es/ESUploadScreen'
-import { generateESCarousel } from '@/lib/generate-ES'
+import { generateESCarousel } from '@/lib/generate-es'
 import { useESStore } from '@/lib/store/ESStore'
 import ESPreviewScreen from '@/components/es/ESPreviewScreen'
 
