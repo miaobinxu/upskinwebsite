@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
-import ESUploadScreen from '@/components/ES/ESUploadScreen'
+import ESUploadScreen from '@/components/es/ESUploadScreen'
 import { generateESCarousel } from '@/lib/generate-ES'
 import { useESStore } from '@/lib/store/ESStore'
-import ESPreviewScreen from '@/components/ES/ESPreviewScreen'
+import ESPreviewScreen from '@/components/es/ESPreviewScreen'
 
 export default function Page() {
     const [currentScreen, setCurrentScreen] = useState<'upload' | 'preview'>('upload')
