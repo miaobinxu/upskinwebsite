@@ -9,7 +9,7 @@ interface UploadScreenProps {
 }
 
 
-export default function EsUploadScreen({ onGenerate, loading }: UploadScreenProps) {
+export default function ESUploadScreen({ onGenerate, loading }: UploadScreenProps) {
 
   const handleGenerate = () => {
     const ua = navigator.userAgent;
