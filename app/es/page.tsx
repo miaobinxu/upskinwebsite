@@ -2,17 +2,17 @@
 
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
-import NewCharmChatUploadScreen from '@/components/newcharmchat/NewCharmChatUploadScreen'
-import { generateNewCharmChatCarousel } from '@/lib/generate-new-charmchat'
-import { useNewCharmChatStore } from '@/lib/store/newCharmChatStore'
-import NewCharmChatPreviewScreen from '@/components/newcharmchat/NewCharmChatPreviewScreen'
+import EsUploadScreen from '@/components/es/EsUploadScreen'
+import { generateEsCarousel } from '@/lib/generate-es'
+import { useEsStore } from '@/lib/store/esStore'
+import EsPreviewScreen from '@/components/es/EsPreviewScreen'
 
 export default function Page() {
     const [currentScreen, setCurrentScreen] = useState<'upload' | 'preview'>('upload')
     const [loading, setLoading] = useState(false)
     const [previewImages, setPreviewImages] = useState<string[]>([])
     const { toast } = useToast()
-    const setData = useNewCharmChatStore((s) => s.setData)
+    const setData = useEsStore((s) => s.setData)
 
     const handleGenerate = async () => {
         setLoading(true)
@@ -47,7 +47,7 @@ export default function Page() {
                 return
             }
 
-            const { data: response, error } = await generateNewCharmChatCarousel({ topic: topicTitle })
+            const { data: response, error } = await generateEsCarousel({ topic: topicTitle })
 
             const rawContent = response?.choices?.[0]?.message?.content?.trim()
             if (error || !rawContent) {
@@ -82,9 +82,9 @@ export default function Page() {
     return (
         <main className="flex flex-col h-full">
             {currentScreen === 'upload' ? (
-                <NewCharmChatUploadScreen onGenerate={handleGenerate} loading={loading} />
+                <EsUploadScreen onGenerate={handleGenerate} loading={loading} />
             ) : (
-                <NewCharmChatPreviewScreen images={previewImages} />
+                <EsPreviewScreen images={previewImages} />
             )}
         </main>
     )
