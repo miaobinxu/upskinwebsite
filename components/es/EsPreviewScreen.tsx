@@ -49,9 +49,9 @@ export default function ESPreviewScreen({ images }: esPreviewScreenProps) {
   const reply = data?.['Message Prompt'] ?? ''
 
   const messages = extractMessagesFromFlat(data ?? {});
-  const finalResult = 'Messages suggested by CharmChat.\n' + messages
-    .map(msg => `Don't say: "${msg.text}"\nSay: "${msg.description}"`)
-    .join('\n') + '\n#dating #relationship #texting #queen #feminineenergy '
+  const finalResult = 'Mensajes sugeridos por CharmChat\n' + messages
+    .map(msg => `No digas: "${msg.text}"\nDi esto: "${msg.description}"`)
+    .join('\n') + '\n#citas #relación #mensajes #reina '
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
@@ -115,8 +115,8 @@ export default function ESPreviewScreen({ images }: esPreviewScreenProps) {
             <MessagePage
               key={`msg-${index}`}
               image={img}
-              message={msg?.text ? `❌ Don't Say: "${msg.text}"` : ''}
-              description={msg?.description ? `✅ Say this: "${msg.description}"` : ''}
+              message={msg?.text ? `❌ No digas: "${msg.text}"` : ''}
+              description={msg?.description ? `✅ Di esto: "${msg.description}"` : ''}
               downloadIndex={sequentialIndex}
             />
           )

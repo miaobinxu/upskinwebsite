@@ -22,7 +22,7 @@ const fallback = (val: string | undefined, placeholder: string) =>
 export const buildCharmPrompt = (topic: string, tone = ""): string => {
   const prompt: Record<string, string> = {}
 
-  prompt["Title"] = topic
+  prompt["Title"] = "Translate '" + topic + "' to native Spanish"
   prompt["Subtitle"] = `Fill the blank in native Spanish based on the context`
   prompt["Message Prompt"] = "Refer the title to write a phrase in native Spanish"
   prompt["Tone"] = fallback(tone, "Choose from Citas, Coqueta, or Atrevida")
