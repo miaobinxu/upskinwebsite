@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
-import ESUploadScreen from '@/components/es/EsUploadScreen'
+import EsUploadScreen from '@/components/es/EsUploadScreen'
 import { generateESCarousel } from '@/lib/generate-es'
 import { useESStore } from '@/lib/store/esStore'
 import ESPreviewScreen from '@/components/es/EsPreviewScreen'
@@ -82,7 +82,7 @@ export default function Page() {
     return (
         <main className="flex flex-col h-full">
             {currentScreen === 'upload' ? (
-                <ESUploadScreen onGenerate={handleGenerate} loading={loading} />
+                <EsUploadScreen onGenerate={handleGenerate} loading={loading} />
             ) : (
                 <ESPreviewScreen images={previewImages} />
             )}
