@@ -5,7 +5,7 @@ import { ChevronRight, Download } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useRef, useState } from 'react'
 import { Poppins } from 'next/font/google';
-import { useESStore } from '@/lib/store/ESStore'
+import { useESStore } from '@/lib/store/esStore'
 import { DownloadButton } from './DownloadButton'
 
 const poppins = Poppins({
@@ -14,7 +14,7 @@ const poppins = Poppins({
 });
 
 
-interface ESPreviewScreenProps {
+interface esPreviewScreenProps {
   images: string[]
 }
 
@@ -41,7 +41,7 @@ function addArrowSuffix(text: string): string {
 }
 
 /* ---------------------------- 🔥 MAIN COMPONENT --------------------------- */
-export default function ESPreviewScreen({ images }: ESPreviewScreenProps) {
+export default function ESPreviewScreen({ images }: esPreviewScreenProps) {
   const data = useESStore(state => state.data);
   const title = data?.['Title'] ?? ''
   const subtitle = addArrowSuffix(data?.['Subtitle'] ?? '')

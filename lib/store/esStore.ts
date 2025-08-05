@@ -27,7 +27,7 @@ export const useESStore = create<ESState>()(
       clearData: () => set({ data: null }),
     }),
     {
-      name: 'ES',
+      name: 'es',
     }
   )
 )

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import ESUploadScreen from '@/components/es/ESUploadScreen'
 import { generateESCarousel } from '@/lib/generate-es'
-import { useESStore } from '@/lib/store/ESStore'
+import { useESStore } from '@/lib/store/esStore'
 import ESPreviewScreen from '@/components/es/ESPreviewScreen'
 
 export default function Page() {
