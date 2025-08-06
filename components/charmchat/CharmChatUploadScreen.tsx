@@ -103,7 +103,7 @@ export default function CharmChatUploadScreen({ onGenerate, loading }: UploadScr
     const isChromeDesktop = /Chrome/.test(ua) && !isSafari && !isMobile;
 
     if (!isChromeDesktop) {
-      toast.error("This feature is only supported in Chrome on desktop. Please switch browser.");
+      toast.error("This feature is only supported in Chrome on computer. Please switch browser.");
       return;
     }
 
@@ -281,7 +281,7 @@ export default function CharmChatUploadScreen({ onGenerate, loading }: UploadScr
       ) : (
         <>
           <Sparkles className="h-5 w-5 mr-2 text-yellow-400" />
-          Generate CharmChat Carousel
+          Generate Carousel
         </>
       )}
     </Button>
