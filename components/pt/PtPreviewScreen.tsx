@@ -5,7 +5,7 @@ import { ChevronRight, Download } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useRef, useState } from 'react'
 import { Poppins } from 'next/font/google';
-import { useFRStore } from '@/lib/store/frStore'
+import { usePTStore } from '@/lib/store/PTStore'
 import { DownloadButton } from './DownloadButton'
 
 const poppins = Poppins({
@@ -14,7 +14,7 @@ const poppins = Poppins({
 });
 
 
-interface frPreviewScreenProps {
+interface PTPreviewScreenProps {
   images: string[]
 }
 
@@ -41,17 +41,17 @@ function addArrowSuffix(text: string): string {
 }
 
 /* ---------------------------- 🔥 MAIN COMPONENT --------------------------- */
-export default function FRPreviewScreen({ images }: frPreviewScreenProps) {
-  const data = useFRStore(state => state.data);
+export default function PTPreviewScreen({ images }: PTPreviewScreenProps) {
+  const data = usePTStore(state => state.data);
   const title = data?.['Title'] ?? ''
   const subtitle = addArrowSuffix(data?.['Subtitle'] ?? '')
   const tone = data?.['Tone'] ?? ''
   const reply = data?.['Message Prompt'] ?? ''
 
   const messages = extractMessagesFromFlat(data ?? {});
-  const finalResult = 'Messages suggérés par CharmChat\n' + messages
-    .map(msg => `Ne dis pas: "${msg.text}"\nDis plutôt: "${msg.description}"`)
-    .join('\n') + '\n#rencontre #reine #relation #messages '
+  const finalResult = 'Mensagens sugeridas pelo CharmChat\n' + messages
+    .map(msg => `Não diga: "${msg.text}"\nDiga isso: "${msg.description}"`)
+    .join('\n') + '\n#romance #rainha #Relacionamento #mensagem '
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
@@ -115,8 +115,8 @@ export default function FRPreviewScreen({ images }: frPreviewScreenProps) {
             <MessagePage
               key={`msg-${index}`}
               image={img}
-              message={msg?.text ? `❌ Ne dis pas: "${msg.text}"` : ''}
-              description={msg?.description ? `✅ Dis plutôt: "${msg.description}"` : ''}
+              message={msg?.text ? `❌ Não diga: "${msg.text}"` : ''}
+              description={msg?.description ? `✅ Diga isso: "${msg.description}"` : ''}
               downloadIndex={sequentialIndex}
             />
           )
@@ -305,11 +305,11 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
           <div className="absolute scale-[1.05] flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className='border border-purple-600 rounded-full ring-offset-4 ring-purple-600 text-purple-600 p-2'>
               <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
-                Télécharge l’app CharmChat
+              Baixe o app CharmChat
               </div>
             </div>
             <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-[3px] border-purple-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
-              Copie-colle et rends-le accro à toi
+              Copie e cole para deixar ele obcecado por você
               <img src={'/charmchat/crown.png'} className='w-24 h-12 rotate-[12deg] scale-50 absolute -top-8 -right-9' />
             </div>
           </div>
@@ -323,18 +323,18 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
             <div
               className="flex gap-1 items-center w-1/2 justify-center text-sm bg-white font-medium py-1.5 px-2 rounded-[8px] transition"
             >
-              <img src={'/charmchat/magic.png'} className='w-4 h-4' />Répondre
+              <img src={'/charmchat/magic.png'} className='w-4 h-4' />Responder
             </div>
             <div
               className="flex gap-1 text-[#a3a3a3] items-center w-1/2 justify-center text-[16px] font-medium py-1.5 px-2 rounded-[8px]"
             >
-              <img src={'/charmchat/edit.png'} className='w-4 h-4' />Écrire
+              <img src={'/charmchat/edit.png'} className='w-4 h-4' />Escrever
             </div>
           </div>
 
           {/* Prompt Block */}
           <div className="bg-white w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}>
-            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">Mode {tone}<ChevronRight size={16} /></div>
+            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">Modo {tone}<ChevronRight size={16} /></div>
             <div className="text-[15px] font-medium text-black leading-snug line-clamp-4">
               {modifiedReply || 'Make him terrified of losing me'}
             </div>
@@ -342,8 +342,8 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
 
           {/* Suggestions Header */}
           <div className="flex justify-between font-medium items-center px-4 text-sm text-gray-600">
-            <span>Suggestions</span>
-            <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/Adjust.svg'} className='w-3 h-3' />Ajuster</span>
+            <span>Sugestões</span>
+            <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/Adjust.svg'} className='w-3 h-3' />Ajustar</span>
           </div>
 
           {/* Suggestions List */}
