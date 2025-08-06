@@ -51,7 +51,7 @@ export default function PTPreviewScreen({ images }: PTPreviewScreenProps) {
   const messages = extractMessagesFromFlat(data ?? {});
   const finalResult = 'Mensagens sugeridas pelo CharmChat\n' + messages
     .map(msg => `Não diga: "${msg.text}"\nDiga isso: "${msg.description}"`)
-    .join('\n') + '\n#romance #rainha #Relacionamento #mensagem '
+    .join('\n') + '\n#romance #rainha #relacionamento #mensagem '
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>

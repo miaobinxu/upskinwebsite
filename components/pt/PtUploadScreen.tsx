@@ -43,7 +43,7 @@ export default function JPUploadScreen({ onGenerate, loading }: UploadScreenProp
         ) : (
           <>
             <Sparkles className="h-5 w-5 mr-2 text-yellow-400" />
-            Generate JP
+            Generate PT
           </>
         )}
       </Button>
