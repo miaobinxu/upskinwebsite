@@ -87,7 +87,7 @@ export default function UploadScreen({ onGenerate, loading }: UploadScreenProps)
   const isChromeDesktop = /Chrome/.test(ua) && !isSafari && !isMobile;
 
     if (!isChromeDesktop) {
-      toast.error("This feature is only supported in Chrome on desktop. Please switch browser.");
+      toast.error("This feature is only supported in Chrome on computer. Please switch browser.");
       return;
     }
 

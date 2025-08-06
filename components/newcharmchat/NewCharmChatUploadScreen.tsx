@@ -18,7 +18,7 @@ export default function NewCharmChatUploadScreen({ onGenerate, loading }: Upload
     const isChromeDesktop = /Chrome/.test(ua) && !isSafari && !isMobile;
 
     if (!isChromeDesktop) {
-      toast.error("This feature is only supported in Chrome on desktop. Please switch browser.");
+      toast.error("This feature is only supported in Chrome on computer. Please switch browser.");
       return;
     }
     onGenerate()
