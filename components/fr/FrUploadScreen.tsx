@@ -9,7 +9,7 @@ interface UploadScreenProps {
 }
 
 
-export default function JPUploadScreen({ onGenerate, loading }: UploadScreenProps) {
+export default function FRUploadScreen({ onGenerate, loading }: UploadScreenProps) {
 
   const handleGenerate = () => {
     const ua = navigator.userAgent;
@@ -43,7 +43,7 @@ export default function JPUploadScreen({ onGenerate, loading }: UploadScreenProp
         ) : (
           <>
             <Sparkles className="h-5 w-5 mr-2 text-yellow-400" />
-            Generate JP
+            Generate FR
           </>
         )}
       </Button>
