@@ -49,9 +49,9 @@ export default function JPPreviewScreen({ images }: jpPreviewScreenProps) {
   const reply = data?.['Message Prompt'] ?? ''
 
   const messages = extractMessagesFromFlat(data ?? {});
-  const finalResult = 'Mensajes sugeridos por CharmChat\n' + messages
-    .map(msg => `No digas: "${msg.text}"\nDi esto: "${msg.description}"`)
-    .join('\n') + '\n#citas #relación #mensajes #reina '
+  const finalResult = 'CharmChatのおすすめメッセージ\n' + messages
+    .map(msg => `言わないで："${msg.text}"\nこう言ってみて："${msg.description}"`)
+    .join('\n') + '\n#デート #女王 #恋愛 #メッセージ '
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
