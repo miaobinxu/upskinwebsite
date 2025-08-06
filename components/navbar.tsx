@@ -26,14 +26,6 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center cursor-pointer">
             <Link href="/">
-              <Image
-                src="/upskin-logo.png"
-                alt="Upskin Logo"
-                height={50}
-                width={50}
-                className="h-10 w-10 object-cover rounded-xl"
-                priority
-              />
             </Link>
           </div>
 
