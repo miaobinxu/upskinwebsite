@@ -5,7 +5,7 @@ import { ChevronRight, Download } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useRef, useState } from 'react'
 import { Poppins } from 'next/font/google';
-import { usePTStore } from '@/lib/store/PTStore'
+import { usePTStore } from '@/lib/store/ptStore'
 import { DownloadButton } from './DownloadButton'
 
 const poppins = Poppins({
