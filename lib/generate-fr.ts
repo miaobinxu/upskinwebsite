@@ -25,7 +25,7 @@ export const buildCharmPrompt = (topic: string, tone = ""): string => {
   prompt["Title"] = "Translate '" + topic + "' to native French"
   prompt["Subtitle"] = `Fill the blank in native French based on the context`
   prompt["Message Prompt"] = "Refer the title to write a phrase in native French"
-  prompt["Tone"] = fallback(tone, "Choose from デート, サッシー, or フラーティー")
+  prompt["Tone"] = fallback(tone, "Choose from Rencontre, Audacieuse, or Séduction")
 
   for (let i = 1; i <= 5; i++) {
     prompt[`Don't Say Message ${i}`] = `Fill the blank in native French based on the context`
