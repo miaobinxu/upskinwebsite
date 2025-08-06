@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 const BUCKET_NAME = process.env.BUCKET_NAME || 'files';
-const FOLDER_NAME = process.env.FOLDER_NAME || 'charmtool3';
+const FOLDER_NAME = 'charmtool3'; // Hardcoded to always use charmtool3
 const EXCLUDE_FILE = process.env.EXCLUDE_FILE || '__keep.txt';
 const RANDOM_LIMIT = 5;
 const EXPIRY_SECONDS = 60 * 15; // 15 minutes

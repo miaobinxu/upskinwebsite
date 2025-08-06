@@ -81,7 +81,7 @@ WHERE (SELECT count FROM existing) = 0;
 
 
 const BUCKET_NAME = process.env.BUCKET_NAME || 'files'
-const FOLDER_NAME = process.env.FOLDER_NAME || 'charmtool3'
+const FOLDER_NAME = 'charmtool3' // Hardcoded to always use charmtool3
 const DUMMY_FILE_CONTENT = 'init-folder';
 
 export async function GET() {
