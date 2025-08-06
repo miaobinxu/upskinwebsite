@@ -49,9 +49,9 @@ export default function FRPreviewScreen({ images }: frPreviewScreenProps) {
   const reply = data?.['Message Prompt'] ?? ''
 
   const messages = extractMessagesFromFlat(data ?? {});
-  const finalResult = 'CharmChatのおすすめメッセージ\n' + messages
-    .map(msg => `言わないで："${msg.text}"\nこう言ってみて："${msg.description}"`)
-    .join('\n') + '\n#デート #女王 #恋愛 #メッセージ '
+  const finalResult = 'Suggestions de CharmChat\n' + messages
+    .map(msg => `Ne dis pas: "${msg.text}"\nDis plutôt: "${msg.description}"`)
+    .join('\n') + '\n#rencontre #reine #relation #messages '
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
@@ -115,8 +115,8 @@ export default function FRPreviewScreen({ images }: frPreviewScreenProps) {
             <MessagePage
               key={`msg-${index}`}
               image={img}
-              message={msg?.text ? `❌ 言わないで："${msg.text}"` : ''}
-              description={msg?.description ? `✅ こう言ってみて："${msg.description}"` : ''}
+              message={msg?.text ? `❌ Ne dis pas: "${msg.text}"` : ''}
+              description={msg?.description ? `✅ Dis plutôt: "${msg.description}"` : ''}
               downloadIndex={sequentialIndex}
             />
           )
