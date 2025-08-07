@@ -50,7 +50,7 @@ export default function DEPreviewScreen({ images }: dePreviewScreenProps) {
 
   const messages = extractMessagesFromFlat(data ?? {});
   const finalResult = 'Von CharmChat empfohlene Nachrichten\n' + messages
-    .map(msg => `Sag lieber: „${msg.text}“\nSag lieber: „${msg.description}“`)
+    .map(msg => `Sag nicht: „${msg.text}“\nSag lieber: „${msg.description}“`)
     .join('\n') + '\n#dating #Königin #Beziehung #Chatten '
 
   if (!images || images.length === 0) {
@@ -115,7 +115,7 @@ export default function DEPreviewScreen({ images }: dePreviewScreenProps) {
             <MessagePage
               key={`msg-${index}`}
               image={img}
-              message={msg?.text ? `❌ Sag lieber: „${msg.text}“` : ''}
+              message={msg?.text ? `❌ Sag nicht: „${msg.text}“` : ''}
               description={msg?.description ? `✅ Sag lieber: „${msg.description}“` : ''}
               downloadIndex={sequentialIndex}
             />
