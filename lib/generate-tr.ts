@@ -22,17 +22,17 @@ const fallback = (val: string | undefined, placeholder: string) =>
 export const buildCharmPrompt = (topic: string, tone = ""): string => {
   const prompt: Record<string, string> = {}
 
-  prompt["Title"] = "Translate '" + topic + "' to native Japanese"
-  prompt["Subtitle"] = `Fill the blank in native Japanese based on the context`
-  prompt["Message Prompt"] = "Refer the title to write a phrase in native Japanese"
-  prompt["Tone"] = fallback(tone, "Choose from デート, サッシー, or フラーティー")
+  prompt["Title"] = "Translate '" + topic + "' to native Turkish"
+  prompt["Subtitle"] = `Fill the blank in native Turkish based on the context`
+  prompt["Message Prompt"] = "Refer the title to write a phrase in native Turkish"
+  prompt["Tone"] = fallback(tone, "Choose from Flört, Afacan, or Flörtöz")
 
   for (let i = 1; i <= 5; i++) {
-    prompt[`Don't Say Message ${i}`] = `Fill the blank in native Japanese based on the context`
-    prompt[`Say Message ${i}`] = `Fill the blank in native Japanese based on the context`
+    prompt[`Don't Say Message ${i}`] = `Fill the blank in native Turkish based on the context`
+    prompt[`Say Message ${i}`] = `Fill the blank in native Turkish based on the context`
   }
 
-  return `You are writing a TikTok post teaching women how to text with men and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field unless the field requires to use Japanese. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post, but they are all in English. You will need to use Japanese in some fields as required. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive.
+  return `You are writing a TikTok post teaching women how to text with men and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field unless the field requires to use Turkish. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post, but they are all in English. You will need to use Turkish in some fields as required. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive.
 Example 1:
 {
   "Title": "Feminine Ways to Talk to Him",
