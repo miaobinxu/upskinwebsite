@@ -116,7 +116,7 @@ export default function FRPreviewScreen({ images }: frPreviewScreenProps) {
               key={`msg-${index}`}
               image={img}
               message={msg?.text ? `❌ Ne dis pas : « ${msg.text} »` : ''}
-              description={msg?.description ? `✅ Dis plutôt : « "${msg.description} »` : ''}
+              description={msg?.description ? `✅ Dis plutôt : « ${msg.description} »` : ''}
               downloadIndex={sequentialIndex}
             />
           )
