@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Upskin - Product Screenshot Generator",
+  title: "Product Screenshot Generator",
   description: "Generate beautiful product screenshots for your skincare analysis",
     generator: 'Upskin'
 }
