@@ -13,12 +13,20 @@ export default function JPUploadScreen({ onGenerate, loading }: UploadScreenProp
 
   const handleGenerate = () => {
     const ua = navigator.userAgent;
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+    const isChrome = /Chrome/i.test(ua);
     const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-    const isChromeDesktop = /Chrome/.test(ua) && !isSafari && !isMobile;
+    
+    // Allow Chrome on desktop or Chrome on Android, but block iOS and other browsers
+    const isChromeAllowed = isChrome && !isSafari && (!isIOS);
 
-    if (!isChromeDesktop) {
-      toast.error("This feature is only supported in Chrome on computer. Please switch browser.");
+    if (!isChromeAllowed) {
+      if (isIOS) {
+        toast.error("This feature is not supported on iOS devices. Please use Chrome on Android or computer.");
+      } else {
+        toast.error("This feature is only supported in Chrome on computer or Android. Please switch browser.");
+      }
       return;
     }
     onGenerate()
