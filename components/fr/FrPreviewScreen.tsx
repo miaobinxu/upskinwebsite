@@ -50,7 +50,7 @@ export default function FRPreviewScreen({ images }: frPreviewScreenProps) {
 
   const messages = extractMessagesFromFlat(data ?? {});
   const finalResult = 'Messages suggérés par CharmChat\n' + messages
-    .map(msg => `Ne dis pas: "${msg.text}"\nDis plutôt: "${msg.description}"`)
+    .map(msg => `Ne dis pas : « ${msg.text} »\nDis plutôt : « ${msg.description} »`)
     .join('\n') + '\n#rencontre #reine #relation #messages '
 
   if (!images || images.length === 0) {
@@ -115,8 +115,8 @@ export default function FRPreviewScreen({ images }: frPreviewScreenProps) {
             <MessagePage
               key={`msg-${index}`}
               image={img}
-              message={msg?.text ? `❌ Ne dis pas: "${msg.text}"` : ''}
-              description={msg?.description ? `✅ Dis plutôt: "${msg.description}"` : ''}
+              message={msg?.text ? `❌ Ne dis pas : « ${msg.text} »` : ''}
+              description={msg?.description ? `✅ Dis plutôt : « "${msg.description} »` : ''}
               downloadIndex={sequentialIndex}
             />
           )
