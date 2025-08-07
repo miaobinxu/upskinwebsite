@@ -305,7 +305,7 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
           <div className="absolute scale-[1.05] flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className='border border-purple-600 rounded-full ring-offset-4 ring-purple-600 text-purple-600 p-2'>
               <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
-               「“CharmChat” uygulamasını indir
+               “CharmChat” uygulamasını indir
               </div>
             </div>
             <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-[3px] border-purple-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
