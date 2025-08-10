@@ -20,7 +20,7 @@ export async function GET() {
     const imageFiles = (allFiles ?? []).filter(
       file =>
         file.name !== EXCLUDE_FILE &&
-        file.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)
+        file.name.match(/\.(jpg|jpeg|JPEG|png|webp|gif)$/i)
     );
 
     // Randomly select N images
