@@ -12,7 +12,7 @@ export async function GET() {
     // List all files in the folder
     const { data: allFiles, error } = await supabase.storage
       .from(BUCKET_NAME)
-      .list(FOLDER_NAME, { limit: 1000 });
+      .list(FOLDER_NAME, { limit: 2000 });
 
     if (error) throw new Error(`Failed to list files: ${error.message}`);
 
