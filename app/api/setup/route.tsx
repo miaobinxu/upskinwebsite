@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 const setupSqlScript = `
 
 -- Topics Table
-CREATE TABLE IF NOT EXISTS public.topics (
+CREATE TABLE IF NOT EXISTS public.topics_charmchat_male (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   order_index INT NOT NULL,
@@ -12,38 +12,38 @@ CREATE TABLE IF NOT EXISTS public.topics (
 );
 
 -- Cursor Table
-CREATE TABLE IF NOT EXISTS public.topic_cursor (
+CREATE TABLE IF NOT EXISTS public.topic_charmchat_male_cursor (
   id INT PRIMARY KEY DEFAULT 1,
   current_index INT NOT NULL DEFAULT 0,
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- Seed Cursor
-INSERT INTO topic_cursor (id, current_index)
+INSERT INTO topic_charmchat_male_cursor (id, current_index)
 VALUES (1, 0)
 ON CONFLICT (id) DO NOTHING;
 
 -- Enable RLS
-ALTER TABLE topics ENABLE ROW LEVEL SECURITY;
-ALTER TABLE topic_cursor ENABLE ROW LEVEL SECURITY;
+ALTER TABLE topics_charmchat_male ENABLE ROW LEVEL SECURITY;
+ALTER TABLE topic_charmchat_male_cursor ENABLE ROW LEVEL SECURITY;
 
 -- Drop policies if they exist
 -- Note: Supabase SQL API does not allow IF EXISTS for DROP POLICY, so skip if fails manually
 
 -- Recreate optimized policies
-DROP POLICY IF EXISTS "Public read" ON topics;
-CREATE POLICY "Public read" ON topics
+DROP POLICY IF EXISTS "Public read" ON topics_charmchat_male;
+CREATE POLICY "Public read" ON topics_charmchat_male
   FOR SELECT USING (true);
 
-DROP POLICY IF EXISTS "Service role only" ON topic_cursor;
-CREATE POLICY "Service role only" ON topic_cursor
+DROP POLICY IF EXISTS "Service role only" ON topic_charmchat_male_cursor;
+CREATE POLICY "Service role only" ON topic_charmchat_male_cursor
   FOR ALL USING ((SELECT auth.role()) = 'service_role');
 
 -- ✅ Insert seed topics only if table is empty
 WITH existing AS (
-  SELECT COUNT(*) as count FROM public.topics
+  SELECT COUNT(*) as count FROM public.topics_charmchat_male
 )
-INSERT INTO public.topics (title, order_index)
+INSERT INTO public.topics_charmchat_male (title, order_index)
 SELECT * FROM (
   VALUES
     ('Do You Communicate Like a Feminine Woman or a Masculine Woman in your relationship?', 1),

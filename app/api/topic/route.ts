@@ -4,7 +4,7 @@ export async function GET(req: Request) {
   try {
     // Fetch current index from cursor
     const { data: cursorData, error: cursorError } = await supabase
-      .from('topic_cursor')
+      .from('topic_charmchat_male_cursor')
       .select('current_index')
       .eq('id', 1)
       .single();
@@ -15,7 +15,7 @@ export async function GET(req: Request) {
 
     // Try to fetch the next topic
     let { data: nextTopic, error: topicError } = await supabase
-      .from('topics')
+      .from('topics_charmchat_male')
       .select('*')
       .gt('order_index', currentIndex)
       .order('order_index', { ascending: true })
@@ -26,23 +26,23 @@ export async function GET(req: Request) {
     if (topicError || !nextTopic) {
       // Reset cursor to 0
       await supabase
-        .from('topic_cursor')
+        .from('topic_charmchat_male_cursor')
         .update({ current_index: 0, updated_at: new Date().toISOString() })
         .eq('id', 1);
 
       // Fetch first topic again after reset
       const { data: resetTopic, error: resetError } = await supabase
-        .from('topics')
+        .from('topics_charmchat_male')
         .select('*')
         .order('order_index', { ascending: true })
         .limit(1)
         .single();
 
-      if (resetError || !resetTopic) throw resetError || new Error('No topics found after reset.');
+      if (resetError || !resetTopic) throw resetError || new Error('No topics_charmchat_male found after reset.');
 
       // Update cursor with new index
       await supabase
-        .from('topic_cursor')
+        .from('topic_charmchat_male_cursor')
         .update({ current_index: resetTopic.order_index, updated_at: new Date().toISOString() })
         .eq('id', 1);
 
@@ -51,7 +51,7 @@ export async function GET(req: Request) {
 
     // Normal flow, topic found
     await supabase
-      .from('topic_cursor')
+      .from('topic_charmchat_male_cursor')
       .update({ current_index: nextTopic.order_index, updated_at: new Date().toISOString() })
       .eq('id', 1);
 

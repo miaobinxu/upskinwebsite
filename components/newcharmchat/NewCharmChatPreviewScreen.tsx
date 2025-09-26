@@ -51,7 +51,7 @@ export default function NewCharmChatPreviewScreen({ images }: newCharmChatPrevie
   const messages = extractMessagesFromFlat(data ?? {});
   const finalResult = 'Messages suggested by CharmChat.\n' + messages
     .map(msg => `Don't say: "${msg.text}"\nSay: "${msg.description}"`)
-    .join('\n') + '\n#dating #relationship #texting #queen #feminineenergy '
+    .join('\n') + '\n#dating #relationship #texting #datingcoachformen #datingtipsformen '
 
   if (!images || images.length === 0) {
     return <div className="text-center text-gray-500">No preview images available.</div>
@@ -309,7 +309,7 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
               </div>
             </div>
             <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-[3px] border-purple-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
-              Copy and paste to make him obsessed with you.
+              Copy & paste to level up your game
               <img src={'/charmchat/crown.png'} className='w-24 h-12 rotate-[12deg] scale-50 absolute -top-8 -right-9' />
             </div>
           </div>
@@ -348,7 +348,7 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
 
           {/* Suggestions List */}
           <div className="flex flex-col gap-3">
-            {modifiedMessages?.slice(0, 3).map((msg, index) => (
+            {modifiedMessages?.map((msg, index) => (
               <div
                 key={index}
                 className="bg-white text-[15px] font-medium text-black leading-snug w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}
