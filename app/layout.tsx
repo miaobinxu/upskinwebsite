@@ -1,15 +1,15 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import "./globals.css"
+import "../styles/globals.css"
 import { Toaster } from "react-hot-toast"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Product Screenshot Generator",
-  description: "Generate beautiful product screenshots for your skincare analysis",
-    generator: 'Upskin'
+  title: "CharmChat",
+  description: "AI-powered relationship communication tool",
+  generator: 'CharmChat'
 }
 
 export default function RootLayout({
