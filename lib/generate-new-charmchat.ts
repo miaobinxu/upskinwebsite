@@ -24,7 +24,7 @@ export const buildCharmPrompt = (topic: string, tone = ""): string => {
 
   prompt["Title"] = topic
   prompt["Subtitle"] = "fill the blank based on the context"
-  prompt["Message Prompt"] = `Refer the title to write a phrase`
+  prompt["Message Prompt"] = `Refer the title to write a phrase. Don't paraphrase unnecessarily - if the Title is already a clear action phrase, use it as-is. If not, create a concise action phrase that captures the Title's intent.`
   prompt["Tone"] = fallback(tone, "Choose from Dating, Flirty, or Adult")
 
   for (let i = 1; i <= 3; i++) {
@@ -32,7 +32,7 @@ export const buildCharmPrompt = (topic: string, tone = ""): string => {
     prompt[`Say Message ${i}`] = `Fill the blank based on the context`
   }
 
-  return `You are writing a TikTok post teaching men how to text with women and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive. Study the **nuanced patterns** in these examples carefully. The 'Say' messages demonstrate different charming textures of a man - sometimes mysterious and playful, sometimes assertive and direct, sometimes dark and psychological. Learn these nuances from the examples. The 'Don't Say' messages represent typical weak texts men send.Each 'Don't Say' and 'Say' pair should address the same context (like both being compliments, both asking her out, both being flirty) - the difference is in the delivery and emotional impact.
+  return `You are writing a TikTok post teaching men how to text with women and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. For "say" messages, they should be VERY impressive. Study the **nuanced patterns** in these examples carefully. The 'Say' messages demonstrate different charming textures of a man - sometimes mysterious and playful, sometimes assertive and direct, sometimes dark and psychological, sometimes subtly sophisticated. Learn these nuances from the examples. The 'Don't Say' messages represent typical weak texts men send.Each 'Don't Say' and 'Say' pair should address the same context (like both being compliments, both asking her out, both being flirty) - the difference is in the delivery and emotional impact.
 Example 1:
 {
   "Title": "4 Text moves that make her think about you all day",
