@@ -1,5 +1,5 @@
 import { Sparkles } from 'lucide-react'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '../ui/button'
 import toast from 'react-hot-toast'
 
@@ -9,7 +9,7 @@ interface UploadScreenProps {
 }
 
 
-export default function NewCharmChatUploadScreen({ onGenerate, loading }: UploadScreenProps) {
+export default function NewCharmChatUploadScreenEs({ onGenerate, loading }: UploadScreenProps) {
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
@@ -30,9 +30,9 @@ export default function NewCharmChatUploadScreen({ onGenerate, loading }: Upload
 
     if (!isChromeAllowed) {
       if (isIOS) {
-        toast.error("This feature is not supported on iOS devices. Please use Chrome on computer.");
+        toast.error("Esta función no es compatible con dispositivos iOS. Por favor, usa Chrome en computadora.");
       } else {
-        toast.error("This feature is only supported in Chrome on computer.");
+        toast.error("Esta función solo es compatible con Chrome en computadora.");
       }
       return;
     }
@@ -53,15 +53,15 @@ export default function NewCharmChatUploadScreen({ onGenerate, loading }: Upload
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
             </svg>
-            Generating...
+            Generando...
           </span>
         ) : (
           <>
             <Sparkles className="h-5 w-5 mr-2 text-yellow-400" />
-            Generate EN
+            Generar ES
           </>
         )}
       </Button>
     </div>
   )
-}
+} 
