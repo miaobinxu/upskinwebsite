@@ -5,94 +5,279 @@ export default function HomePage() {
     <>
       <style jsx>{`
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            color: #333;
-            background: #f4f4f4;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          margin: 0;
+          padding: 0;
+          line-height: 1.7;
+          color: #393e46;
+          background: linear-gradient(135deg, #f7f7f7 0%, #f2e7d5 100%);
+          min-height: 100vh;
         }
+        
         .app-store-section {
-            text-align: center;
-            margin: 40px 0;
+          text-align: center;
+          margin: 60px 0;
         }
+        
         .app-store-button {
-            display: inline-block;
-            padding: 15px 30px;
-            background-color: #AEE67F; /* Bright Blue Color */
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 20px; /* Larger Font Size */
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle Shadow for Depth */
-            transition: background-color 0.3s, transform 0.2s;
+          display: inline-block;
+          padding: 18px 40px;
+          background: linear-gradient(135deg, #6d9886 0%, #5a8070 100%);
+          color: white;
+          border-radius: 12px;
+          text-decoration: none;
+          font-size: 18px;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+          box-shadow: 0 8px 25px rgba(109, 152, 134, 0.3);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border: none;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .app-store-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s;
+        }
+
+        .app-store-button:hover::before {
+          left: 100%;
         }
 
         .app-store-button:hover, .app-store-button:focus {
-            background-color: #AEE67F; /* Slightly Darker Shade for Hover */
-            text-decoration: none;
-            color: white;
-            transform: translateY(-2px); /* Slight Raise on Hover */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced Shadow on Hover */
+          background: linear-gradient(135deg, #5a8070 0%, #4a6b5a 100%);
+          text-decoration: none;
+          color: white;
+          transform: translateY(-3px);
+          box-shadow: 0 12px 35px rgba(109, 152, 134, 0.4);
         }
+        
         .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
+          width: 90%;
+          max-width: 1200px;
+          margin: auto;
+          overflow: hidden;
         }
+        
         header {
-            background: #AEE67F;
-            color: #333;
-            padding-top: 30px;
-            min-height: 70px;
-            border-bottom: #AEE67F 3px solid;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          color: #393e46;
+          padding: 20px 0;
+          border-bottom: 1px solid rgba(109, 152, 134, 0.2);
+          box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+          position: sticky;
+          top: 0;
+          z-index: 100;
         }
+        
         header a {
-            color: #333;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 16px;
+          color: #393e46;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 15px;
+          transition: all 0.3s ease;
         }
+        
         header ul {
-            padding: 0;
-            list-style: none;
-            text-align: center;
+          padding: 0;
+          list-style: none;
+          text-align: center;
+          margin: 0;
         }
+        
         header li {
-            display: inline;
-            margin: 0 20px;
+          display: inline;
+          margin: 0 25px;
         }
+        
         header #branding {
-            float: left;
+          float: left;
         }
+        
         header #branding h1 {
-            margin: 0;
+          margin: 0;
+          font-size: 28px;
+          font-weight: 700;
+          background: linear-gradient(135deg, #6d9886 0%, #5a8070 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
+        
         header nav {
-            float: right;
-            margin-top: 10px;
+          float: right;
+          margin-top: 8px;
         }
-        header .highlight, header .current a {
-            font-weight: bold;
+        
+        header .highlight {
+          font-weight: 800;
         }
+        
+        header .current a {
+          background: linear-gradient(135deg, #6d9886 0%, #5a8070 100%);
+          color: white;
+          padding: 10px 20px;
+          border-radius: 8px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+        
         header a:hover {
-            color: #ffffff;
-            font-weight: bold;
+          color: #6d9886;
+          transform: translateY(-1px);
         }
+        
+        header .current a:hover {
+          color: white;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(109, 152, 134, 0.3);
+        }
+        
+        .main-title {
+          text-align: center;
+          margin: 80px 0 40px 0;
+          font-size: 48px;
+          font-weight: 800;
+          background: linear-gradient(135deg, #393e46 0%, #6d9886 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          line-height: 1.2;
+        }
+        
         .section {
-            margin: 40px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          margin: 50px 0;
+          padding: 40px;
+          background: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(10px);
+          border-radius: 20px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
         }
+        
+        .section:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section h2 {
+          color: #393e46;
+          font-size: 32px;
+          font-weight: 700;
+          margin-bottom: 25px;
+          padding-bottom: 15px;
+          border-bottom: 3px solid #6d9886;
+          display: inline-block;
+        }
+        
+        .section h3 {
+          color: #6d9886;
+          font-size: 22px;
+          font-weight: 600;
+          margin: 30px 0 15px 0;
+        }
+        
+        .section p {
+          font-size: 16px;
+          line-height: 1.8;
+          margin-bottom: 20px;
+          color: #393e46;
+        }
+        
+        .section ul {
+          padding-left: 25px;
+          margin: 20px 0;
+        }
+        
+        .section li {
+          margin-bottom: 8px;
+          color: #393e46;
+          line-height: 1.6;
+        }
+        
+        .section a {
+          color: #6d9886;
+          text-decoration: none;
+          font-weight: 500;
+          transition: all 0.3s ease;
+        }
+        
+        .section a:hover {
+          color: #5a8070;
+          text-decoration: underline;
+        }
+        
         footer {
-            background: #333;
-            color: white;
+          background: linear-gradient(135deg, #393e46 0%, #2a2f36 100%);
+          color: white;
+          text-align: center;
+          padding: 50px 0;
+          margin-top: 80px;
+          font-size: 16px;
+          font-weight: 500;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          header #branding, header nav {
+            float: none;
             text-align: center;
-            padding: 40px 0;
-            margin-top: 60px;
+          }
+          
+          header nav {
+            margin-top: 20px;
+          }
+          
+          header li {
+            display: block;
+            margin: 10px 0;
+          }
+          
+          .main-title {
+            font-size: 36px;
+            margin: 60px 0 30px 0;
+          }
+          
+          .section {
+            padding: 30px 20px;
+            margin: 30px 0;
+          }
+          
+          .container {
+            width: 95%;
+          }
+        }
+        
+        /* Smooth scrolling */
+        html {
+          scroll-behavior: smooth;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+          background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+          background: #6d9886;
+          border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+          background: #5a8070;
         }
       `}</style>
       
@@ -112,7 +297,7 @@ export default function HomePage() {
       </header>
       
       <div className="container">
-        <h1>Welcome to CharmChat</h1>
+        <h1 className="main-title">Welcome to CharmChat</h1>
         <div className="app-store-section">
           <a href="https://apps.apple.com/us/app/nativechat-texting-natively/id6463583958" target="_blank" className="app-store-button">Download on the App Store</a>
         </div>
