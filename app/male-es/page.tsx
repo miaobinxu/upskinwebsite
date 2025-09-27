@@ -49,6 +49,14 @@ export default function Page() {
 
             const { data: response, error } = await generateNewCharmChatCarouselEs({ topic: topicTitle })
 
+            // Log API provider info for monitoring
+            if (response?._metadata) {
+                console.log(`📊 Topic: "${topicTitle}" | Provider: ${response._metadata.provider} | Fallback: ${response._metadata.usedFallback}`)
+                if (response._metadata.usedFallback) {
+                    console.log('⚠️ Azure failed (filtered or empty content), used OpenAI fallback')
+                }
+            }
+
             const rawContent = response?.choices?.[0]?.message?.content?.trim()
             if (error || !rawContent) {
                 throw new Error(error || 'La IA no devolvió contenido')

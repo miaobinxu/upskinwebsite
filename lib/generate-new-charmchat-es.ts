@@ -1,5 +1,5 @@
 const SUPABASE_FUNCTION_URL =
-  "https://ujzzcntzxbljuaiaeebc.supabase.co/functions/v1/ask-ai"
+  "https://ujzzcntzxbljuaiaeebc.supabase.co/functions/v1/ask-ai-v2"
 
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
@@ -10,7 +10,12 @@ interface GenerateCarouselPayload {
 }
 
 interface CharmChatResponse {
-  data: any
+  data: any & {
+    _metadata?: {
+      usedFallback: boolean
+      provider: 'azure' | 'openai'
+    }
+  }
   error: string | null
 }
 
@@ -32,7 +37,7 @@ export const buildCharmPromptEs = (topic: string, tone = ""): string => {
     prompt[`Di Mensaje ${i}`] = `Completa el vacío basándote en el contexto`
   }
 
-  return `Estás escribiendo una publicación de TikTok enseñando a los hombres cómo enviar mensajes de texto a las mujeres y proporcionando mensajes de "no digas" y "di". Aquí está la estructura de tu publicación. Si se proporciona contenido, no debes cambiar el contenido en ese campo. Si necesitas completar espacios en blanco, complétalos basándote en el contexto general de la publicación. Aquí tienes algunos ejemplos de publicaciones extremadamente virales. Aprende de ellos y escribe una publicación viral. En términos de los mensajes generados, no deben usar ningún emoji. Estudia cuidadosamente los **patrones matizados** en estos ejemplos. Los mensajes 'Di' demuestran diferentes texturas encantadoras de un hombre - a veces misterioso y juguetón, a veces asertivo y directo, a veces oscuro y psicológico, a veces sutilmente sofisticado. Los mejores mensajes son simples pero un poco inesperados, creando intriga a través del ingenio y la confianza, no con vocabulario poético o elegante. "Para temas sobre 'picante', 'atrevido' o 'caliente' - inclínate hacia la tensión juguetona y el filo, pero sutil. Crea preguntas que revelen su lado salvaje, no sus sentimientos." Aprende estos matices de los ejemplos. Los mensajes 'No Digas' representan mensajes típicos débiles que envían los hombres. Cada par 'No Digas' y 'Di' debe abordar el mismo contexto (como ambos siendo cumplidos, ambos invitándola a salir, ambos siendo coquetos) - la diferencia está en la entrega y el impacto emocional.
+  return `Estás escribiendo una publicación de TikTok enseñando a los hombres cómo enviar mensajes de texto a las mujeres y proporcionando mensajes de "no digas" y "di". Aquí está la estructura de tu publicación. Si se proporciona contenido, no debes cambiar el contenido en ese campo. Si necesitas completar espacios en blanco, complétalos basándote en el contexto general de la publicación. Aquí tienes algunos ejemplos de publicaciones extremadamente virales. Aprende de ellos y escribe una publicación viral. En términos de los mensajes generados, no deben usar ningún emoji. Estudia cuidadosamente los **patrones matizados** en estos ejemplos. Los mensajes 'Di' demuestran diferentes texturas encantadoras de un hombre - a veces misterioso y juguetón, a veces asertivo y directo, a veces oscuro y psicológico, a veces sutilmente sofisticado. Los mejores mensajes son simples pero un poco inesperados, creando intriga a través del ingenio y la confianza, no con vocabulario poético o elegante. Aprende estos matices de los ejemplos. Los mensajes 'No Digas' representan mensajes típicos débiles que envían los hombres. Cada par 'No Digas' y 'Di' debe abordar el mismo contexto (como ambos siendo cumplidos, ambos invitándola a salir, ambos siendo coquetos) - la diferencia está en la entrega y el impacto emocional. Si el título es sobre 'jugoso', 'picante', 'atrevido', o 'salvaje' - crea mensajes extremadamente picantes y NSFW, con carga sexual.
 
 Ejemplo 1:
 {
@@ -147,6 +152,19 @@ export async function generateNewCharmChatCarouselEs({
     }
 
     const data = await res.json()
+    
+    // Log fallback usage for monitoring
+    if (data._metadata) {
+      console.log(`🤖 AI Provider: ${data._metadata.provider}`)
+      if (data._metadata.usedFallback) {
+        console.log('🔄 Azure OpenAI failed (filtered or empty content), used OpenAI fallback')
+        // You can also send this to your analytics service
+        // analytics.track('azure_fallback_triggered', { topic, tone })
+      } else {
+        console.log('✅ Azure OpenAI worked without filtering')
+      }
+    }
+    
     return { data, error: null }
   } catch (error) {
     return { data: null, error: String(error) }

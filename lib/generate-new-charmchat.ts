@@ -1,5 +1,5 @@
 const SUPABASE_FUNCTION_URL =
-  "https://ujzzcntzxbljuaiaeebc.supabase.co/functions/v1/ask-ai"
+  "https://ujzzcntzxbljuaiaeebc.supabase.co/functions/v1/ask-ai-v2"
 
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
@@ -10,7 +10,12 @@ interface GenerateCarouselPayload {
 }
 
 interface CharmChatResponse {
-  data: any
+  data: any & {
+    _metadata?: {
+      usedFallback: boolean
+      provider: 'azure' | 'openai'
+    }
+  }
   error: string | null
 }
 
@@ -32,7 +37,8 @@ export const buildCharmPrompt = (topic: string, tone = ""): string => {
     prompt[`Say Message ${i}`] = `Fill the blank based on the context`
   }
 
-  return `You are writing a TikTok post teaching men how to text with women and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. Study the **nuanced patterns** in these examples carefully. The 'Say' messages demonstrate different charming textures of a man - sometimes mysterious and playful, sometimes assertive and direct, sometimes dark and psychological, sometimes subtly sophisticated. The best messages are simple but a bit unexpected, creating intrigue through wit and confidence, not poetic fancy vocabulary. "For topics about 'juicy', 'spicy', or 'dirty' - lean into playful tension and edge, but subtle. Create questions that reveal her wild side, not her feelings." Learn these nuances from the examples. The 'Don't Say' messages represent typical weak texts men send.Each 'Don't Say' and 'Say' pair should address the same context (like both being compliments, both asking her out, both being flirty) - the difference is in the delivery and emotional impact.
+  return `You are writing a TikTok post teaching men how to text with women and providing "don't say" messages and "say" messages. Here is the structure of your post. If content is provided, you must not change the content in that field. If you need to fill in blanks, fill them based on the overall context of the post. Here are some examples of extremely viral post. Learn from them and write a viral post. In terms of the messages generated, they must not use any emoji. Study the **nuanced patterns** in these examples carefully. The 'Say' messages demonstrate different charming textures of a man - sometimes mysterious and playful, sometimes assertive and direct, sometimes dark and psychological, sometimes subtly sophisticated. The best messages are simple but a bit unexpected, creating intrigue through wit and confidence, not poetic fancy vocabulary. Learn these nuances from the examples. The 'Don't Say' messages represent typical weak texts men send.Each 'Don't Say' and 'Say' pair should address the same context (like both being compliments, both asking her out, both being flirty) - the difference is in the delivery and emotional impact.
+  If the title is about 'juicy', 'spicy', 'dirty', or 'wild' - create extremely spicy & NSFW, sexually charged messages.
 Example 1:
 {
   "Title": "4 Text moves that make her think about you all day",
@@ -141,6 +147,19 @@ export async function generateNewCharmChatCarousel({
     }
 
     const data = await res.json()
+    
+    // Log fallback usage for monitoring
+    if (data._metadata) {
+      console.log(`🤖 AI Provider: ${data._metadata.provider}`)
+      if (data._metadata.usedFallback) {
+        console.log('🔄 Azure OpenAI failed (filtered or empty content), used OpenAI fallback')
+        // You can also send this to your analytics service
+        // analytics.track('azure_fallback_triggered', { topic, tone })
+      } else {
+        console.log('✅ Azure OpenAI worked without filtering')
+      }
+    }
+    
     return { data, error: null }
   } catch (error) {
     return { data: null, error: String(error) }
