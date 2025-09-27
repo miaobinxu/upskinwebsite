@@ -54,7 +54,7 @@ export default function NewCharmChatPreviewScreenEs({ images }: newCharmChatPrev
     .join('\n') + '\n#ligar #relaciones #mensajes #consejosdecitasparahombres #consejosdeamorparahombres '
 
   if (!images || images.length === 0) {
-    return <div className="text-center text-gray-500">No hay imágenes de vista previa disponibles.</div>
+    return <div className="text-center text-gray-500" translate="no">No hay imágenes de vista previa disponibles.</div>
   }
 
   return (
@@ -124,7 +124,7 @@ export default function NewCharmChatPreviewScreenEs({ images }: newCharmChatPrev
       </div>
       <div className="space-y-2 flex flex-col items-center">
         {/* Description */}
-        <p className="text-gray-700 text-md whitespace-pre-line">
+        <p className="text-gray-700 text-md whitespace-pre-line" translate="no">
           {finalResult}
         </p>
       </div>
@@ -245,6 +245,7 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
           <div className="text-xl font-bold leading-snug max-w-xs">
             <span
               className="bg-white text-black px-3 py-1"
+              translate="no"
               style={{
                 display: 'inline',
                 boxDecorationBreak: 'clone',
@@ -259,6 +260,7 @@ function MessagePage({ image, message, description, downloadIndex }: MessagePage
           <div className="text-xl font-bold leading-snug max-w-xs">
             <span
               className="bg-red-500 text-white px-3 py-1"
+              translate="no"
               style={{
                 display: 'inline',
                 boxDecorationBreak: 'clone',
@@ -325,11 +327,11 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
         <div className={`w-[308px] scale-[0.60] p-2 px-4 flex flex-col gap-4 absolute left-0 z-30 bg-[#FAFAFA] text-gray-900 shadow-lg ... border border-gray-200 ${poppins.className}`} style={{ top: `${topOffset}px` }}>
           <div className="absolute scale-[1.05] flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className='border border-purple-600 rounded-full ring-offset-4 ring-purple-600 text-purple-600 p-2'>
-              <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
+              <div className="bg-purple-100 text-purple-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold" translate="no">
                 Descargar la App "CharmChat"
               </div>
             </div>
-            <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-[3px] border-purple-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
+            <div className="bg-purple-100 text-purple-600 relative p-3 mr-1 flex items-center border-[3px] border-purple-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold" translate="no">
               Copia y pega para mejorar tu juego
               <img src={'/charmchat/crown.png'} className='w-24 h-12 rotate-[12deg] scale-50 absolute -top-8 -right-9' />
             </div>
@@ -344,25 +346,25 @@ function FinalMockupPage({ image, reply, tone, messages, downloadIndex }: FinalM
             <div
               className="flex gap-1 items-center w-1/2 justify-center text-sm bg-white font-medium py-1.5 px-2 rounded-[8px] transition"
             >
-              <img src={'/charmchat/magic.png'} className='w-4 h-4' /> Responder
+              <img src={'/charmchat/magic.png'} className='w-4 h-4' /> <span translate="no">Responder</span>
             </div>
             <div
               className="flex gap-1 text-[#a3a3a3] items-center w-1/2 justify-center text-[16px] font-medium py-1.5 px-2 rounded-[8px]"
             >
-              <img src={'/charmchat/edit.png'} className='w-4 h-4' /> Escribir
+              <img src={'/charmchat/edit.png'} className='w-4 h-4' /> <span translate="no">Escribir</span>
             </div>
           </div>
 
           {/* Prompt Block */}
           <div className="bg-white w-full p-4 flex flex-col gap-2 rounded-xl" style={{ boxShadow: '0px 4px 16px 0px #0000000D' }}>
-            <div className="text-[12px] text-[#8063EF] font-medium flex items-center">Modo {tone}<ChevronRight size={16} /></div>
+            <div className="text-[12px] text-[#8063EF] font-medium flex items-center" translate="no">Modo {tone}<ChevronRight size={16} /></div>
             <div className="text-[15px] font-medium text-black leading-snug line-clamp-4">
-              {modifiedReply || 'Haz que tenga miedo de perderme'}
+                              <span translate="no">{modifiedReply || 'Haz que tenga miedo de perderme'}</span>
             </div>
           </div>
 
           {/* Suggestions Header */}
-          <div className="flex justify-between font-medium items-center px-4 text-sm text-gray-600">
+          <div className="flex justify-between font-medium items-center px-4 text-sm text-gray-600" translate="no">
             <span>Sugerencias</span>
             <span className="text-[12px] text-[#8063EF] font-medium flex gap-2 items-center"><img src={'/charmchat/Adjust.svg'} className='w-3 h-3' />Ajustar</span>
           </div>

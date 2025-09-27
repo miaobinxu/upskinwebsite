@@ -2,9 +2,18 @@ import { supabase } from "@/lib/supabase/server";
 
 export async function GET(req: Request) {
   try {
+    // Parse URL to get language parameter
+    const url = new URL(req.url);
+    const lang = url.searchParams.get('lang') || 'en';
+    
+    // Determine cursor table based on language
+    const cursorTable = lang === 'es' 
+      ? 'topic_charmchat_male_es_cursor' 
+      : 'topic_charmchat_male_cursor';
+    
     // Fetch current index from cursor
     const { data: cursorData, error: cursorError } = await supabase
-      .from('topic_charmchat_male_cursor')
+      .from(cursorTable)
       .select('current_index')
       .eq('id', 1)
       .single();
@@ -26,7 +35,7 @@ export async function GET(req: Request) {
     if (topicError || !nextTopic) {
       // Reset cursor to 0
       await supabase
-        .from('topic_charmchat_male_cursor')
+        .from(cursorTable)
         .update({ current_index: 0, updated_at: new Date().toISOString() })
         .eq('id', 1);
 
@@ -42,7 +51,7 @@ export async function GET(req: Request) {
 
       // Update cursor with new index
       await supabase
-        .from('topic_charmchat_male_cursor')
+        .from(cursorTable)
         .update({ current_index: resetTopic.order_index, updated_at: new Date().toISOString() })
         .eq('id', 1);
 
@@ -51,7 +60,7 @@ export async function GET(req: Request) {
 
     // Normal flow, topic found
     await supabase
-      .from('topic_charmchat_male_cursor')
+      .from(cursorTable)
       .update({ current_index: nextTopic.order_index, updated_at: new Date().toISOString() })
       .eq('id', 1);
 

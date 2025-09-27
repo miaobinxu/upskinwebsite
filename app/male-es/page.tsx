@@ -18,7 +18,7 @@ export default function Page() {
         setLoading(true)
         try {
             const [topicRes, imageRes] = await Promise.all([
-                fetch('/api/topic'),
+                fetch('/api/topic?lang=es'),
                 fetch('/api/get-images'),
             ])
 
