@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useMemo, useRef, useState } from 'react'
 import { Poppins } from 'next/font/google';
 import { useProductsStore } from '@/lib/store/productsStore'
-import { Card, CardContent } from "@/components/ui/card"
+
 import { PiShare } from "react-icons/pi";
 import { DownloadButton } from './DownloadButton'
 
@@ -229,7 +229,7 @@ function ProductAnalysisPage({ image, title, downloadIndex }: ProductAnalysisPag
 
   // Mock data for the product analysis (similar to internal preview screen)
   const mockProduct = {
-    name: title || "La Mer Moisturizing Cream",
+    name: "Lamer Cream",
     overallScore: { name: "Overall Score", value: 94 },
     skinType: "Oily",
     compatibility: { name: "Compatibility", value: 94 },
@@ -238,7 +238,7 @@ function ProductAnalysisPage({ image, title, downloadIndex }: ProductAnalysisPag
       { name: "Lime Tea Extract", description: "Soothe redness" }
     ],
     keyTakeaway: [
-      "La Mer is highly compatible with oily skin, providing essential hydration without clogging pores.",
+      "Lamer is highly compatible with oily skin, providing essential hydration without clogging pores.",
       "Sea Kelp is a key ingredient that helps maintain moisture balance, making it ideal for oily skin types."
     ]
   }
@@ -274,95 +274,104 @@ function ProductAnalysisPage({ image, title, downloadIndex }: ProductAnalysisPag
         />
 
         {/* Mobile App Preview Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Card className="border-none max-w-[280px] w-full" style={{
-            background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
-            fontFamily: "Inter, sans-serif",
-          }}>
-            <CardContent className="pt-1 px-4 pb-4 flex flex-col items-center">
-              {/* Mock Mobile Header */}
-              <div className="flex items-center w-full justify-between mb-1 pb-1">
-                <div className="p-1 border rounded-full border-gray-200">
-                  <ArrowLeft className="h-4 w-4" />
+        <div className={`w-[308px] scale-[0.60] p-2 px-4 flex flex-col gap-4 absolute left-0 z-30 text-gray-900 shadow-lg border border-gray-200 ${poppins.className}`} style={{ 
+          top: `40px`,
+          background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
+          fontFamily: "Inter, sans-serif",
+        }}>
+          <div className="absolute scale-[1.05] flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
+            <div className='border border-green-600 rounded-full ring-offset-4 ring-green-600 text-green-600 p-2'>
+              <div className="bg-green-100 text-green-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
+                Download "UpSkin" App
+              </div>
+            </div>
+            <div className="bg-green-100 text-green-600 relative p-3 mr-1 flex items-center border-[3px] border-green-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
+              Analyze your skincare products instantly.
+              <img src={'/internal/upskin-logo.png'} className='w-12 h-12 rotate-[12deg] scale-50 absolute -top-6 -right-9' />
+            </div>
+          </div>
+
+          {/* Mock Mobile Header */}
+          <div className="flex items-center w-full justify-between mb-1 pb-1">
+            <div className="p-1 border rounded-full border-gray-200">
+              <ArrowLeft className="h-4 w-4" />
+            </div>
+            <span className="font-semibold text-lg" style={{ color: "#393E46", fontFamily: "Cormorant SC" }}>
+              APP
+            </span>
+            <div className="p-1 border rounded-full border-gray-200">
+              <PiShare className="h-4 w-4" />
+            </div>
+          </div>
+
+          {/* Product Image */}
+          <div className="relative w-full max-w-[120px] aspect-square mb-4 rounded-[6px] overflow-hidden bg-gray-100 mx-auto">
+            <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+              <span className="text-xs text-blue-800 font-medium">Product</span>
+            </div>
+          </div>
+
+          {/* Product Title */}
+          <div className="flex items-center justify-between w-full mb-3" style={{ gap: "6px" }}>
+            <h2 className="text-sm font-bold w-[90%] text-[#393E46] break-words">
+              {mockProduct.name}
+            </h2>
+            <Heart className="h-4 w-4 font-bold flex-shrink-0" />
+          </div>
+
+          {/* Scores */}
+          <div className="grid grid-cols-3 mb-3" style={{ gap: "6px" }}>
+            {[mockProduct.overallScore, { name: 'Your Skin', value: mockProduct.skinType }, mockProduct.compatibility].map((item, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-[6px] shadow-sm p-2 flex flex-col items-start gap-0"
+              >
+                <div className="flex items-center justify-between w-full mb-1">
+                  <img src="/internal/shield.png" alt="icon" className="w-4 h-4 object-contain" />
                 </div>
-                <span className="font-semibold text-lg" style={{ color: "#393E46", fontFamily: "Cormorant SC" }}>
-                  APP
-                </span>
-                <div className="p-1 border rounded-full border-gray-200">
-                  <PiShare className="h-4 w-4" />
+                <p className="text-xs font-medium mb-0.5 break-words w-full">
+                  {item.name}
+                </p>
+                <div style={{ color: typeof item.value === 'number' ? getDotColor(item.value) : '#393E46' }} className="text-xs">
+                  <p className="font-semibold text-xs">
+                    {item.value}
+                    {typeof item.value === "number" && (
+                      <span className="text-xs"> · {getScoreDescription(item.value)}</span>
+                    )}
+                  </p>
                 </div>
               </div>
+            ))}
+          </div>
 
-              {/* Product Image */}
-              <div className="relative w-full max-w-[120px] aspect-square mb-4 rounded-[6px] overflow-hidden bg-gray-100 mx-auto">
-                <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                  <span className="text-xs text-blue-800 font-medium">Product</span>
-                </div>
-              </div>
-
-              {/* Product Title */}
-              <div className="flex items-center justify-between w-full mb-3" style={{ gap: "6px" }}>
-                <h2 className="text-sm font-bold w-[90%] text-[#393E46] break-words">
-                  {mockProduct.name}
-                </h2>
-                <Heart className="h-4 w-4 font-bold flex-shrink-0" />
-              </div>
-
-              {/* Scores */}
-              <div className="grid grid-cols-3 mb-3" style={{ gap: "6px" }}>
-                {[mockProduct.overallScore, { name: 'Your Skin', value: mockProduct.skinType }, mockProduct.compatibility].map((item, index) => (
+          {/* Key Ingredients */}
+          <div className="mb-3 flex flex-col w-full" style={{ gap: "6px" }}>
+            <h3 className="font-semibold text-sm mb-2 text-[#393E46]">Ingredients</h3>
+            {mockProduct.ingredients.map((ingredient, idx) => (
+              <div className="rounded-[6px] p-2 bg-[#FFFFFF]" key={idx}>
+                <p className="font-bold text-xs text-[#393E46]">{ingredient.name}</p>
+                <div className="flex items-center space-x-1 mt-0.5">
                   <div
-                    key={index}
-                    className="bg-white rounded-[6px] shadow-sm p-2 flex flex-col items-start gap-0"
-                  >
-                    <div className="flex items-center justify-between w-full mb-1">
-                      <img src="/internal/shield.png" alt="icon" className="w-4 h-4 object-contain" />
-                    </div>
-                    <p className="text-xs font-medium mb-0.5 break-words w-full">
-                      {item.name}
-                    </p>
-                    <div style={{ color: typeof item.value === 'number' ? getDotColor(item.value) : '#393E46' }} className="text-xs">
-                      <p className="font-semibold text-xs">
-                        {item.value}
-                        {typeof item.value === "number" && (
-                          <span className="text-xs"> · {getScoreDescription(item.value)}</span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Key Ingredients */}
-              <div className="mb-3 flex flex-col w-full" style={{ gap: "6px" }}>
-                <h3 className="font-semibold text-sm mb-2 text-[#393E46]">Ingredients</h3>
-                {mockProduct.ingredients.map((ingredient, idx) => (
-                  <div className="rounded-[6px] p-2 bg-[#FFFFFF]" key={idx}>
-                    <p className="font-bold text-xs text-[#393E46]">{ingredient.name}</p>
-                    <div className="flex items-center space-x-1 mt-0.5">
-                      <div
-                        className="w-[8px] h-[8px] rounded-full"
-                        style={{ backgroundColor: "#2B641A" }}
-                      ></div>
-                      <span className="text-xs text-gray-600">{ingredient.description}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Key Takeaway */}
-              <div className="mb-2 flex flex-col w-full" style={{ gap: "6px" }}>
-                <h3 className="font-semibold text-sm mb-2 text-[#393E46]">Key Takeaway</h3>
-                <div className="">
-                  {mockProduct.keyTakeaway.map((point, idx) => (
-                    <p key={idx} className="text-xs text-gray-700 rounded-[6px] p-2 bg-[#FFFFFF] leading-relaxed mb-1">
-                      {point}
-                    </p>
-                  ))}
+                    className="w-[8px] h-[8px] rounded-full"
+                    style={{ backgroundColor: "#2B641A" }}
+                  ></div>
+                  <span className="text-xs text-gray-600">{ingredient.description}</span>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            ))}
+          </div>
+
+          {/* Key Takeaway */}
+          <div className="mb-2 flex flex-col w-full" style={{ gap: "6px" }}>
+            <h3 className="font-semibold text-sm mb-2 text-[#393E46]">Key Takeaway</h3>
+            <div className="">
+              {mockProduct.keyTakeaway.map((point, idx) => (
+                <p key={idx} className="text-xs text-gray-700 rounded-[6px] p-2 bg-[#FFFFFF] leading-relaxed mb-1">
+                  {point}
+                </p>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
