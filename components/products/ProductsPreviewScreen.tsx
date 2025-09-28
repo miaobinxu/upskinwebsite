@@ -273,11 +273,10 @@ function ProductAnalysisPage({ image, title, downloadIndex }: ProductAnalysisPag
           alt="Product Analysis"
         />
 
-        {/* Mobile App Preview Overlay */}
-        <div className={`w-[308px] scale-[0.60] p-2 px-4 flex flex-col gap-4 absolute left-0 z-30 text-gray-900 shadow-lg border border-gray-200 ${poppins.className}`} style={{ 
-          top: `40px`,
-          background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
-          fontFamily: "Inter, sans-serif",
+        {/* Mobile App Preview Overlay - Exact Copy from Internal */}
+        <div className={`w-[308px] scale-[0.60] absolute z-30 ${poppins.className}`} style={{ 
+          top: `-10px`,
+          left: `30px`,
         }}>
           <div className="absolute scale-[1.05] flex left-[200px] -top-36 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className='border border-green-600 rounded-full ring-offset-4 ring-green-600 text-green-600 p-2'>
@@ -291,85 +290,97 @@ function ProductAnalysisPage({ image, title, downloadIndex }: ProductAnalysisPag
             </div>
           </div>
 
-          {/* Mock Mobile Header */}
-          <div className="flex items-center w-full justify-between mb-1 pb-1">
-            <div className="p-1 border rounded-full border-gray-200">
-              <ArrowLeft className="h-4 w-4" />
-            </div>
-            <span className="font-semibold text-lg" style={{ color: "#393E46", fontFamily: "Cormorant SC" }}>
-              APP
-            </span>
-            <div className="p-1 border rounded-full border-gray-200">
-              <PiShare className="h-4 w-4" />
-            </div>
-          </div>
-
-          {/* Product Image */}
-          <div className="relative w-full max-w-[120px] aspect-square mb-4 rounded-[6px] overflow-hidden bg-gray-100 mx-auto">
-            <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-              <span className="text-xs text-blue-800 font-medium">Product</span>
-            </div>
-          </div>
-
-          {/* Product Title */}
-          <div className="flex items-center justify-between w-full mb-3" style={{ gap: "6px" }}>
-            <h2 className="text-sm font-bold w-[90%] text-[#393E46] break-words">
-              {mockProduct.name}
-            </h2>
-            <Heart className="h-4 w-4 font-bold flex-shrink-0" />
-          </div>
-
-          {/* Scores */}
-          <div className="grid grid-cols-3 mb-3" style={{ gap: "6px" }}>
-            {[mockProduct.overallScore, { name: 'Your Skin', value: mockProduct.skinType }, mockProduct.compatibility].map((item, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-[6px] shadow-sm p-2 flex flex-col items-start gap-0"
-              >
-                <div className="flex items-center justify-between w-full mb-1">
-                  <img src="/internal/shield.png" alt="icon" className="w-4 h-4 object-contain" />
+          {/* Card matching internal exactly */}
+          <div className="border-none max-w-sm mx-auto" style={{
+            background: "linear-gradient(to top, #e3ede4 0%, #FFFFFF 100%)",
+            fontFamily: "Inter, sans-serif",
+          }}>
+            <div className="pt-1 px-6 pb-6 flex flex-col items-center">
+              {/* Mock Mobile Header */}
+              <div className="flex items-center w-full justify-between mb-1 pb-1">
+                <div className="p-2 border rounded-full border-gray-200">
+                  <ArrowLeft className="h-5 w-5" />
                 </div>
-                <p className="text-xs font-medium mb-0.5 break-words w-full">
-                  {item.name}
-                </p>
-                <div style={{ color: typeof item.value === 'number' ? getDotColor(item.value) : '#393E46' }} className="text-xs">
-                  <p className="font-semibold text-xs">
-                    {item.value}
-                    {typeof item.value === "number" && (
-                      <span className="text-xs"> · {getScoreDescription(item.value)}</span>
-                    )}
-                  </p>
+                <span className="font-semibold text-2xl" style={{ color: "#393E46", fontFamily: "Cormorant SC" }}>
+                  APP
+                </span>
+                <div className="p-2 border rounded-full border-gray-200">
+                  <PiShare className="h-5 w-5" />
                 </div>
               </div>
-            ))}
-          </div>
 
-          {/* Key Ingredients */}
-          <div className="mb-3 flex flex-col w-full" style={{ gap: "6px" }}>
-            <h3 className="font-semibold text-sm mb-2 text-[#393E46]">Ingredients</h3>
-            {mockProduct.ingredients.map((ingredient, idx) => (
-              <div className="rounded-[6px] p-2 bg-[#FFFFFF]" key={idx}>
-                <p className="font-bold text-xs text-[#393E46]">{ingredient.name}</p>
-                <div className="flex items-center space-x-1 mt-0.5">
+              {/* Product Image */}
+              <div className="relative w-full max-w-[180px] aspect-square mb-6 rounded-[8px] overflow-hidden bg-gray-100 mx-auto">
+                <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                  <span className="text-sm text-blue-800 font-medium">Product</span>
+                </div>
+              </div>
+
+              {/* Product Title */}
+              <div className="flex items-center justify-between w-full mb-4" style={{ gap: "8px" }}>
+                <h2 className="text-xl font-bold w-[90%] text-[#393E46] break-words">
+                  {mockProduct.name}
+                </h2>
+                <Heart className="h-6 w-6 font-bold flex-shrink-0" />
+              </div>
+
+              {/* Scores */}
+              <div className="grid grid-cols-3 mb-4" style={{ gap: "8px" }}>
+                {[
+                  { ...mockProduct.overallScore, icon: '/internal/shield.png', dotColor: getDotColor(mockProduct.overallScore.value), description: getScoreDescription(mockProduct.overallScore.value) },
+                  { name: 'Your Skin', value: mockProduct.skinType, icon: '/internal/skin-type.png', dotColor: '#393E46', description: null },
+                  { ...mockProduct.compatibility, icon: '/internal/compability.png', dotColor: getDotColor(mockProduct.compatibility.value), description: getScoreDescription(mockProduct.compatibility.value) }
+                ].map((item, index) => (
                   <div
-                    className="w-[8px] h-[8px] rounded-full"
-                    style={{ backgroundColor: "#2B641A" }}
-                  ></div>
-                  <span className="text-xs text-gray-600">{ingredient.description}</span>
+                    key={index}
+                    className="bg-white rounded-[8px] shadow-sm p-3 flex flex-col items-start gap-0"
+                  >
+                    <div className="flex items-center justify-between w-full mb-2">
+                      <img src={item.icon} alt="icon" className="w-6 h-6 object-contain" />
+                    </div>
+                    <p className="text-xs font-medium mb-1 break-words w-full">
+                      {item.name}
+                    </p>
+                    <div style={{ color: item.dotColor }} className="text-xs">
+                      <p className="font-semibold text-sm">
+                        {item.value}
+                        {typeof item.value === "number" && item.description ? (
+                          <span className="text-xs"> · {item.description}</span>
+                        ) : null}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Key Ingredients */}
+              <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
+                <h3 className="font-semibold text-lg mb-3 text-[#393E46]">Ingredients</h3>
+                {mockProduct.ingredients.map((ingredient, idx) => (
+                  <div className="rounded-[8px] p-3 bg-[#FFFFFF]" key={idx}>
+                    <p className="font-bold text-[#393E46]">{ingredient.name}</p>
+                    <div className="flex items-center space-x-1 mt-1">
+                      <div
+                        className="w-[10px] h-[10px] rounded-full"
+                        style={{ backgroundColor: "#2B641A" }}
+                      ></div>
+                      <span className="text-xs text-gray-600">{ingredient.description}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Key Takeaway */}
+              <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
+                <h3 className="font-semibold text-lg mb-3 text-[#393E46]">Key Takeaway</h3>
+                <div className="">
+                  {mockProduct.keyTakeaway.map((point, idx) => (
+                    <p key={idx} className="text-sm text-gray-700 rounded-[8px] p-2 bg-[#FFFFFF] leading-relaxed mb-2">
+                      {point}
+                    </p>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Key Takeaway */}
-          <div className="mb-2 flex flex-col w-full" style={{ gap: "6px" }}>
-            <h3 className="font-semibold text-sm mb-2 text-[#393E46]">Key Takeaway</h3>
-            <div className="">
-              {mockProduct.keyTakeaway.map((point, idx) => (
-                <p key={idx} className="text-xs text-gray-700 rounded-[6px] p-2 bg-[#FFFFFF] leading-relaxed mb-1">
-                  {point}
-                </p>
-              ))}
             </div>
           </div>
         </div>
