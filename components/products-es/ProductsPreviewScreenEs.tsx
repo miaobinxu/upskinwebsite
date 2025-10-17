@@ -5,7 +5,7 @@ import { ChevronRight, Download, ArrowLeft, Heart, Share2 } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useRef, useState } from 'react'
 import { Poppins } from 'next/font/google';
-import { useProductsStore } from '@/lib/store/productsStore'
+import { useProductsStoreEs } from '@/lib/store/productsStoreEs'
 
 import { PiShare } from "react-icons/pi";
 import { DownloadButton } from './DownloadButton'
@@ -53,15 +53,15 @@ function addArrowSuffix(text: string): string {
 }
 
 /* ---------------------------- 🔥 MAIN COMPONENT --------------------------- */
-export default function ProductsPreviewScreen({ images }: ProductsPreviewScreenProps) {
-  const data = useProductsStore(state => state.data);
+export default function ProductsPreviewScreenEs({ images }: ProductsPreviewScreenProps) {
+  const data = useProductsStoreEs(state => state.data);
   const title = data?.['Title'] ?? ''
   const productAnalysis = data?.['Product Analysis']
 
   const contents = extractContentFromFlat(data ?? {});
 
   if (!images || images.length === 0) {
-    return <div className="text-center text-gray-500">No preview images available.</div>
+    return <div className="text-center text-gray-500">No hay imágenes de vista previa disponibles.</div>
   }
 
   // Get Product 4 image (index 4, which is the 5th image) for the mockup product display
@@ -303,19 +303,19 @@ function ContentPage({ image, content, downloadIndex }: ContentPageProps) {
 function ProductAnalysisPage({ image, title, downloadIndex, productImage, productAnalysis }: ProductAnalysisPageProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  // Use AI-analyzed data if available, otherwise use mock data
+  // Use AI-analyzed data if available, otherwise use mock data (Spanish version)
   const mockProduct = {
-    name: "Lamer Cream",
+    name: "Crema Lamer",
     overallScore: 94,
-    skinType: "Oily",
+    skinType: "Grasa",
     compatibility: 94,
     ingredients: [
-      { name: "Sea Kelp", description: "Hydrate your skin" },
-      { name: "Lime Tea Extract", description: "Soothe redness" }
+      { name: "Alga Marina", description: "Hidrata tu piel" },
+      { name: "Extracto de Té de Lima", description: "Calma el enrojecimiento" }
     ],
     keyTakeaway: [
-      "Lamer is highly compatible with oily skin, providing essential hydration without clogging pores.",
-      "Sea Kelp is a key ingredient that helps maintain moisture balance, making it ideal for oily skin types."
+      "Lamer es altamente compatible con piel grasa, proporcionando hidratación esencial sin tapar los poros.",
+      "El Alga Marina es un ingrediente clave que ayuda a mantener el equilibrio de humedad, ideal para tipos de piel grasa."
     ]
   }
 
@@ -323,9 +323,9 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
   const productData = productAnalysis || mockProduct
   const displayProduct = {
     name: productData.name || mockProduct.name,
-    overallScore: { name: "Overall Score", value: productData.overallScore || mockProduct.overallScore },
+    overallScore: { name: "Puntuación General", value: productData.overallScore || mockProduct.overallScore },
     skinType: productData.skinType || mockProduct.skinType,
-    compatibility: { name: "Compatibility", value: productData.compatibility || mockProduct.compatibility },
+    compatibility: { name: "Compatibilidad", value: productData.compatibility || mockProduct.compatibility },
     ingredients: productData.ingredients || mockProduct.ingredients,
     keyTakeaway: productData.keyTakeaway || mockProduct.keyTakeaway
   }
@@ -338,10 +338,10 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
   };
 
   const getScoreDescription = (value: number) => {
-    if (value >= 90) return "Excellent";
-    if (value >= 60) return "Good";
-    if (value >= 30) return "Poor";
-    return "Bad";
+    if (value >= 90) return "Excelente";
+    if (value >= 60) return "Bueno";
+    if (value >= 30) return "Regular";
+    return "Malo";
   };
 
   return (
@@ -369,7 +369,7 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
           <div className="absolute scale-[1.05] flex left-[80px] -top-32 flex-col z-40 items-center space-y-2 text-center text-[11px] text-white">
             <div className='border border-green-600 rounded-full ring-offset-4 ring-green-600 text-green-600 p-2'>
               <div className="bg-green-100 text-green-600 py-1 px-10 flex items-center justify-center text-center w-80 rounded-full text-[24px] font-semibold">
-                Download "UpSkin" App
+                Descarga la App "UpSkin"
               </div>
             </div>
           </div>
@@ -377,7 +377,7 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
           {/* Analyze products CTA - moved down and right */}
           <div className="absolute scale-[1.05] flex left-[280px] top-10 flex-col z-40 items-end space-y-2 text-right text-[11px] text-white">
             <div className="bg-green-100 text-green-600 relative p-3 mr-1 flex items-center border-[3px] border-green-600 justify-center text-start w-64 rounded-2xl text-[18px] font-semibold">
-              Find what works for YOUR skin!
+              ¡Descubre qué funciona para TU piel!
               <img src={'/charmchat/crown.png'} className='w-24 h-12 rotate-[12deg] scale-50 absolute -top-8 -right-9' />
             </div>
           </div>
@@ -412,7 +412,7 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                    <span className="text-sm text-blue-800 font-medium">Product</span>
+                    <span className="text-sm text-blue-800 font-medium">Producto</span>
                   </div>
                 )}
               </div>
@@ -429,7 +429,7 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
               <div className="grid grid-cols-3 mb-4 w-full" style={{ gap: "10px" }}>
                 {[
                   { ...displayProduct.overallScore, icon: '/internal/shield.png', dotColor: getDotColor(displayProduct.overallScore.value), description: getScoreDescription(displayProduct.overallScore.value) },
-                  { name: 'Your Skin', value: displayProduct.skinType, icon: '/internal/skin-type.png', dotColor: '#393E46', description: null },
+                  { name: 'Tu Piel', value: displayProduct.skinType, icon: '/internal/skin-type.png', dotColor: '#393E46', description: null },
                   { ...displayProduct.compatibility, icon: '/internal/compability.png', dotColor: getDotColor(displayProduct.compatibility.value), description: getScoreDescription(displayProduct.compatibility.value) }
                 ].map((item, index) => (
                   <div
@@ -456,7 +456,7 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
 
               {/* Key Ingredients */}
               <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
-                <h3 className="font-semibold text-lg mb-3 text-[#393E46]">Ingredients</h3>
+                <h3 className="font-semibold text-lg mb-3 text-[#393E46]">Ingredientes</h3>
                 {displayProduct.ingredients.map((ingredient: any, idx: number) => (
                   <div className="rounded-[8px] p-3 bg-[#FFFFFF]" key={idx}>
                     <p className="font-bold text-[#393E46]">{ingredient.name}</p>
@@ -473,7 +473,7 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
 
               {/* Key Takeaway */}
               <div className="mb-4 flex flex-col w-full" style={{ gap: "8px" }}>
-                <h3 className="font-semibold text-lg mb-3 text-[#393E46]">Key Takeaway</h3>
+                <h3 className="font-semibold text-lg mb-3 text-[#393E46]">Conclusión Clave</h3>
                 <div className="">
                   {displayProduct.keyTakeaway.map((point: string, idx: number) => (
                     <p key={idx} className="text-sm text-gray-700 rounded-[8px] p-3 bg-[#FFFFFF] leading-relaxed mb-2">
@@ -489,3 +489,4 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
     </div>
   )
 }
+

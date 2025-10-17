@@ -19,7 +19,7 @@ interface ProductsState {
   clearData: () => void
 }
 
-export const useProductsStore = create<ProductsState>()(
+export const useProductsStoreEs = create<ProductsState>()(
   persist(
     (set) => ({
       data: null,
@@ -27,7 +27,8 @@ export const useProductsStore = create<ProductsState>()(
       clearData: () => set({ data: null }),
     }),
     {
-      name: 'products',
+      name: 'products-es',
     }
   )
-) 
+)
+

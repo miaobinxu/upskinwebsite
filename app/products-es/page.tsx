@@ -2,17 +2,17 @@
 
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
-import ProductsUploadScreen from '@/components/products/ProductsUploadScreen'
-import ProductsPreviewScreen from '@/components/products/ProductsPreviewScreen'
-import { determineProductStructure, generateProductTextOverlays, analyzeProductForMockup } from '@/lib/generate-products'
-import { useProductsStore } from '@/lib/store/productsStore'
+import ProductsUploadScreenEs from '@/components/products-es/ProductsUploadScreenEs'
+import ProductsPreviewScreenEs from '@/components/products-es/ProductsPreviewScreenEs'
+import { determineProductStructure, generateProductTextOverlays, analyzeProductForMockup } from '@/lib/generate-products-es'
+import { useProductsStoreEs } from '@/lib/store/productsStoreEs'
 
-export default function ProductsPage() {
+export default function ProductsEsPage() {
     const [currentScreen, setCurrentScreen] = useState<'upload' | 'preview'>('upload')
     const [loading, setLoading] = useState(false)
     const [previewImages, setPreviewImages] = useState<string[]>([])
     const { toast } = useToast()
-    const setData = useProductsStore((s) => s.setData)
+    const setData = useProductsStoreEs((s) => s.setData)
 
     const handleGenerate = async () => {
         setLoading(true)
@@ -24,8 +24,8 @@ export default function ProductsPage() {
 
             if (!topicRes.ok || !topicTitle) {
                 toast({
-                    title: 'Please try again',
-                    description: 'Failed to fetch topic',
+                    title: 'Por favor intenta de nuevo',
+                    description: 'Error al obtener el tema',
                     variant: 'destructive',
                 })
                 return
@@ -38,8 +38,8 @@ export default function ProductsPage() {
 
             if (!firstImageRes.ok || !firstImage) {
                 toast({
-                    title: 'Please try again',
-                    description: 'Failed to fetch first page image',
+                    title: 'Por favor intenta de nuevo',
+                    description: 'Error al obtener la imagen de primera página',
                     variant: 'destructive',
                 })
                 return
@@ -49,7 +49,7 @@ export default function ProductsPage() {
             const { structure, error: structureError } = await determineProductStructure(topicTitle)
 
             if (structureError || !structure || structure.length !== 4) {
-                throw new Error(structureError || 'Failed to determine product structure')
+                throw new Error(structureError || 'Error al determinar la estructura del producto')
             }
 
             // Step 4: Fetch product images based on structure
@@ -63,14 +63,14 @@ export default function ProductsPage() {
 
             if (!productImagesRes.ok || !Array.isArray(productImages) || productImages.length !== 4) {
                 toast({
-                    title: 'Please try again',
-                    description: 'Failed to fetch product images',
+                    title: 'Por favor intenta de nuevo',
+                    description: 'Error al obtener imágenes de productos',
                     variant: 'destructive',
                 })
                 return
             }
 
-            // Step 5: Layer 2 AI - Generate text overlays with vision
+            // Step 5: Layer 2 AI - Generate text overlays with vision (Spanish)
             const { data: response, error } = await generateProductTextOverlays({
                 topic: topicTitle,
                 productImages,
@@ -78,7 +78,7 @@ export default function ProductsPage() {
 
             const rawContent = response?.choices?.[0]?.message?.content?.trim()
             if (error || !rawContent) {
-                throw new Error(error || 'The AI did not return any content')
+                throw new Error(error || 'La IA no devolvió ningún contenido')
             }
 
             const jsonString = rawContent.replace(/^```json/, '').replace(/```$/, '').trim()
@@ -87,10 +87,13 @@ export default function ProductsPage() {
             try {
                 parsedData = JSON.parse(jsonString)
             } catch (err) {
-                throw new Error('Failed to parse AI response')
+                throw new Error('Error al analizar la respuesta de la IA')
             }
 
-            // Step 5.5: Layer 3 AI - Analyze Product 4 for mockup display
+            // Use Spanish title from AI response, fallback to original topic if not provided
+            const spanishTitle = parsedData['Title'] || topicTitle
+
+            // Step 5.5: Layer 3 AI - Analyze Product 4 for mockup display (Spanish)
             const { data: analysisResponse, error: analysisError } = await analyzeProductForMockup({
                 topic: topicTitle,
                 productImage: productImages[3], // Product 4 (last product)
@@ -98,7 +101,7 @@ export default function ProductsPage() {
 
             const analysisRawContent = analysisResponse?.choices?.[0]?.message?.content?.trim()
             if (analysisError || !analysisRawContent) {
-                console.warn('⚠️ Product analysis failed, will use mock data')
+                console.warn('⚠️ El análisis del producto falló, se usarán datos de prueba')
             }
 
             let productAnalysisData: any = null
@@ -106,9 +109,9 @@ export default function ProductsPage() {
                 try {
                     const analysisJsonString = analysisRawContent.replace(/^```json/, '').replace(/```$/, '').trim()
                     productAnalysisData = JSON.parse(analysisJsonString)
-                    console.log('✅ Product analysis data:', productAnalysisData)
+                    console.log('✅ Datos de análisis del producto:', productAnalysisData)
                 } catch (err) {
-                    console.warn('⚠️ Failed to parse product analysis, will use mock data')
+                    console.warn('⚠️ Error al analizar el análisis del producto, se usarán datos de prueba')
                 }
             }
 
@@ -123,9 +126,9 @@ export default function ProductsPage() {
                 firstImage, // Image 6: Final analysis page (same as first)
             ]
 
-            // Prepare data for store
+            // Prepare data for store (use Spanish title from AI)
             const finalData: any = {
-                Title: topicTitle,
+                Title: spanishTitle,
                 'Product 1': parsedData['Product 1'] || '',
                 'Product 2': parsedData['Product 2'] || '',
                 'Product 3': parsedData['Product 3'] || '',
@@ -133,19 +136,19 @@ export default function ProductsPage() {
                 'Product Analysis': productAnalysisData, // Add product analysis data
             }
 
-            console.log('📦 Final parsed data:', parsedData)
-            console.log('📦 Product analysis data:', productAnalysisData)
-            console.log('📦 Final data to store:', finalData)
+            console.log('📦 Datos analizados finales:', parsedData)
+            console.log('📦 Datos de análisis del producto:', productAnalysisData)
+            console.log('📦 Datos finales para almacenar:', finalData)
 
             setPreviewImages(finalImages)
             setData(finalData)
             setCurrentScreen('preview')
 
         } catch (error: any) {
-            console.error('🚨 Unexpected error:', error)
+            console.error('🚨 Error inesperado:', error)
             toast({
-                title: 'Generation failed',
-                description: error.message || 'Something went wrong. Please try again.',
+                title: 'Error de generación',
+                description: error.message || 'Algo salió mal. Por favor intenta de nuevo.',
                 variant: 'destructive',
             })
         } finally {
@@ -156,10 +159,11 @@ export default function ProductsPage() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
             {currentScreen === 'upload' ? (
-                <ProductsUploadScreen onGenerate={handleGenerate} loading={loading} />
+                <ProductsUploadScreenEs onGenerate={handleGenerate} loading={loading} />
             ) : (
-                <ProductsPreviewScreen images={previewImages} />
+                <ProductsPreviewScreenEs images={previewImages} />
             )}
         </div>
     )
-} 
+}
+
