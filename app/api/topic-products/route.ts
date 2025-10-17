@@ -2,9 +2,9 @@ import { supabase } from "@/lib/supabase/server";
 
 export async function GET(req: Request) {
   try {
-    // Fetch current index from cursor
+    // Fetch current index from topic_upskin_products_cursor
     const { data: cursorData, error: cursorError } = await supabase
-      .from('topic_cursor')
+      .from('topic_upskin_products_cursor')
       .select('current_index')
       .eq('id', 1)
       .single();
@@ -13,9 +13,9 @@ export async function GET(req: Request) {
 
     let currentIndex = cursorData.current_index;
 
-    // Try to fetch the next topic
+    // Try to fetch the next topic from topics_upskin_products
     let { data: nextTopic, error: topicError } = await supabase
-      .from('topics')
+      .from('topics_upskin_products')
       .select('*')
       .gt('order_index', currentIndex)
       .order('order_index', { ascending: true })
@@ -26,23 +26,23 @@ export async function GET(req: Request) {
     if (topicError || !nextTopic) {
       // Reset cursor to 0
       await supabase
-        .from('topic_cursor')
+        .from('topic_upskin_products_cursor')
         .update({ current_index: 0, updated_at: new Date().toISOString() })
         .eq('id', 1);
 
       // Fetch first topic again after reset
       const { data: resetTopic, error: resetError } = await supabase
-        .from('topics')
+        .from('topics_upskin_products')
         .select('*')
         .order('order_index', { ascending: true })
         .limit(1)
         .single();
 
-      if (resetError || !resetTopic) throw resetError || new Error('No topics found after reset.');
+      if (resetError || !resetTopic) throw resetError || new Error('No topics found in topics_upskin_products after reset.');
 
       // Update cursor with new index
       await supabase
-        .from('topic_cursor')
+        .from('topic_upskin_products_cursor')
         .update({ current_index: resetTopic.order_index, updated_at: new Date().toISOString() })
         .eq('id', 1);
 
@@ -51,7 +51,7 @@ export async function GET(req: Request) {
 
     // Normal flow, topic found
     await supabase
-      .from('topic_cursor')
+      .from('topic_upskin_products_cursor')
       .update({ current_index: nextTopic.order_index, updated_at: new Date().toISOString() })
       .eq('id', 1);
 

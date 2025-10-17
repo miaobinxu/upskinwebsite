@@ -2,13 +2,20 @@ import { supabase } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 const BUCKET_NAME = process.env.BUCKET_NAME || 'files';
-const FOLDER_NAME = process.env.FOLDER_NAME || 'charmtool2';
 const EXCLUDE_FILE = process.env.EXCLUDE_FILE || '__keep.txt';
-const RANDOM_LIMIT = 5;
 const EXPIRY_SECONDS = 60 * 15; // 15 minutes
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    // Parse query parameters
+    const url = new URL(req.url);
+    const folderParam = url.searchParams.get('folder');
+    const countParam = url.searchParams.get('count');
+    
+    // Determine folder and count
+    const FOLDER_NAME = folderParam || process.env.FOLDER_NAME || 'charmtool2';
+    const RANDOM_LIMIT = countParam ? parseInt(countParam, 10) : 5;
+
     // List all files in the folder
     const { data: allFiles, error } = await supabase.storage
       .from(BUCKET_NAME)
