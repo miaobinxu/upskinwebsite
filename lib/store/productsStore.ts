@@ -1,16 +1,29 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+export interface ProductAnalysis {
+  name: string
+  overallScore: number
+  skinType: string
+  compatibility: number
+  ingredients: Array<{
+    name: string
+    description: string
+  }>
+  keyTakeaway: string[]
+}
+
 export interface ProductsBase {
   Title: string
   Subtitle?: string
   "Message Prompt"?: string
   Tone?: string
   "Post description and hashtag"?: string
+  "Product Analysis"?: ProductAnalysis
 }
 
 export type ProductsData = ProductsBase & {
-  [key: string]: string
+  [key: string]: string | ProductAnalysis | undefined
 }
 
 interface ProductsState {

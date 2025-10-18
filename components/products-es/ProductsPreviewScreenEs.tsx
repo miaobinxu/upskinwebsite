@@ -5,7 +5,7 @@ import { ChevronRight, Download, ArrowLeft, Heart, Share2 } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useRef, useState } from 'react'
 import { Poppins } from 'next/font/google';
-import { useProductsStoreEs } from '@/lib/store/productsStoreEs'
+import { useProductsStoreEs, ProductAnalysisEs } from '@/lib/store/productsStoreEs'
 
 import { PiShare } from "react-icons/pi";
 import { DownloadButton } from './DownloadButton'
@@ -66,6 +66,13 @@ export default function ProductsPreviewScreenEs({ images }: ProductsPreviewScree
 
   // Get Product 4 image (index 4, which is the 5th image) for the mockup product display
   const product4Image = images.length >= 5 ? images[4] : undefined;
+
+  // Build description text from product data
+  const buildDescription = () => {
+    return 'Análisis de tu tipo de piel y productos por UpSkin.\n\n#cuidadodelapiel #belleza #productos #upskin #saluddelapiel'
+  }
+
+  const finalDescription = buildDescription()
 
   return (
     <div className='flex flex-col p-4'>
@@ -130,6 +137,13 @@ export default function ProductsPreviewScreenEs({ images }: ProductsPreviewScree
             />
           )
         })}
+      </div>
+      
+      {/* Description Section */}
+      <div className="space-y-2 flex flex-col items-center mt-6">
+        <p className="text-gray-700 text-md whitespace-pre-line max-w-2xl">
+          {finalDescription}
+        </p>
       </div>
     </div>
   )
