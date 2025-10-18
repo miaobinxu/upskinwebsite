@@ -323,7 +323,7 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
   const productData = productAnalysis || mockProduct
   const displayProduct = {
     name: productData.name || mockProduct.name,
-    overallScore: { name: "Puntuación General", value: productData.overallScore || mockProduct.overallScore },
+    overallScore: { name: "Puntaje", value: productData.overallScore || mockProduct.overallScore },
     skinType: productData.skinType || mockProduct.skinType,
     compatibility: { name: "Compatibilidad", value: productData.compatibility || mockProduct.compatibility },
     ingredients: productData.ingredients || mockProduct.ingredients,
@@ -429,7 +429,7 @@ function ProductAnalysisPage({ image, title, downloadIndex, productImage, produc
               <div className="grid grid-cols-3 mb-4 w-full" style={{ gap: "10px" }}>
                 {[
                   { ...displayProduct.overallScore, icon: '/internal/shield.png', dotColor: getDotColor(displayProduct.overallScore.value), description: getScoreDescription(displayProduct.overallScore.value) },
-                  { name: 'Tu Piel', value: displayProduct.skinType, icon: '/internal/skin-type.png', dotColor: '#393E46', description: null },
+                  { name: 'Tu Tipo de Piel', value: displayProduct.skinType, icon: '/internal/skin-type.png', dotColor: '#393E46', description: null },
                   { ...displayProduct.compatibility, icon: '/internal/compability.png', dotColor: getDotColor(displayProduct.compatibility.value), description: getScoreDescription(displayProduct.compatibility.value) }
                 ].map((item, index) => (
                   <div
