@@ -23,7 +23,14 @@ export interface ProductsBaseEs {
 }
 
 export type ProductsDataEs = ProductsBaseEs & {
-  [key: string]: string | ProductAnalysisEs | undefined
+  [key: string]: string | ProductAnalysisEs | ProductContentEs | undefined
+}
+
+export interface ProductContentEs {
+  name?: string
+  emoji?: string
+  score?: string
+  points?: string[]
 }
 
 interface ProductsStateEs {

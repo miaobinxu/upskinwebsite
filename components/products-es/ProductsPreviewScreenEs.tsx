@@ -27,11 +27,12 @@ function extractContentFromFlat(data: Record<string, any>) {
   while (data[`Product ${i}`]) {
     const product = data[`Product ${i}`]
     console.log(`🔍 Product ${i}:`, product, 'Type:', typeof product)
-    // Support both old format (string) and new format (object with emoji, score, points)
+    // Support both old format (string) and new format (object with name, emoji, score, points)
     if (typeof product === 'string') {
       contents.push({ text: product })
     } else {
       contents.push({
+        name: product.name || '',
         emoji: product.emoji || '✅',
         score: product.score || '',
         points: product.points || []
@@ -69,7 +70,25 @@ export default function ProductsPreviewScreenEs({ images }: ProductsPreviewScree
 
   // Build description text from product data
   const buildDescription = () => {
-    return 'Análisis de tu tipo de piel y productos por UpSkin.\n\n#cuidadodelapiel #belleza #productos #upskin #saluddelapiel'
+    let description = 'Todos los análisis por UpSkin.\n'
+    
+    // Add each product with name, score, and first bullet point
+    contents.forEach((content, index) => {
+      const productNum = index + 1
+      
+      if (typeof content === 'object' && 'emoji' in content && 'score' in content && 'points' in content) {
+        const productName = (content as any).name || `Producto ${productNum}`
+        const firstPoint = content.points?.[0] || ''
+        description += `${productName} - ${content.score}\n`
+        if (firstPoint) {
+          description += `- ${firstPoint}\n`
+        }
+      }
+    })
+    
+    description += '#skincare #cuidadodelapiel #piel #pielsana #cuidadofacial'
+    
+    return description
   }
 
   const finalDescription = buildDescription()

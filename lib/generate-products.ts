@@ -113,10 +113,12 @@ CRITICAL: Analyze the topic carefully to understand the narrative:
 The ratings and emojis MUST align with the topic's narrative. Don't randomly give high scores if the topic is negative!
 
 I will show you ${productImages.length} product images (images 2-5 of the carousel). For each product image, you need to:
-1. Identify what the product is (from the image)
+1. Identify the FULL product name (brand + product name) from the image
 2. Give a rating out of 10 that MATCHES THE TOPIC NARRATIVE (can be exaggerated like TikTok: -5/10, 1/10, 100/10, etc.)
 3. Add ✅ (for good) or ❌ (for bad) emoji - MUST match the topic's stance
 4. Write 2-3 punchy bullet points explaining why
+
+CRITICAL: Your bullet points should NOT include the product name. The product name will be displayed separately.
 
 IMPORTANT: Focus your bullet points on:
 - Specific ingredients and their effects
@@ -135,6 +137,7 @@ Format your response as JSON with this exact structure:
 Example for NEGATIVE topic ("This broke me out"):
 {
   "Product 1": {
+    "name": "La Mer Treatment Lotion",
     "emoji": "❌",
     "score": "1/10",
     "points": [
@@ -144,15 +147,17 @@ Example for NEGATIVE topic ("This broke me out"):
     ]
   },
   "Product 2": {
+    "name": "Drunk Elephant C-Firma",
     "emoji": "❌",
     "score": "-5/10",
     "points": [
       "RUINS skin barrier",
-      "Increases hyperpigmentation and UV damanage",
+      "Increases hyperpigmentation and UV damage",
       "Gave me closed comedones"
     ]
   },
   "Product 3": {
+    "name": "St. Ives Apricot Scrub",
     "emoji": "❌",
     "score": "2/10",
     "points": [
@@ -162,6 +167,7 @@ Example for NEGATIVE topic ("This broke me out"):
     ]
   },
   "Product 4": {
+    "name": "The Ordinary AHA 30% + BHA 2%",
     "emoji": "❌",
     "score": "0/10",
     "points": [
@@ -174,6 +180,7 @@ Example for NEGATIVE topic ("This broke me out"):
 Example for POSITIVE topic ("Best products for..."):
 {
   "Product 1": {
+    "name": "Paula's Choice 2% BHA",
     "emoji": "✅",
     "score": "10/10",
     "points": [
@@ -182,6 +189,7 @@ Example for POSITIVE topic ("Best products for..."):
     ]
   },
   "Product 2": {
+    "name": "CeraVe Moisturizing Cream",
     "emoji": "✅",
     "score": "9/10",
     "points": [
@@ -191,14 +199,16 @@ Example for POSITIVE topic ("Best products for..."):
     ]
   },
   "Product 3": {
+    "name": "La Roche-Posay Cicaplast Baume",
     "emoji": "✅",
     "score": "100/10",
     "points": [
-      "Excellnet choice during flare-ups of sensitivity",
+      "Excellent choice during flare-ups of sensitivity",
       "Deep hydration"
     ]
   },
   "Product 4": {
+    "name": "Vanicream Gentle Facial Cleanser",
     "emoji": "✅",
     "score": "8/10",
     "points": [
