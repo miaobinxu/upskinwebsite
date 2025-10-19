@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import ProductsUploadScreenEs from '@/components/products-es/ProductsUploadScreenEs'
 import ProductsPreviewScreenEs from '@/components/products-es/ProductsPreviewScreenEs'
-import { determineProductStructure, generateProductTextOverlays, analyzeProductForMockup } from '@/lib/generate-products-es'
+import { generateProductTextOverlays, analyzeProductForMockup } from '@/lib/generate-products-es'
 import { useProductsStoreEs } from '@/lib/store/productsStoreEs'
 
 export default function ProductsEsPage() {
@@ -45,32 +45,31 @@ export default function ProductsEsPage() {
                 return
             }
 
-            // Step 3: Layer 1 AI - Determine structure
-            const { structure, error: structureError } = await determineProductStructure(topicTitle)
-
-            if (structureError || !structure || structure.length !== 4) {
-                throw new Error(structureError || 'Error al determinar la estructura del producto')
-            }
-
-            // Step 4: Fetch product images based on structure
+            // Step 3: Selección inteligente de productos basada en el tema
+            // La API analizará el tema y seleccionará productos apropiados usando coincidencia de etiquetas
             const productImagesRes = await fetch('/api/get-product-images', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ structure }),
+                body: JSON.stringify({ topic: topicTitle }),
             })
             const productImagesJson = await productImagesRes.json()
             const productImages = productImagesJson?.images
 
-            if (!productImagesRes.ok || !Array.isArray(productImages) || productImages.length !== 4) {
+            if (!productImagesRes.ok || !Array.isArray(productImages) || productImages.length === 0) {
                 toast({
                     title: 'Por favor intenta de nuevo',
-                    description: 'Error al obtener imágenes de productos',
+                    description: productImagesJson?.error || 'Error al obtener imágenes de productos',
                     variant: 'destructive',
                 })
                 return
             }
 
-            // Step 5: Layer 2 AI - Generate text overlays with vision (Spanish)
+            console.log(`✅ Seleccionados ${productImages.length} productos para: "${topicTitle}"`)
+            productImages.forEach((img: any, i: number) => {
+                console.log(`   ${i + 1}. ${img.name}`)
+            })
+
+            // Step 4: Generar superposiciones de texto con visión (AI analiza imágenes de productos)
             const { data: response, error } = await generateProductTextOverlays({
                 topic: topicTitle,
                 productImages,
@@ -93,10 +92,11 @@ export default function ProductsEsPage() {
             // Use Spanish title from AI response, fallback to original topic if not provided
             const spanishTitle = parsedData['Title'] || topicTitle
 
-            // Step 5.5: Layer 3 AI - Analyze Product 4 for mockup display (Spanish)
+            // Step 5: Analizar el último producto para visualización detallada en mockup
+            const lastProductIndex = productImages.length - 1
             const { data: analysisResponse, error: analysisError } = await analyzeProductForMockup({
                 topic: topicTitle,
-                productImage: productImages[3], // Product 4 (last product)
+                productImage: productImages[lastProductIndex], // Último producto para página de análisis
             })
 
             const analysisRawContent = analysisResponse?.choices?.[0]?.message?.content?.trim()
@@ -115,26 +115,26 @@ export default function ProductsEsPage() {
                 }
             }
 
-            // Step 6: Construct final image array
-            // [firstImage, productImage1, productImage2, productImage3, productImage4, firstImage (last)]
+            // Step 6: Construir array final de imágenes
+            // [firstImage, ...productImages, firstImage (última para análisis)]
             const finalImages = [
-                firstImage, // Image 1: Title page
-                productImages[0].url, // Image 2: Product 1
-                productImages[1].url, // Image 3: Product 2
-                productImages[2].url, // Image 4: Product 3
-                productImages[3].url, // Image 5: Product 4
-                firstImage, // Image 6: Final analysis page (same as first)
+                firstImage, // Imagen 1: Página de título
+                ...productImages.map((img: any) => img.url), // Imágenes de productos
+                firstImage, // Última imagen: Página de análisis final
             ]
 
-            // Prepare data for store (use Spanish title from AI)
+            // Preparar datos para el store (dinámicamente basado en el número de productos)
             const finalData: any = {
-                Title: spanishTitle,
-                'Product 1': parsedData['Product 1'] || '',
-                'Product 2': parsedData['Product 2'] || '',
-                'Product 3': parsedData['Product 3'] || '',
-                'Product 4': parsedData['Product 4'] || '',
-                'Product Analysis': productAnalysisData, // Add product analysis data
+                Title: spanishTitle, // Usar título en español de la IA
+                'Product Analysis': productAnalysisData, // Análisis de producto para última página
             }
+
+            // Agregar todos los productos a los datos
+            Object.keys(parsedData).forEach((key) => {
+                if (key !== 'Title') { // Skip Title as we already have it
+                    finalData[key] = parsedData[key]
+                }
+            })
 
             console.log('📦 Datos analizados finales:', parsedData)
             console.log('📦 Datos de análisis del producto:', productAnalysisData)

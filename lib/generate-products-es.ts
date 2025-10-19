@@ -23,76 +23,15 @@ interface ProductAnalysisResponse {
   error: string | null
 }
 
-/* ------------------------ LAYER 1: DETERMINE STRUCTURE ------------------------ */
+/* ------------------------ LAYER 1: DEPRECATED ------------------------ */
+/**
+ * @deprecated Esta función ya no se utiliza. La selección de productos ahora se maneja
+ * mediante el endpoint /api/get-product-images que usa coincidencia de etiquetas multidimensional.
+ * El nuevo sistema soporta 4 dimensiones: tipo de producto, beneficio, tipo de piel y rango de precio.
+ */
 export async function determineProductStructure(topic: string): Promise<{ structure: string[], error: string | null }> {
-  const prompt = `Eres un experto en comparaciones de productos para el cuidado de la piel. Basándote en el siguiente tema, determina la estructura de un carrusel de comparación de productos.
-
-Tema: "${topic}"
-
-Tu tarea es determinar qué 4 productos deberían destacarse (imágenes 2-5 del carrusel). Cada producto debe ser "luxury" (caro/alta gama) o "affordable" (económico/asequible).
-
-Analiza el tema y decide:
-- Si se trata de comparar rangos de precios, alterna entre luxury y affordable
-- Si se trata de preocupaciones específicas, elige productos que demuestren mejor el punto
-- Considera el flujo narrativo y qué tiene sentido para la comparación
-
-Responde SOLO con un array JSON de 4 elementos, cada uno siendo "luxury" o "affordable".
-
-Ejemplo 1 - Tema: "Mi rutina de skincare de $5000 vs la rutina de $50 de mi compañero de cuarto"
-Respuesta: ["luxury", "affordable", "luxury", "affordable"]
-
-Ejemplo 2 - Tema: "Alternativas económicas para skincare de lujo"
-Respuesta: ["luxury", "affordable", "luxury", "affordable"]
-
-Ejemplo 3 - Tema: "Gasté $5K en skincare antes de darme cuenta de que ESTO me causaba brotes"
-Respuesta: ["luxury", "luxury", "luxury", "luxury"]
-
-Ahora analiza este tema y responde con el array de estructura:
-Tema: "${topic}"
-
-Respuesta (solo array JSON):`
-
-  const messages = [
-    {
-      role: "user",
-      content: [{ type: "text", text: prompt }],
-    },
-  ]
-
-  try {
-    const res = await fetch(SUPABASE_FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-      },
-      body: JSON.stringify({ messages }),
-    })
-
-    if (!res.ok) {
-      const error = await res.text()
-      return { structure: [], error }
-    }
-
-    const data = await res.json()
-    const rawContent = data?.choices?.[0]?.message?.content?.trim()
-    
-    if (!rawContent) {
-      return { structure: [], error: 'No se recibió contenido de la IA' }
-    }
-
-    // Parse the JSON array
-    const jsonString = rawContent.replace(/^```json/, '').replace(/```$/, '').trim()
-    const structure = JSON.parse(jsonString)
-
-    if (!Array.isArray(structure) || structure.length !== 4) {
-      return { structure: [], error: 'Formato de estructura inválido - se esperaban 4 elementos' }
-    }
-
-    return { structure, error: null }
-  } catch (error) {
-    return { structure: [], error: String(error) }
-  }
+  console.warn('⚠️  determineProductStructure está obsoleto. Use /api/get-product-images directamente.')
+  return { structure: [], error: 'Función obsoleta - use /api/get-product-images' }
 }
 
 /* ------------------------ LAYER 2: GENERATE TEXT OVERLAYS ------------------------ */

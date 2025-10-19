@@ -5,7 +5,7 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 interface GenerateProductsCarouselPayload {
   topic: string
-  productImages: { url: string; name: string; type: string }[]
+  productImages: { url: string; name: string; type: string; sentiment?: 'positive' | 'negative' }[]
 }
 
 interface ProductsResponse {
@@ -23,76 +23,15 @@ interface ProductAnalysisResponse {
   error: string | null
 }
 
-/* ------------------------ LAYER 1: DETERMINE STRUCTURE ------------------------ */
+/* ------------------------ LAYER 1: DEPRECATED ------------------------ */
+/**
+ * @deprecated This function is no longer used. Product selection is now handled
+ * by the /api/get-product-images endpoint which uses multi-dimensional tag matching.
+ * The new system supports 4 dimensions: product type, benefit, skin type, and price range.
+ */
 export async function determineProductStructure(topic: string): Promise<{ structure: string[], error: string | null }> {
-  const prompt = `You are an expert in skincare product comparisons. Based on the following topic, determine the structure of a product comparison carousel.
-
-Topic: "${topic}"
-
-Your task is to determine which 4 products should be featured (images 2-5 of the carousel). Each product should be either "luxury" (expensive/high-end) or "affordable" (budget-friendly).
-
-Analyze the topic and decide:
-- If it's about comparing price points, alternate between luxury and affordable
-- If it's about specific concerns, choose products that best demonstrate the point
-- Consider the narrative flow and what makes sense for the comparison
-
-Respond with ONLY a JSON array of 4 items, each being either "luxury" or "affordable".
-
-Example 1 - Topic: "My $5000 skincare routine vs my roommate's $50 routine"
-Response: ["luxury", "affordable", "luxury", "affordable"]
-
-Example 2 - Topic: "Affordable dupes for luxury skincare"
-Response: ["luxury", "affordable", "luxury", "affordable"]
-
-Example 3 - Topic: "I spent $5K on skincare before realizing THIS was breaking me out"
-Response: ["luxury", "luxury", "luxury", "luxury"]
-
-Now analyze this topic and respond with the structure array:
-Topic: "${topic}"
-
-Response (JSON array only):`
-
-  const messages = [
-    {
-      role: "user",
-      content: [{ type: "text", text: prompt }],
-    },
-  ]
-
-  try {
-    const res = await fetch(SUPABASE_FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-      },
-      body: JSON.stringify({ messages }),
-    })
-
-    if (!res.ok) {
-      const error = await res.text()
-      return { structure: [], error }
-    }
-
-    const data = await res.json()
-    const rawContent = data?.choices?.[0]?.message?.content?.trim()
-    
-    if (!rawContent) {
-      return { structure: [], error: 'No content returned from AI' }
-    }
-
-    // Parse the JSON array
-    const jsonString = rawContent.replace(/^```json/, '').replace(/```$/, '').trim()
-    const structure = JSON.parse(jsonString)
-
-    if (!Array.isArray(structure) || structure.length !== 4) {
-      return { structure: [], error: 'Invalid structure format - expected 4 items' }
-    }
-
-    return { structure, error: null }
-  } catch (error) {
-    return { structure: [], error: String(error) }
-  }
+  console.warn('⚠️  determineProductStructure is deprecated. Use /api/get-product-images directly.')
+  return { structure: [], error: 'Function deprecated - use /api/get-product-images' }
 }
 
 /* ------------------------ LAYER 2: GENERATE TEXT OVERLAYS ------------------------ */
@@ -101,18 +40,29 @@ export async function generateProductTextOverlays({
   productImages,
 }: GenerateProductsCarouselPayload): Promise<ProductsResponse> {
   
+  // Check if products have sentiment markers
+  const hasSentiment = productImages.some(img => img.sentiment);
+  const sentimentInfo = hasSentiment 
+    ? productImages.map((img, i) => `Product ${i+1}: ${img.sentiment || 'neutral'}`).join(', ')
+    : '';
+
   // Build the prompt for text overlay generation with vision
   const prompt = `You are creating a product comparison carousel for skincare. The topic is: "${topic}"
 
 CRITICAL: Analyze the topic carefully to understand the narrative:
 - If the topic is about products that broke them out / caused issues → ALL products should be rated LOW (1-3/10) with ❌
 - If the topic is about expensive products that didn't work → Rate luxury products LOW, affordable alternatives HIGH
-- If the topic is about comparing expensive vs cheap → Mix ratings based on which actually works better
+- If the topic is rating skincare products → Mix ratings, half should be high, half should be low
 - If the topic is positive (e.g., "best products for...") → Give HIGH ratings (8+, or even 100/10, 2800/10, etc.) with ✅
+${hasSentiment ? `\n**IMPORTANT: Some products are marked with sentiment:**
+${sentimentInfo}
+- Products marked "positive" → Give HIGH ratings (8-500/10) with ✅
+- Products marked "negative" → Give LOW ratings (-1000-3/10) with ❌
+Follow these sentiment markers strictly!` : ''}
 
-The ratings and emojis MUST align with the topic's narrative. Don't randomly give high scores if the topic is negative!
+The ratings and emojis MUST align with the topic's narrative${hasSentiment ? ' and sentiment markers' : ''}. Don't randomly give high scores if the topic is negative!
 
-I will show you ${productImages.length} product images (images 2-5 of the carousel). For each product image, you need to:
+I will show you ${productImages.length} product images. For each product image, you need to:
 1. Identify the FULL product name (brand + product name) from the image
 2. Give a rating out of 10 that MATCHES THE TOPIC NARRATIVE (can be exaggerated like TikTok: -5/10, 1/10, 100/10, etc.)
 3. Add ✅ (for good) or ❌ (for bad) emoji - MUST match the topic's stance
@@ -217,6 +167,12 @@ Example for POSITIVE topic ("Best products for..."):
     ]
   }
 }
+
+**IMPORTANT:**
+- You will receive ${productImages.length} product images
+- Generate exactly ${productImages.length} product entries in your JSON response
+- Label them as "Product 1", "Product 2", "Product 3", etc. up to "Product ${productImages.length}"
+- The number of products may vary (could be 4, 5, 6, or more)
 
 Topic: "${topic}"
 
