@@ -15,7 +15,7 @@ interface ProductsResponse {
 
 interface ProductAnalysisPayload {
   topic: string
-  productImage: { url: string; name: string; type: string }
+  productImage: { url: string; name: string; type: string; sentiment?: 'positive' | 'negative' }
 }
 
 interface ProductAnalysisResponse {
@@ -228,11 +228,20 @@ export async function analyzeProductForMockup({
   productImage,
 }: ProductAnalysisPayload): Promise<ProductAnalysisResponse> {
   
+  // Use sentiment if provided, otherwise infer from topic
+  const sentimentGuidance = productImage.sentiment === 'positive'
+    ? '**CRITICAL: This product is marked as POSITIVE** → Give VERY HIGH scores (85-98 range)'
+    : productImage.sentiment === 'negative'
+    ? '**CRITICAL: This product is marked as NEGATIVE** → Give VERY LOW scores (10-30 range)'
+    : 'Infer from topic whether this should be positive or negative';
+  
   const prompt = `You are analyzing a skincare product for display in an app mockup. The carousel topic is: "${topic}"
 
+${sentimentGuidance}
+
 CRITICAL: The scores MUST be EXTREME to grab attention!
-- If the topic is NEGATIVE (breaking out, bad products) → Give VERY LOW scores (10-30 range)
-- If the topic is POSITIVE (best products, works well) → Give VERY HIGH scores (85-98 range)
+- If the topic/sentiment is NEGATIVE (breaking out, bad products, marked negative) → Give VERY LOW scores (10-30 range)
+- If the topic/sentiment is POSITIVE (best products, works well, marked positive) → Give VERY HIGH scores (85-98 range)
 
 DO NOT give medium scores (40-70). We want extreme reactions!
 

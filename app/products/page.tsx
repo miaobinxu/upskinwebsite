@@ -95,9 +95,14 @@ export default function ProductsPage() {
 
             // Step 5: Analyze last product for detailed mockup display
             const lastProductIndex = productImages.length - 1
+            const lastProduct = productImages[lastProductIndex]
+            
+            console.log(`📱 Analyzing last product for app mockup: ${lastProduct.name}`)
+            console.log(`   Sentiment: ${lastProduct.sentiment || 'not specified'}`)
+            
             const { data: analysisResponse, error: analysisError } = await analyzeProductForMockup({
                 topic: topicTitle,
-                productImage: productImages[lastProductIndex], // Last product for analysis page
+                productImage: lastProduct, // Last product for analysis page (includes sentiment)
             })
 
             const analysisRawContent = analysisResponse?.choices?.[0]?.message?.content?.trim()

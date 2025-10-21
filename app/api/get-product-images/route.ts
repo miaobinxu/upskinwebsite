@@ -19,6 +19,50 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 /**
+ * Diversified selection: picks items from different prefix groups to increase variety
+ * This ensures visual diversity by avoiding consecutive similar filenames
+ */
+function diversifiedShuffle(array: any[]): any[] {
+  if (array.length === 0) return array;
+  
+  // Group by filename prefix (first 5 chars)
+  const groups: Record<string, any[]> = {};
+  array.forEach(item => {
+    const prefix = item.image_name ? item.image_name.substring(0, 5) : item.name?.substring(0, 5) || 'other';
+    if (!groups[prefix]) groups[prefix] = [];
+    groups[prefix].push(item);
+  });
+  
+  // Shuffle each group internally
+  Object.keys(groups).forEach(prefix => {
+    groups[prefix] = shuffleArray(groups[prefix]);
+  });
+  
+  // Round-robin selection from different groups
+  const result: any[] = [];
+  const groupKeys = shuffleArray(Object.keys(groups)); // Randomize group order
+  let groupIndex = 0;
+  
+  while (result.length < array.length) {
+    const currentGroup = groupKeys[groupIndex];
+    if (groups[currentGroup].length > 0) {
+      result.push(groups[currentGroup].shift());
+    }
+    // Move to next group (round-robin)
+    groupIndex = (groupIndex + 1) % groupKeys.length;
+    
+    // Remove empty groups
+    if (groups[groupKeys[groupIndex]]?.length === 0) {
+      groupKeys.splice(groupIndex, 1);
+      if (groupKeys.length === 0) break;
+      groupIndex = groupIndex % groupKeys.length;
+    }
+  }
+  
+  return result;
+}
+
+/**
  * Product search criteria extracted from topic
  */
 interface ProductCriteria {
@@ -261,6 +305,23 @@ async function searchProductsByCriteria(
       return [];
     }
 
+    // 🔍 DEBUG: Analyze filename distribution
+    const prefixCount: Record<string, number> = {};
+    data.forEach((item: any) => {
+      const prefix = item.image_name.substring(0, 5); // e.g., "IMG_1", "IMG_8"
+      prefixCount[prefix] = (prefixCount[prefix] || 0) + 1;
+    });
+    
+    console.log(`   📦 Supabase returned ${data.length} products with prefix distribution:`);
+    Object.entries(prefixCount)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .forEach(([prefix, count]) => {
+        console.log(`      ${prefix}*: ${count} files`);
+      });
+    console.log(`   📝 First 5: ${data.slice(0, 5).map((i: any) => i.image_name).join(', ')}`);
+    console.log(`   📝 Last 5: ${data.slice(-5).map((i: any) => i.image_name).join(', ')}`);
+
     // Filter out already selected images (do this in memory after fetch)
     const filteredData = excludeImagePaths.length > 0
       ? data.filter(item => !excludeImagePaths.includes(item.image_path))
@@ -271,18 +332,15 @@ async function searchProductsByCriteria(
       return [];
     }
 
-    // Shuffle the results using Fisher-Yates for true randomness
-    const shuffledData = shuffleArray(filteredData);
+    // Shuffle with diversification to ensure variety
+    const shuffledData = diversifiedShuffle(filteredData);
 
-    console.log(`   ✅ Found ${shuffledData.length} products matching criteria (shuffled from entire database)`);
-    
-    // Show a sample of matches
-    if (shuffledData.length > 0) {
-      const sample = shuffledData.slice(0, 3);
-      sample.forEach((item: any, index: number) => {
-        console.log(`      ${index + 1}. ${item.image_name} [${item.tags.join(', ')}]`);
-      });
-    }
+    // 🔍 DEBUG: Show shuffle results with diversity
+    console.log(`   🎲 After diversified shuffle (from ${shuffledData.length} total):`);
+    console.log(`      First: ${shuffledData[0].image_name}`);
+    console.log(`      Middle: ${shuffledData[Math.floor(shuffledData.length / 2)]?.image_name}`);
+    console.log(`      Last: ${shuffledData[shuffledData.length - 1]?.image_name}`);
+    console.log(`      Indexes [0,1,2,3]: ${shuffledData.slice(0, 4).map((i: any) => i.image_name).join(', ')}`);
 
     return shuffledData;
   } catch (error) {
@@ -295,6 +353,8 @@ async function searchProductsByCriteria(
  * Fallback: get random product from folder
  */
 async function getRandomProductFromFolder(folderName: string, excludeImagePaths: string[] = []): Promise<any | null> {
+  console.log(`   📂 Fallback: Listing files from storage folder '${folderName}'...`);
+  
   const { data: allFiles, error } = await supabase.storage
     .from(BUCKET_NAME)
     .list(folderName, { limit: 2000 });
@@ -316,9 +376,30 @@ async function getRandomProductFromFolder(folderName: string, excludeImagePaths:
     return null;
   }
 
-  // Shuffle using Fisher-Yates algorithm for true randomness
-  const shuffledFiles = shuffleArray(imageFiles);
+  // 🔍 DEBUG: Analyze filename distribution from storage
+  const storagePrefixCount: Record<string, number> = {};
+  imageFiles.forEach((file: any) => {
+    const prefix = file.name.substring(0, 5); // e.g., "IMG_1", "IMG_8"
+    storagePrefixCount[prefix] = (storagePrefixCount[prefix] || 0) + 1;
+  });
+  
+  console.log(`   📦 Storage returned ${imageFiles.length} files with prefix distribution:`);
+  Object.entries(storagePrefixCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .forEach(([prefix, count]) => {
+      console.log(`      ${prefix}*: ${count} files (${Math.round(count/imageFiles.length*100)}%)`);
+    });
+  console.log(`   📝 First 3: ${imageFiles.slice(0, 3).map((f: any) => f.name).join(', ')}`);
+  console.log(`   📝 Last 3: ${imageFiles.slice(-3).map((f: any) => f.name).join(', ')}`);
+
+  // Shuffle with diversification for variety
+  const shuffledFiles = diversifiedShuffle(imageFiles);
   const randomImage = shuffledFiles[0];  // Take first from shuffled array
+  
+  console.log(`   🎲 Selected after diversified shuffle: ${randomImage.name}`);
+  console.log(`   📊 Sample of shuffled list [0,1,2,3]: ${shuffledFiles.slice(0, 4).map((f: any) => f.name).join(', ')}`);
+  
   return {
     image_path: `${folderName}/${randomImage.name}`,
     image_name: randomImage.name,
@@ -340,6 +421,7 @@ async function selectProduct(
   excludeImagePaths: string[]
 ): Promise<{ url: string; name: string; type: string; imagePath: string; sentiment?: 'positive' | 'negative' }> {
   console.log(`\n🔍 Searching for product:`, criteria);
+  console.log(`   📝 Already selected (excluded): ${excludeImagePaths.length} products`);
   
   // Try exact match first
   let matches = await searchProductsByCriteria(criteria, excludeImagePaths);
