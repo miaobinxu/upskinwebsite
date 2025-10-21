@@ -31,8 +31,8 @@ export default function ProductsEsPage() {
                 return
             }
 
-            // Step 2: Fetch first image from upskin_firstpage_products
-            const firstImageRes = await fetch('/api/get-images?folder=upskin_firstpage_products&count=1')
+            // Step 2: Fetch first image from upskin_firstpage_beauty
+            const firstImageRes = await fetch('/api/get-images?folder=upskin_firstpage_beauty&count=1')
             const firstImageJson = await firstImageRes.json()
             const firstImage = firstImageJson?.images?.[0]
 
@@ -94,9 +94,25 @@ export default function ProductsEsPage() {
 
             // Step 5: Analizar el último producto para visualización detallada en mockup
             const lastProductIndex = productImages.length - 1
+            const lastProduct = productImages[lastProductIndex]
+            
+            // Obtener la calificación del último producto de la llamada anterior para asegurar consistencia
+            const lastProductKey = `Product ${productImages.length}`
+            const lastProductRating = parsedData[lastProductKey]
+            const isPositive = lastProductRating?.emoji === '✅'
+            const previousScore = lastProductRating?.score || 'unknown'
+            
+            console.log(`📱 Analizando último producto para mockup de app: ${lastProduct.name}`)
+            console.log(`   Calificación previa: ${lastProductRating?.emoji} ${previousScore}`)
+            
             const { data: analysisResponse, error: analysisError } = await analyzeProductForMockup({
                 topic: topicTitle,
-                productImage: productImages[lastProductIndex], // Último producto para página de análisis
+                productImage: lastProduct,
+                previousRating: {
+                    emoji: lastProductRating?.emoji,
+                    score: previousScore,
+                    isPositive
+                }
             })
 
             const analysisRawContent = analysisResponse?.choices?.[0]?.message?.content?.trim()

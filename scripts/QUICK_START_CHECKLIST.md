@@ -1,150 +1,88 @@
-# ✅ Quick Start Checklist
+# ✅ Quick Start Checklist - Simplified Product Carousel System
 
-Follow these steps in order to set up the intelligent product tagging system.
+Follow these simple steps to set up the product carousel system.
 
 ---
 
 ## 📋 Pre-requisites
 
 - [ ] Supabase account with storage bucket set up
-- [ ] Azure OpenAI account with gpt-4o (vision) deployment
-- [ ] Node.js installed (for running scripts)
 - [ ] Product images ready to upload
+- [ ] Node.js installed
 
 ---
 
 ## 🚀 Setup Steps
 
-### Step 1: Database Setup (5 minutes)
+### Step 1: Database Setup (2 minutes)
 
 - [ ] Open Supabase Dashboard
 - [ ] Go to SQL Editor
-- [ ] Copy contents of `scripts/setup-product-tags-database.sql`
-- [ ] Run the SQL script
-- [ ] Verify table created: Check Tables → `product_tags` should exist
+- [ ] Create the topics table:
 
-**Test:**
 ```sql
-SELECT * FROM product_tags LIMIT 1;
+-- Topics table for product carousels
+CREATE TABLE IF NOT EXISTS topics_upskin_products (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  used BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Add some sample topics
+INSERT INTO topics_upskin_products (title) VALUES
+  ('Things I will never put on my face again after 6 years as an esthetician...'),
+  ('Rating all my products from 1/10'),
+  ('My honest opinion on VIRAL skincare products'),
+  ('Products that SAVED my sensitive skin'),
+  ('Expensive products that were worth it vs total waste of money');
 ```
-Should return empty table (or error if table doesn't exist).
 
 ---
 
-### Step 2: Environment Variables (2 minutes)
-
-- [ ] Open `.env.local` in your project root
-- [ ] Add/verify these variables:
-
-```bash
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=eyJxxx...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJxxx...
-
-# Azure OpenAI
-AZURE_OPENAI_ENDPOINT=your-resource-name
-# OR
-AZURE_OPENAI_API_BASE=https://your-resource-name.openai.azure.com
-AZURE_OPENAI_API_KEY=abc123...
-AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o
-```
-
-- [ ] Save the file
-
----
-
-### Step 3: Upload Product Images (10 minutes)
+### Step 2: Upload Product Images (10 minutes)
 
 - [ ] Go to Supabase Dashboard → Storage
-- [ ] Create/navigate to bucket: `files`
-- [ ] Create folder: `products` (or your preferred name)
+- [ ] Navigate to bucket: `files`
+- [ ] Create folder: `upskin_products` (exact name, case-sensitive)
 - [ ] Upload product images (JPG, PNG, WebP)
   - Recommended: Clear product packaging photos
   - Minimum: 10-20 products for good variety
-  - Ideal: 50+ products covering different types/prices
+  - Ideal: 50+ products for maximum variety
 
-**Naming tip:** Use descriptive names like:
+**Naming tip:** Any naming works, but descriptive names help:
 - `cerave-moisturizing-cream.jpg`
 - `the-ordinary-niacinamide.jpg`
 - `skii-facial-treatment-essence.jpg`
 
 ---
 
-### Step 4: Configure Auto-Tagging Script (2 minutes)
+### Step 3: Upload First Page Images (5 minutes)
 
-- [ ] Open `scripts/auto-tag-products.mjs`
-- [ ] Update folder name (line 72):
+- [ ] In the same `files` bucket
+- [ ] Create folder: `upskin_firstpage_beauty`
+- [ ] Upload first page/title screen images
+  - These appear as the first slide in carousels
+  - Typically beauty/skincare themed backgrounds
 
-```javascript
-const FOLDERS_TO_TAG = ['products']  // Change 'products' to your folder name
-```
+---
 
-- [ ] (Optional) Customize batch size if needed:
+### Step 4: Environment Variables (2 minutes)
 
-```javascript
-const BATCH_SIZE = 5  // Process 5 images at a time
+- [ ] Open `.env.local` in your project root
+- [ ] Verify these variables exist:
+
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJxxx...
 ```
 
 - [ ] Save the file
 
 ---
 
-### Step 5: Run Auto-Tagging (Time varies by product count)
-
-- [ ] Open terminal in project root
-- [ ] Run the tagging script:
-
-```bash
-node scripts/auto-tag-products.mjs
-```
-
-- [ ] Watch the output:
-  - ✅ See "Found X images"
-  - ✅ See "Analyzing: product-name.jpg"
-  - ✅ See "Tags: [type, benefit, skin, price]"
-  - ✅ See "Successfully tagged: X products"
-
-**Expected time:**
-- 10 products ≈ 2-3 minutes
-- 50 products ≈ 10-15 minutes
-- 100 products ≈ 20-30 minutes
-
-**Common issues:**
-- ⚠️ "Azure OpenAI API error" → Check credentials in `.env.local`
-- ⚠️ "No images found" → Check folder name matches
-- ⚠️ "Failed to create signed URL" → Check Supabase credentials
-
----
-
-### Step 6: Verify Tags in Database (1 minute)
-
-- [ ] Go to Supabase Dashboard → SQL Editor
-- [ ] Run this query:
-
-```sql
--- Check tag statistics
-SELECT * FROM get_tag_statistics();
-```
-
-- [ ] Verify you see:
-  - Product Type tags (cleanser, serum, moisturizer, etc.)
-  - Benefit tags (hydrating, acne-treatment, etc.)
-  - Skin Type tags (oily, dry, sensitive, etc.)
-  - Price Range tags (affordable, mid-range, luxury)
-
-- [ ] Run this query:
-
-```sql
--- View some tagged products
-SELECT image_name, tags FROM product_tags LIMIT 10;
-```
-
-- [ ] Verify each product has exactly 4 tags
-
----
-
-### Step 7: Test the API (2 minutes)
+### Step 5: Test the System (5 minutes)
 
 - [ ] Start your development server:
 
@@ -152,45 +90,13 @@ SELECT image_name, tags FROM product_tags LIMIT 10;
 npm run dev
 ```
 
-- [ ] Test the API endpoint:
-
-```bash
-curl -X POST http://localhost:3000/api/get-product-images \
-  -H "Content-Type: application/json" \
-  -d '{"topic": "Affordable moisturizers for dry skin"}'
-```
-
-- [ ] Expected response:
-
-```json
-{
-  "images": [
-    {
-      "url": "https://...",
-      "name": "cerave-moisturizing-cream.jpg",
-      "type": "affordable"
-    },
-    // ... more products
-  ]
-}
-```
-
----
-
-### Step 8: Test Full Carousel Generation (5 minutes)
-
 - [ ] Open browser: `http://localhost:3000/products`
-- [ ] Wait for page to load
-- [ ] Click "Generate" (or your generate button)
-- [ ] Watch console logs:
-  - ✅ See "Selected X products for: [topic]"
-  - ✅ See product names listed
-  - ✅ See carousel generation complete
-
-- [ ] Verify carousel:
-  - Image 1: Title page
-  - Images 2-N: Product reviews with relevant images
-  - Last image: Detailed product analysis
+- [ ] Click "Generate" button
+- [ ] Watch the carousel generation:
+  - ✅ Random topic is selected
+  - ✅ 4 random products are selected
+  - ✅ AI analyzes products and generates reviews
+  - ✅ Carousel displays with ratings and bullet points
 
 ---
 
@@ -198,79 +104,83 @@ curl -X POST http://localhost:3000/api/get-product-images \
 
 You've successfully set up the system if:
 
-✅ Database has `product_tags` table with your products
-✅ Each product has exactly 4 tags
-✅ API returns relevant products for test topics
+✅ Products folder has images uploaded
+✅ First page folder has background images
+✅ Topics table has topics in database
 ✅ Carousel generation works end-to-end
-✅ Products match the topic semantically
+✅ Each product gets AI-generated review with rating and bullet points
 
 ---
 
-## 🔄 Next Steps (Optional)
+## 🎯 How It Works
 
-### Improve Tag Quality
+### Simple Random Selection
+- **No tagging required** - Just upload product images
+- **No complex matching** - Products are randomly selected
+- **AI analyzes everything** - Product name, rating, and review points are generated by AI vision
 
-- [ ] Review sample tags: Do they make sense?
-- [ ] If tags are inaccurate, edit prompt in `auto-tag-products.mjs`
-- [ ] Delete old tags: `DELETE FROM product_tags;`
-- [ ] Re-run tagging script
+### Topic Examples
+The system works best with general, engaging topics:
+- ✅ "Things I will never put on my face again..."
+- ✅ "Rating all my products from 1/10"
+- ✅ "My honest opinion on VIRAL skincare products"
+- ✅ "Products that broke me out vs saved my skin"
+
+---
+
+## 🔄 Adding More Content
 
 ### Add More Products
+- [ ] Upload new images to `upskin_products` folder
+- [ ] They'll automatically be included in random selection
+- [ ] No additional setup needed!
 
-- [ ] Upload new product images to Supabase
-- [ ] Re-run tagging script (it skips already-tagged images)
-- [ ] New products will be automatically tagged
+### Add More Topics
+- [ ] Add rows to `topics_upskin_products` table:
 
-### Monitor Performance
+```sql
+INSERT INTO topics_upskin_products (title) VALUES
+  ('Your new topic here');
+```
 
-- [ ] Check which topics work best
-- [ ] Look for patterns in product selection
-- [ ] Adjust tags or add more products as needed
+### Add More First Page Images
+- [ ] Upload to `upskin_firstpage_beauty` folder
+- [ ] System will randomly select one for each carousel
+
+---
+
+## 🌍 Spanish Version
+
+The Spanish version works identically:
+- [ ] Visit: `http://localhost:3000/products-es`
+- [ ] Uses same product images
+- [ ] Uses same topics (AI translates to Spanish)
+- [ ] Generates Spanish reviews automatically
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Script runs but no tags saved
-
+### No products showing
 **Check:**
-```sql
-SELECT COUNT(*) FROM product_tags;
+```
+- Folder name is exactly: upskin_products (case-sensitive)
+- Images are in: files/upskin_products/
+- Files are: .jpg, .jpeg, .png, .webp, .gif
 ```
 
-If 0:
-- Check Supabase service role key in `.env.local`
-- Check table permissions
-- Review script console output for errors
+### Generation fails
+**Check browser console and terminal logs:**
+- Topic fetch failed? → Check `topics_upskin_products` table exists
+- First image failed? → Check `upskin_firstpage_beauty` folder exists
+- Product images failed? → Check `upskin_products` folder has images
+- AI generation failed? → Check `NEXT_PUBLIC_SUPABASE_ANON_KEY` is set
 
-### API returns random products instead of matching
-
-**Check:**
-```bash
-# Enable detailed logging in route.ts
-console.log('Search criteria:', criteria)
-```
-
-Possible causes:
-- No products with matching tags
-- Topic extraction failed
-- Need more variety in product tags
-
-### Carousel shows duplicate products
-
-**This shouldn't happen**, but if it does:
-- Check `usedImagePaths` tracking in API
-- Verify products have unique `image_path`
-- Clear cache and try again
-
----
-
-## 📞 Need Help?
-
-1. **Check console logs** - They're very detailed!
-2. **Review README** - `scripts/PRODUCT_TAGGING_README.md`
-3. **Check implementation** - `IMPLEMENTATION_SUMMARY.md`
-4. **SQL queries** - Test database functions manually
+### Products don't match topic
+**This is expected!** The system uses random selection. The AI will:
+- Analyze each product independently
+- Generate appropriate ratings based on the topic
+- Mix positive and negative reviews to match the narrative
 
 ---
 
@@ -282,21 +192,50 @@ Possible causes:
    - Avoid blurry or low-res images
 
 2. **Product Variety**
-   - Mix of affordable, mid-range, and luxury
-   - Cover different skin types (oily, dry, sensitive)
-   - Include various product types (cleanser, serum, etc.)
+   - Mix of affordable and luxury products
+   - Different product types (cleanser, serum, moisturizer, etc.)
+   - Various brands and categories
 
 3. **Topic Crafting**
-   - Be specific: "Affordable toners for oily skin"
-   - Or broad: "My honest skincare reviews"
-   - Both work, but specific = better matches
+   - General topics work best: "Rating all my products"
+   - Narrative topics are engaging: "What worked vs what didn't"
+   - Avoid overly specific: ~~"CeraVe moisturizer for winter"~~
 
 4. **Maintenance**
-   - Periodically review tag statistics
-   - Add new products regularly
-   - Re-tag if you improve the prompt
+   - Add new products regularly for variety
+   - Add new topics to keep content fresh
+   - Check console logs if something breaks
+
+---
+
+## 📦 Folder Structure Summary
+
+```
+Supabase Storage (files bucket):
+├── upskin_products/          ← Product images (randomly selected)
+│   ├── product1.jpg
+│   ├── product2.jpg
+│   └── ...
+└── upskin_firstpage_beauty/  ← First page backgrounds
+    ├── background1.jpg
+    └── ...
+
+Supabase Database:
+└── topics_upskin_products    ← Carousel topics
+```
+
+---
+
+## 🗑️ Deprecated Files
+
+**These files are from the old tag-based system and are NO LONGER USED:**
+- ❌ `scripts/auto-tag-products.mjs`
+- ❌ `scripts/setup-product-tags-database.sql`
+- ❌ `scripts/PRODUCT_TAGGING_README.md`
+- ❌ `scripts/find-missing-images.mjs`
+
+You can safely ignore or delete these files.
 
 ---
 
 **Ready to start?** Begin with Step 1! 🚀
-

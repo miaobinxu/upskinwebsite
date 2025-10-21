@@ -207,3 +207,4 @@ COMMENT ON FUNCTION get_tag_statistics IS 'Returns tag statistics broken down by
 -- 3. Check tag statistics: SELECT * FROM get_tag_statistics();
 -- ============================================================================
 
+

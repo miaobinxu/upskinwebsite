@@ -31,8 +31,8 @@ export default function ProductsPage() {
                 return
             }
 
-            // Step 2: Fetch first image from upskin_firstpage_products
-            const firstImageRes = await fetch('/api/get-images?folder=upskin_firstpage_products&count=1')
+            // Step 2: Fetch first image from upskin_firstpage_beauty
+            const firstImageRes = await fetch('/api/get-images?folder=upskin_firstpage_beauty&count=1')
             const firstImageJson = await firstImageRes.json()
             const firstImage = firstImageJson?.images?.[0]
 
@@ -97,12 +97,23 @@ export default function ProductsPage() {
             const lastProductIndex = productImages.length - 1
             const lastProduct = productImages[lastProductIndex]
             
+            // Get the last product's rating from the previous AI call to ensure consistency
+            const lastProductKey = `Product ${productImages.length}`
+            const lastProductRating = parsedData[lastProductKey]
+            const isPositive = lastProductRating?.emoji === '✅'
+            const previousScore = lastProductRating?.score || 'unknown'
+            
             console.log(`📱 Analyzing last product for app mockup: ${lastProduct.name}`)
-            console.log(`   Sentiment: ${lastProduct.sentiment || 'not specified'}`)
+            console.log(`   Previous rating: ${lastProductRating?.emoji} ${previousScore}`)
             
             const { data: analysisResponse, error: analysisError } = await analyzeProductForMockup({
                 topic: topicTitle,
-                productImage: lastProduct, // Last product for analysis page (includes sentiment)
+                productImage: lastProduct,
+                previousRating: {
+                    emoji: lastProductRating?.emoji,
+                    score: previousScore,
+                    isPositive
+                }
             })
 
             const analysisRawContent = analysisResponse?.choices?.[0]?.message?.content?.trim()
