@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Product Screenshot Generator",
   description: "Generate beautiful product screenshots for your skincare analysis",
-    generator: 'Upskin'
+  generator: 'Upskin'
 }
 
 export default function RootLayout({

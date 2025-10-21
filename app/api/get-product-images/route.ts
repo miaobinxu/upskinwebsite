@@ -1,129 +1,137 @@
 import { supabase } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-const BUCKET_NAME = process.env.BUCKET_NAME || 'files';
-const EXCLUDE_FILE = process.env.EXCLUDE_FILE || '__keep.txt';
+const BUCKET_NAME = 'files';
+const FOLDER_PRODUCTS = 'upskin_products';
 const EXPIRY_SECONDS = 60 * 15; // 15 minutes
+const DEFAULT_PRODUCT_COUNT = 4;
 
-export async function POST(req: Request) {
+/**
+ * Fisher-Yates shuffle algorithm for true randomness
+ */
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+/**
+ * Get signed URL for an image
+ */
+async function getImageUrl(imagePath: string): Promise<string> {
+  const { data, error } = await supabase.storage
+    .from(BUCKET_NAME)
+    .createSignedUrl(imagePath, EXPIRY_SECONDS);
+
+  if (error || !data) {
+    throw new Error(`Failed to create signed URL for ${imagePath}`);
+  }
+
+  return data.signedUrl;
+}
+
+/**
+ * Get random products from upskin_products folder
+ */
+async function getRandomProducts(count: number = DEFAULT_PRODUCT_COUNT): Promise<any[]> {
+  console.log(`📂 Fetching products from '${FOLDER_PRODUCTS}'...`);
+  
+  // List all files in the folder
+  const { data: allFiles, error } = await supabase.storage
+    .from(BUCKET_NAME)
+    .list(FOLDER_PRODUCTS, { limit: 2000 });
+
+  if (error) {
+    throw new Error(`Failed to list files in ${FOLDER_PRODUCTS}: ${error.message}`);
+  }
+
+  // Filter for image files only
+  const imageFiles = (allFiles ?? []).filter(
+    file =>
+      file.name !== '__keep.txt' &&
+      file.name.match(/\.(jpg|jpeg|JPEG|png|webp|gif)$/i)
+  );
+
+  if (imageFiles.length === 0) {
+    throw new Error(`No product images found in '${FOLDER_PRODUCTS}' folder. Please upload some product images.`);
+  }
+
+  console.log(`📦 Found ${imageFiles.length} product images`);
+
+  // Shuffle and select
+  const shuffled = shuffleArray(imageFiles);
+  const selected = shuffled.slice(0, Math.min(count, imageFiles.length));
+
+  console.log(`🎲 Randomly selected ${selected.length} products:`);
+  selected.forEach((file, i) => {
+    console.log(`   ${i + 1}. ${file.name}`);
+  });
+
+  // Get signed URLs for each selected product
+  const products = await Promise.all(
+    selected.map(async (file) => {
+      const imagePath = `${FOLDER_PRODUCTS}/${file.name}`;
+      const url = await getImageUrl(imagePath);
+      return {
+        url,
+        name: file.name,
+        type: 'product'
+      };
+    })
+  );
+
+  return products;
+}
+
+/**
+ * POST endpoint: Get random product images
+ * Accepts optional 'count' parameter to specify how many products to return
+ */
+export async function POST(request: NextRequest) {
   try {
-    const { structure } = await req.json();
+    const body = await request.json();
+    const { topic, count = DEFAULT_PRODUCT_COUNT } = body;
     
-    console.log('📦 Received structure:', structure);
+    console.log('\n' + '='.repeat(80));
+    console.log('🎲 Random Product Selection');
+    console.log('='.repeat(80));
+    if (topic) {
+      console.log(`Topic: "${topic}"`);
+    }
+    console.log(`Requested count: ${count}`);
     
-    // structure should be an array like ['luxury', 'affordable', 'luxury', 'affordable']
-    if (!Array.isArray(structure) || structure.length === 0) {
-      return NextResponse.json({ error: 'Invalid structure array' }, { status: 400 });
-    }
-
-    // Pre-fetch all images from both folders
-    const luxuryFiles = await fetchImagesFromFolder('upskin_products_luxury');
-    const affordableFiles = await fetchImagesFromFolder('upskin_products_affordable');
-
-    // Shuffle both arrays to ensure randomness
-    const shuffledLuxury = luxuryFiles.sort(() => 0.5 - Math.random());
-    const shuffledAffordable = affordableFiles.sort(() => 0.5 - Math.random());
-
-    const selectedImages: { url: string; name: string; type: string }[] = [];
-    const usedImages = new Set<string>(); // Track used image names to prevent duplicates
-
-    let luxuryIndex = 0;
-    let affordableIndex = 0;
-
-    // For each item in structure, select a unique image
-    for (const type of structure) {
-      const folderName = type === 'luxury' ? 'upskin_products_luxury' : 'upskin_products_affordable';
-      const imagePool = type === 'luxury' ? shuffledLuxury : shuffledAffordable;
-      let currentIndex = type === 'luxury' ? luxuryIndex : affordableIndex;
-
-      console.log(`🔍 Selecting from folder: ${folderName}`);
-
-      if (imagePool.length === 0) {
-        throw new Error(`No images found in ${folderName}. Please upload images to this folder.`);
-      }
-
-      // Find the next unused image in this pool
-      let selectedImage;
-      let attempts = 0;
-      const maxAttempts = imagePool.length;
-
-      while (attempts < maxAttempts) {
-        const candidate = imagePool[currentIndex % imagePool.length];
-        const imageKey = `${folderName}/${candidate.name}`;
-
-        if (!usedImages.has(imageKey)) {
-          selectedImage = candidate;
-          usedImages.add(imageKey);
-          break;
-        }
-
-        currentIndex++;
-        attempts++;
-      }
-
-      if (!selectedImage) {
-        throw new Error(`Not enough unique images in ${folderName} for this carousel.`);
-      }
-
-      console.log(`🎲 Selected unique image: ${selectedImage.name}`);
-
-      // Update the index for next time
-      if (type === 'luxury') {
-        luxuryIndex = currentIndex + 1;
-      } else {
-        affordableIndex = currentIndex + 1;
-      }
-
-      // Generate signed URL
-      const { data, error: urlError } = await supabase.storage
-        .from(BUCKET_NAME)
-        .createSignedUrl(`${folderName}/${selectedImage.name}`, EXPIRY_SECONDS);
-
-      if (urlError || !data) {
-        console.error(`❌ Error creating signed URL for ${selectedImage.name}:`, urlError);
-        throw new Error(`Failed to create signed URL for ${selectedImage.name}: ${urlError?.message || 'Unknown error'}`);
-      }
-
-      selectedImages.push({
-        url: data.signedUrl,
-        name: selectedImage.name,
-        type: type
-      });
-    }
-
-    console.log(`✅ Successfully selected ${selectedImages.length} unique product images`);
-    return NextResponse.json({ images: selectedImages });
+    const images = await getRandomProducts(count);
+    
+    console.log('='.repeat(80));
+    console.log(`✅ Successfully selected ${images.length} random products`);
+    console.log('='.repeat(80) + '\n');
+    
+    return NextResponse.json({ images });
   } catch (err: any) {
-    console.error('🚨 Error in get-product-images:', err);
+    console.error('❌ Error in get-product-images:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-// Helper function to fetch and filter images from a folder
-async function fetchImagesFromFolder(folderName: string) {
-  const BUCKET_NAME = process.env.BUCKET_NAME || 'files';
-  const EXCLUDE_FILE = process.env.EXCLUDE_FILE || '__keep.txt';
-
-  const { data: allFiles, error } = await supabase.storage
-    .from(BUCKET_NAME)
-    .list(folderName, { limit: 2000 });
-
-  if (error) {
-    console.error(`❌ Error listing files from ${folderName}:`, error);
-    throw new Error(`Failed to list files from ${folderName}: ${error.message}`);
+/**
+ * GET endpoint: Get random products (for testing)
+ */
+export async function GET(request: NextRequest) {
+  try {
+    const searchParams = request.nextUrl.searchParams;
+    const count = parseInt(searchParams.get('count') || String(DEFAULT_PRODUCT_COUNT));
+    
+    console.log('⚠️  Using GET endpoint (for testing)');
+    console.log(`Requested count: ${count}`);
+    
+    const images = await getRandomProducts(count);
+    
+    return NextResponse.json({ images });
+  } catch (err: any) {
+    console.error('❌ Error:', err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
-
-  console.log(`📁 Found ${allFiles?.length || 0} files in ${folderName}`);
-
-  // Filter image files
-  const imageFiles = (allFiles ?? []).filter(
-    file =>
-      file.name !== EXCLUDE_FILE &&
-      file.name.match(/\.(jpg|jpeg|JPEG|png|webp|gif)$/i)
-  );
-
-  console.log(`🖼️  Filtered to ${imageFiles.length} image files in ${folderName}`);
-
-  return imageFiles;
 }
-

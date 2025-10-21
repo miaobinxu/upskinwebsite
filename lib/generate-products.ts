@@ -16,6 +16,11 @@ interface ProductsResponse {
 interface ProductAnalysisPayload {
   topic: string
   productImage: { url: string; name: string; type: string }
+  previousRating?: {
+    emoji?: string
+    score?: string
+    isPositive?: boolean
+  }
 }
 
 interface ProductAnalysisResponse {
@@ -23,114 +28,39 @@ interface ProductAnalysisResponse {
   error: string | null
 }
 
-/* ------------------------ LAYER 1: DETERMINE STRUCTURE ------------------------ */
-export async function determineProductStructure(topic: string): Promise<{ structure: string[], error: string | null }> {
-  const prompt = `You are an expert in skincare product comparisons. Based on the following topic, determine the structure of a product comparison carousel.
-
-Topic: "${topic}"
-
-Your task is to determine which 4 products should be featured (images 2-5 of the carousel). Each product should be either "luxury" (expensive/high-end) or "affordable" (budget-friendly).
-
-Analyze the topic and decide:
-- If it's about comparing price points, alternate between luxury and affordable
-- If it's about specific concerns, choose products that best demonstrate the point
-- Consider the narrative flow and what makes sense for the comparison
-
-Respond with ONLY a JSON array of 4 items, each being either "luxury" or "affordable".
-
-Example 1 - Topic: "My $5000 skincare routine vs my roommate's $50 routine"
-Response: ["luxury", "affordable", "luxury", "affordable"]
-
-Example 2 - Topic: "Affordable dupes for luxury skincare"
-Response: ["luxury", "affordable", "luxury", "affordable"]
-
-Example 3 - Topic: "I spent $5K on skincare before realizing THIS was breaking me out"
-Response: ["luxury", "luxury", "luxury", "luxury"]
-
-Now analyze this topic and respond with the structure array:
-Topic: "${topic}"
-
-Response (JSON array only):`
-
-  const messages = [
-    {
-      role: "user",
-      content: [{ type: "text", text: prompt }],
-    },
-  ]
-
-  try {
-    const res = await fetch(SUPABASE_FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-      },
-      body: JSON.stringify({ messages }),
-    })
-
-    if (!res.ok) {
-      const error = await res.text()
-      return { structure: [], error }
-    }
-
-    const data = await res.json()
-    const rawContent = data?.choices?.[0]?.message?.content?.trim()
-    
-    if (!rawContent) {
-      return { structure: [], error: 'No content returned from AI' }
-    }
-
-    // Parse the JSON array
-    const jsonString = rawContent.replace(/^```json/, '').replace(/```$/, '').trim()
-    const structure = JSON.parse(jsonString)
-
-    if (!Array.isArray(structure) || structure.length !== 4) {
-      return { structure: [], error: 'Invalid structure format - expected 4 items' }
-    }
-
-    return { structure, error: null }
-  } catch (error) {
-    return { structure: [], error: String(error) }
-  }
-}
-
-/* ------------------------ LAYER 2: GENERATE TEXT OVERLAYS ------------------------ */
+/* ------------------------ GENERATE TEXT OVERLAYS ------------------------ */
 export async function generateProductTextOverlays({
   topic,
   productImages,
 }: GenerateProductsCarouselPayload): Promise<ProductsResponse> {
   
-  // Build the prompt for text overlay generation with vision
   const prompt = `You are creating a product comparison carousel for skincare. The topic is: "${topic}"
 
-CRITICAL: Analyze the topic carefully to understand the narrative:
-- If the topic is about products that broke them out / caused issues → ALL products should be rated LOW (1-3/10) with ❌
-- If the topic is about expensive products that didn't work → Rate luxury products LOW, affordable alternatives HIGH
-- If the topic is about comparing expensive vs cheap → Mix ratings based on which actually works better
-- If the topic is positive (e.g., "best products for...") → Give HIGH ratings (8+, or even 100/10, 2800/10, etc.) with ✅
+Your job is to analyze each product and give it an engaging, honest rating that matches the vibe of the topic.
 
-The ratings and emojis MUST align with the topic's narrative. Don't randomly give high scores if the topic is negative!
+Guidelines:
+- Read the topic carefully - is it about things they'll NEVER use again? Rating products? Honest opinions on viral products?
+- If the topic is negative, about products that broke them out / caused issues → ALL products should be rated LOW (1-3/10) with ❌
+- If the topic is positive (e.g., "i stop gatekeep until now...") → Give HIGH ratings (8+, or even 100/10, 2800/10, etc.) with ✅
+- For general rating topics like "Rating all my products", aim for a mix: roughly half positive, half negative
 
-I will show you ${productImages.length} product images (images 2-5 of the carousel). For each product image, you need to:
+I will show you ${productImages.length} product images. For each product image, you need to:
 1. Identify the FULL product name (brand + product name) from the image
-2. Give a rating out of 10 that MATCHES THE TOPIC NARRATIVE (can be exaggerated like TikTok: -5/10, 1/10, 100/10, etc.)
-3. Add ✅ (for good) or ❌ (for bad) emoji - MUST match the topic's stance
+2. Give a rating that fits the narrative (can be exaggerated like TikTok: -5/10, 2/10, 10/10, 500/10, etc.)
+3. Add ✅ (for good) or ❌ (for bad) emoji
 4. Write 2-3 punchy bullet points explaining why
 
 CRITICAL: Your bullet points should NOT include the product name. The product name will be displayed separately.
 
-IMPORTANT: Focus your bullet points on:
-- Specific ingredients and their effects
+Focus your bullet points on:
 - Skin type compatibility (oily, dry, sensitive, combination)
 - Texture, absorption, finish
 - Actual skin concerns it addresses (acne, hyperpigmentation, barrier health, etc.)
 - Fungal acne safety, comedogenicity
 - Potential irritants or actives
+- Real experience notes (e.g., "gave me closed comedones", "saved my moisture barrier")
 
-AVOID focusing on price in the bullet points. Even if the topic mentions price, your points should explain WHY the product is good/bad based on formulation and skin compatibility, not just that it's cheap or expensive.
-
-The language should be casual and on point - like a friend introducing you a product.
+Keep the language casual and genuine - like a friend or esthetician giving real advice.
 
 Format your response as JSON with this exact structure:
 
@@ -218,11 +148,11 @@ Example for POSITIVE topic ("Best products for..."):
   }
 }
 
+
 Topic: "${topic}"
 
-Now analyze these ${productImages.length} products and generate appropriate text overlays:`
+Now analyze these ${productImages.length} products and give me your honest takes:`
 
-  // Build messages array with vision support
   const contentArray: any[] = [
     { type: "text", text: prompt }
   ]
@@ -266,19 +196,42 @@ Now analyze these ${productImages.length} products and generate appropriate text
   }
 }
 
-/* ------------------------ LAYER 3: ANALYZE PRODUCT FOR MOCKUP ------------------------ */
+/* ------------------------ ANALYZE PRODUCT FOR MOCKUP ------------------------ */
 export async function analyzeProductForMockup({
   topic,
   productImage,
+  previousRating,
 }: ProductAnalysisPayload): Promise<ProductAnalysisResponse> {
   
-  const prompt = `You are analyzing a skincare product for display in an app mockup. The carousel topic is: "${topic}"
+  // Build consistency guidance based on previous rating
+  let consistencyGuidance = ''
+  if (previousRating?.emoji && previousRating?.score) {
+    const isPositive = previousRating.emoji === '✅'
+    consistencyGuidance = `
+**CRITICAL - CONSISTENCY REQUIREMENT:**
+This product was previously rated as: ${previousRating.emoji} ${previousRating.score}
 
-CRITICAL: The scores MUST be EXTREME to grab attention!
-- If the topic is NEGATIVE (breaking out, bad products) → Give VERY LOW scores (10-30 range)
-- If the topic is POSITIVE (best products, works well) → Give VERY HIGH scores (85-98 range)
+YOU MUST MAINTAIN CONSISTENCY:
+${isPositive 
+  ? '- Since it was rated POSITIVELY (✅), your scores MUST be HIGH (85-98 range)'
+  : '- Since it was rated NEGATIVELY (❌), your scores MUST be LOW (10-30 range)'}
+- Both Overall Score and Compatibility must match this sentiment
+- Your Key Takeaway points must align with this rating
+- DO NOT contradict the previous rating!
+`
+  }
+  
+  const prompt = `You are analyzing a skincare product for an app mockup. The carousel topic is: "${topic}"
+${consistencyGuidance}
+${!consistencyGuidance ? `
+Based on the topic, determine if this product should be presented positively or negatively, then give EXTREME scores to grab attention.
 
-DO NOT give medium scores (40-70). We want extreme reactions!
+Guidelines:
+- For general rating/opinion topics: vary the scores - some products get high scores (85-98), others get low scores (10-30)
+- For negative topics (e.g., "never use again"): give low scores (10-30 range)
+- For positive topics (e.g., "best products"): give high scores (85-98 range)
+` : ''}
+- NO medium scores (40-70) - we want extreme reactions!
 
 Analyze the product image and provide:
 1. Product name (identify from the image)
@@ -306,7 +259,7 @@ Format your response as JSON:
 
 Topic: "${topic}"
 
-Now analyze this product image:`
+Now analyze this product:`
 
   const messages = [
     {
@@ -343,4 +296,4 @@ Now analyze this product image:`
   } catch (error) {
     return { data: null, error: String(error) }
   }
-} 
+}

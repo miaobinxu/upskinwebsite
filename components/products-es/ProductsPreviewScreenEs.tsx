@@ -218,19 +218,10 @@ function TitlePage({ image, title, downloadIndex }: TitlePageProps) {
           alt="Title Page"
         />
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-black text-center gap-8">
-          {/* Title */}
-          <div className="text-xl font-bold leading-snug max-w-xs">
-            <span
-              className="bg-white text-black px-3 py-1"
-              style={{
-                display: 'inline',
-                boxDecorationBreak: 'clone',
-                WebkitBoxDecorationBreak: 'clone'
-              }}
-            >
-              {title}
-            </span>
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-[40%] px-6 text-center gap-8">
+          {/* Title with TikTok Style */}
+          <div className="text-xl font-bold leading-snug max-w-xs tiktok-text">
+            {title}
           </div>
         </div>
       </div>
@@ -280,49 +271,25 @@ function ContentPage({ image, content, downloadIndex }: ContentPageProps) {
         {/* Text overlay positioned on the right side */}
         <div className="absolute inset-y-0 right-0 flex items-center pr-3">
           {isNewFormat && typeof displayContent === 'object' ? (
-            // New format: emoji + score + bullet points with individual text backgrounds
-            <div className="text-black max-w-[220px] flex flex-col gap-2">
-              {/* Emoji + Score */}
-              <div className="text-2xl font-bold">
-                <span 
-                  className="bg-white px-3 py-1 shadow-lg"
-                  style={{
-                    display: 'inline',
-                    boxDecorationBreak: 'clone',
-                    WebkitBoxDecorationBreak: 'clone'
-                  }}
-                >
-                  {displayContent.emoji} {displayContent.score}
-                </span>
+            // New format: each line gets its own white background box
+            <div className="max-w-[220px] flex flex-col gap-2" style={{ fontFamily: 'TikTok Sans, sans-serif' }}>
+              {/* Emoji + Score - independent white box */}
+              <div className="text-2xl font-bold text-black bg-white rounded-2xl px-4 py-2 shadow-md w-fit">
+                <span style={{ fontFamily: '"Segoe UI Symbol", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>{displayContent.emoji}</span> {displayContent.score}
               </div>
-              {/* Bullet Points */}
-              <ul className="space-y-2 text-xs leading-tight">
+              {/* Each Bullet Point - independent white box */}
+              <div className="flex flex-col gap-2">
                 {displayContent.points.map((point: string, idx: number) => (
-                  <li key={idx} className="flex items-start">
-                    <span className="bg-white px-2 py-1 shadow-md" style={{
-                      display: 'inline',
-                      boxDecorationBreak: 'clone',
-                      WebkitBoxDecorationBreak: 'clone'
-                    }}>
-                      • {point}
-                    </span>
-                  </li>
+                  <div key={idx} className="text-sm font-semibold leading-snug text-black bg-white rounded-2xl px-4 py-2 shadow-md">
+                    • {point}
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           ) : (
-            // Old format: simple text
-            <div className="text-lg font-semibold leading-snug max-w-[200px]">
-              <span
-                className="bg-white text-black px-4 py-2 shadow-lg"
-                style={{
-                  display: 'inline',
-                  boxDecorationBreak: 'clone',
-                  WebkitBoxDecorationBreak: 'clone'
-                }}
-              >
-                {typeof displayContent === 'string' ? displayContent : ''}
-              </span>
+            // Old format: simple text with white background box
+            <div className="text-lg font-semibold leading-snug max-w-[200px] bg-white rounded-2xl px-4 py-3 shadow-md text-black" style={{ fontFamily: 'TikTok Sans, sans-serif' }}>
+              {typeof displayContent === 'string' ? displayContent : ''}
             </div>
           )}
         </div>

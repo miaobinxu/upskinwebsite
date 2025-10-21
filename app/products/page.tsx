@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import ProductsUploadScreen from '@/components/products/ProductsUploadScreen'
 import ProductsPreviewScreen from '@/components/products/ProductsPreviewScreen'
-import { determineProductStructure, generateProductTextOverlays, analyzeProductForMockup } from '@/lib/generate-products'
+import { generateProductTextOverlays, analyzeProductForMockup } from '@/lib/generate-products'
 import { useProductsStore } from '@/lib/store/productsStore'
 
 export default function ProductsPage() {
@@ -31,8 +31,8 @@ export default function ProductsPage() {
                 return
             }
 
-            // Step 2: Fetch first image from upskin_firstpage_products
-            const firstImageRes = await fetch('/api/get-images?folder=upskin_firstpage_products&count=1')
+            // Step 2: Fetch first image from upskin_firstpage_beauty
+            const firstImageRes = await fetch('/api/get-images?folder=upskin_firstpage_beauty&count=1')
             const firstImageJson = await firstImageRes.json()
             const firstImage = firstImageJson?.images?.[0]
 
@@ -45,32 +45,31 @@ export default function ProductsPage() {
                 return
             }
 
-            // Step 3: Layer 1 AI - Determine structure
-            const { structure, error: structureError } = await determineProductStructure(topicTitle)
-
-            if (structureError || !structure || structure.length !== 4) {
-                throw new Error(structureError || 'Failed to determine product structure')
-            }
-
-            // Step 4: Fetch product images based on structure
+            // Step 3: Smart product selection based on topic
+            // The API will analyze the topic and select appropriate products using tag matching
             const productImagesRes = await fetch('/api/get-product-images', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ structure }),
+                body: JSON.stringify({ topic: topicTitle }),
             })
             const productImagesJson = await productImagesRes.json()
             const productImages = productImagesJson?.images
 
-            if (!productImagesRes.ok || !Array.isArray(productImages) || productImages.length !== 4) {
+            if (!productImagesRes.ok || !Array.isArray(productImages) || productImages.length === 0) {
                 toast({
                     title: 'Please try again',
-                    description: 'Failed to fetch product images',
+                    description: productImagesJson?.error || 'Failed to fetch product images',
                     variant: 'destructive',
                 })
                 return
             }
 
-            // Step 5: Layer 2 AI - Generate text overlays with vision
+            console.log(`✅ Selected ${productImages.length} products for: "${topicTitle}"`)
+            productImages.forEach((img: any, i: number) => {
+                console.log(`   ${i + 1}. ${img.name}`)
+            })
+
+            // Step 4: Generate text overlays with vision (AI analyzes product images)
             const { data: response, error } = await generateProductTextOverlays({
                 topic: topicTitle,
                 productImages,
@@ -87,13 +86,34 @@ export default function ProductsPage() {
             try {
                 parsedData = JSON.parse(jsonString)
             } catch (err) {
-                throw new Error('Failed to parse AI response')
+                console.error('❌ Failed to parse AI response')
+                console.error('Raw AI response:', rawContent)
+                console.error('Cleaned JSON string:', jsonString)
+                console.error('Parse error:', err)
+                throw new Error(`Failed to parse AI response: ${err instanceof Error ? err.message : 'Unknown error'}\n\nAI Response: ${jsonString.substring(0, 200)}...`)
             }
 
-            // Step 5.5: Layer 3 AI - Analyze Product 4 for mockup display
+            // Step 5: Analyze last product for detailed mockup display
+            const lastProductIndex = productImages.length - 1
+            const lastProduct = productImages[lastProductIndex]
+            
+            // Get the last product's rating from the previous AI call to ensure consistency
+            const lastProductKey = `Product ${productImages.length}`
+            const lastProductRating = parsedData[lastProductKey]
+            const isPositive = lastProductRating?.emoji === '✅'
+            const previousScore = lastProductRating?.score || 'unknown'
+            
+            console.log(`📱 Analyzing last product for app mockup: ${lastProduct.name}`)
+            console.log(`   Previous rating: ${lastProductRating?.emoji} ${previousScore}`)
+            
             const { data: analysisResponse, error: analysisError } = await analyzeProductForMockup({
                 topic: topicTitle,
-                productImage: productImages[3], // Product 4 (last product)
+                productImage: lastProduct,
+                previousRating: {
+                    emoji: lastProductRating?.emoji,
+                    score: previousScore,
+                    isPositive
+                }
             })
 
             const analysisRawContent = analysisResponse?.choices?.[0]?.message?.content?.trim()
@@ -113,25 +133,23 @@ export default function ProductsPage() {
             }
 
             // Step 6: Construct final image array
-            // [firstImage, productImage1, productImage2, productImage3, productImage4, firstImage (last)]
+            // [firstImage, ...productImages, firstImage (last for analysis)]
             const finalImages = [
                 firstImage, // Image 1: Title page
-                productImages[0].url, // Image 2: Product 1
-                productImages[1].url, // Image 3: Product 2
-                productImages[2].url, // Image 4: Product 3
-                productImages[3].url, // Image 5: Product 4
-                firstImage, // Image 6: Final analysis page (same as first)
+                ...productImages.map((img: any) => img.url), // Product images
+                firstImage, // Last image: Final analysis page
             ]
 
-            // Prepare data for store
+            // Prepare data for store (dynamically based on number of products)
             const finalData: any = {
                 Title: topicTitle,
-                'Product 1': parsedData['Product 1'] || '',
-                'Product 2': parsedData['Product 2'] || '',
-                'Product 3': parsedData['Product 3'] || '',
-                'Product 4': parsedData['Product 4'] || '',
-                'Product Analysis': productAnalysisData, // Add product analysis data
+                'Product Analysis': productAnalysisData, // Product analysis for last page
             }
+
+            // Add all products to data
+            Object.keys(parsedData).forEach((key) => {
+                finalData[key] = parsedData[key]
+            })
 
             console.log('📦 Final parsed data:', parsedData)
             console.log('📦 Product analysis data:', productAnalysisData)
