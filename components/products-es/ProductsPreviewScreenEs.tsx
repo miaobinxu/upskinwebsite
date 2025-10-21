@@ -275,7 +275,7 @@ function ContentPage({ image, content, downloadIndex }: ContentPageProps) {
             <div className="max-w-[220px] flex flex-col gap-2" style={{ fontFamily: 'TikTok Sans, sans-serif' }}>
               {/* Emoji + Score - independent white box */}
               <div className="text-2xl font-bold text-black bg-white rounded-2xl px-4 py-2 shadow-md w-fit">
-                {displayContent.emoji} {displayContent.score}
+                <span style={{ fontFamily: '"Segoe UI Symbol", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>{displayContent.emoji}</span> {displayContent.score}
               </div>
               {/* Each Bullet Point - independent white box */}
               <div className="flex flex-col gap-2">

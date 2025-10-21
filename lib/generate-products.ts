@@ -40,10 +40,9 @@ Your job is to analyze each product and give it an engaging, honest rating that 
 
 Guidelines:
 - Read the topic carefully - is it about things they'll NEVER use again? Rating products? Honest opinions on viral products?
-- Mix up your ratings - some products should be hits (8-10/10, or even 100/10 for dramatic effect ✅), others should be misses (1-3/10, or even -5/10 ❌)
+- If the topic is negative, about products that broke them out / caused issues → ALL products should be rated LOW (1-3/10) with ❌
+- If the topic is positive (e.g., "i stop gatekeep until now...") → Give HIGH ratings (8+, or even 100/10, 2800/10, etc.) with ✅
 - For general rating topics like "Rating all my products", aim for a mix: roughly half positive, half negative
-- For negative topics like "Things I'll never use again", all products should have low ratings with ❌
-- For topics about "honest opinions" or "viral products", be real - some work, some don't
 
 I will show you ${productImages.length} product images. For each product image, you need to:
 1. Identify the FULL product name (brand + product name) from the image

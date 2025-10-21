@@ -40,10 +40,9 @@ Tu trabajo es analizar cada producto y darle una calificación honesta y atracti
 
 Guías:
 - Lee el tema cuidadosamente - ¿se trata de cosas que NUNCA volverán a usar? ¿Calificando productos? ¿Opiniones honestas sobre productos virales?
-- Varía tus calificaciones - algunos productos deben ser éxitos (8-10/10, o incluso 100/10 para efecto dramático ✅), otros deben ser fracasos (1-3/10, o incluso -5/10 ❌)
+- Si el tema es negativo, sobre productos que causaron brotes / problemas → TODOS los productos deben tener calificaciones BAJAS (1-3/10) con ❌
+- Si el tema es positivo (ej., "dejo de guardar secretos hasta ahora...") → Da calificaciones ALTAS (8+, o incluso 100/10, 2800/10, etc.) con ✅
 - Para temas generales de calificación como "Calificando todos mis productos", busca una mezcla: aproximadamente la mitad positivos, la mitad negativos
-- Para temas negativos como "Cosas que nunca volveré a usar", la mayoría o todos los productos deben tener calificaciones bajas con ❌
-- Para temas sobre "opiniones honestas" o "productos virales", sé real - algunos funcionan, otros no
 
 Te mostraré ${productImages.length} imágenes de productos. Para cada imagen de producto, necesitas:
 1. Identificar el NOMBRE COMPLETO del producto (marca + nombre del producto) de la imagen
@@ -54,7 +53,6 @@ Te mostraré ${productImages.length} imágenes de productos. Para cada imagen de
 CRÍTICO: Tus puntos NO deben incluir el nombre del producto. El nombre del producto se mostrará por separado.
 
 Enfoca tus puntos en:
-- Ingredientes específicos y sus efectos
 - Compatibilidad con tipo de piel (grasa, seca, sensible, mixta)
 - Textura, absorción, acabado
 - Problemas reales de piel que aborda (acné, hiperpigmentación, salud de la barrera, etc.)
