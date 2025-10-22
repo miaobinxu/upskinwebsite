@@ -272,9 +272,9 @@ function ContentPage({ image, content, downloadIndex }: ContentPageProps) {
         <div className="absolute inset-y-0 right-0 flex items-center pr-3">
           {isNewFormat && typeof displayContent === 'object' ? (
             // New format: each line gets its own white background box
-            <div className="max-w-[220px] flex flex-col gap-2" style={{ fontFamily: 'TikTok Sans, sans-serif' }}>
+            <div className="max-w-[220px] flex flex-col gap-2">
               {/* Emoji + Score - independent white box */}
-              <div className="text-2xl font-bold text-black bg-white rounded-2xl px-4 py-2 shadow-md w-fit">
+              <div className="text-2xl font-bold text-black bg-white rounded-2xl px-4 py-2 shadow-md w-fit" style={{ fontFamily: 'TikTok Sans, sans-serif' }}>
                 <span style={{ fontFamily: '"Segoe UI Symbol", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif' }}>{displayContent.emoji}</span> {displayContent.score}
               </div>
               {/* Each Bullet Point - independent white box */}

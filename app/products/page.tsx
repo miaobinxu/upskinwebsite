@@ -45,6 +45,20 @@ export default function ProductsPage() {
                 return
             }
 
+            // Step 2.5: Fetch last image from upskin_firstpage_products
+            const lastImageRes = await fetch('/api/get-images?folder=upskin_firstpage_products&count=1')
+            const lastImageJson = await lastImageRes.json()
+            const lastImage = lastImageJson?.images?.[0]
+
+            if (!lastImageRes.ok || !lastImage) {
+                toast({
+                    title: 'Please try again',
+                    description: 'Failed to fetch last page image',
+                    variant: 'destructive',
+                })
+                return
+            }
+
             // Step 3: Smart product selection based on topic
             // The API will analyze the topic and select appropriate products using tag matching
             const productImagesRes = await fetch('/api/get-product-images', {
@@ -133,11 +147,11 @@ export default function ProductsPage() {
             }
 
             // Step 6: Construct final image array
-            // [firstImage, ...productImages, firstImage (last for analysis)]
+            // [firstImage, ...productImages, lastImage (last for analysis)]
             const finalImages = [
                 firstImage, // Image 1: Title page
                 ...productImages.map((img: any) => img.url), // Product images
-                firstImage, // Last image: Final analysis page
+                lastImage, // Last image: Final analysis page (from upskin_firstpage_products)
             ]
 
             // Prepare data for store (dynamically based on number of products)
