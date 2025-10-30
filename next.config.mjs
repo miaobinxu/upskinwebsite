@@ -13,12 +13,12 @@ const nextConfig = {
     return [
       {
         source: '/products',
-        destination: 'https://charmchat.app/male',
+        destination: 'https://upskin.app/new',
         permanent: true, // 308 permanent redirect
       },
       {
         source: '/products-es',
-        destination: 'https://charmchat.app/male-es',
+        destination: 'https://upskin.app/es',
         permanent: true, // 308 permanent redirect
       },
     ]
